@@ -458,7 +458,17 @@
     .vision-headline .green { color:var(--green); -webkit-text-fill-color:var(--green); }
     .vision-metric { min-width:126px; padding:18px 20px; border:1px solid rgba(255,255,255,.06); border-radius:18px; background:rgba(255,255,255,.022); box-shadow:inset 0 1px 0 rgba(255,255,255,.035); }
     @media (max-width: 900px) { .hero-layout { grid-template-columns:1fr; } .hero-panels { order:0; } }
-    @media (max-width: 640px) { .hero-sub { font-size:15px; } .obs-experience { min-height:500px; } #obs-canvas { height:500px; } .hero-proofline { margin-top:0; } }
+    @media (max-width: 640px) {
+      .status-grid { grid-template-columns:repeat(3,1fr) !important; }
+      .status-card:nth-child(4), .status-card:nth-child(5) { grid-column:span 1; }
+      .obs-experience { min-height:420px !important; }
+      .obs-hud { grid-template-columns:repeat(2,1fr) !important; }
+      .obs-signal-log { grid-template-columns:1fr !important; }
+      .obs-orbit-readout { flex-direction:column; gap:4px; }
+      .hero-proofline { flex-wrap:wrap; gap:6px; }
+      .proof-pill { font-size:10px !important; }
+      .hero-sub { font-size:14px !important; line-height:1.65 !important; }
+ .hero-sub { font-size:15px; } .obs-experience { min-height:500px; } #obs-canvas { height:500px; } .hero-proofline { margin-top:0; } }
 
 
     /* ═══════════════════════════════════════
@@ -517,6 +527,33 @@
     .evolution-phase p { margin-top:10px; color:var(--text-3); font-size:13px; line-height:1.65; }
     .obs-experience::before { background-image: radial-gradient(circle at 50% 50%, rgba(0,212,255,.05), transparent 22%), linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.016) 1px, transparent 1px); background-size:auto, 72px 72px, 72px 72px; }
     .signal-time { white-space:nowrap; }
+
+    /* ═══════════════════════════════════════
+       OBSERVATORY DEPTH ENHANCEMENT
+    ═══════════════════════════════════════ */
+    .obs-experience::before {
+      content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
+      background-image:
+        repeating-linear-gradient(0deg, rgba(0,212,255,.012) 0px, rgba(0,212,255,.012) 1px, transparent 1px, transparent 3px),
+        radial-gradient(circle at 50% 50%, rgba(0,212,255,.04), transparent 50%);
+      mix-blend-mode: screen;
+    }
+    .obs-field-vignette {
+      background:
+        radial-gradient(circle at center, transparent 28%, rgba(0,0,0,.35) 60%, rgba(0,0,0,.82) 100%),
+        linear-gradient(90deg, rgba(0,212,255,.02), transparent 15%, transparent 85%, rgba(139,92,246,.02)) !important;
+    }
+    .obs-corner { color:rgba(0,212,255,.45) !important; font-size:10px !important; text-shadow:0 0 12px rgba(0,212,255,.15); }
+    .obs-hud-cell {
+      border:1px solid rgba(255,255,255,.06);
+      background: rgba(4,6,10,.72);
+      backdrop-filter:blur(12px);
+      box-shadow: 0 0 30px var(--hud-glow), inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .obs-hud-value { text-shadow: 0 0 20px currentColor; }
+    .obs-signal-log { border:1px solid rgba(255,255,255,.06); border-radius:20px; }
+    .signal-panel { background:rgba(4,6,10,.65); backdrop-filter:blur(10px); }
+
 
     .obs-experience { background: radial-gradient(circle at 50% 48%, rgba(0,212,255,0.14), transparent 34%), radial-gradient(circle at 26% 20%, rgba(139,92,246,0.09), transparent 30%), radial-gradient(circle at 76% 28%, rgba(0,255,136,0.075), transparent 32%), linear-gradient(180deg, rgba(2,4,7,0.98), rgba(4,5,8,0.98)); }
     .obs-field-vignette { background: radial-gradient(circle at center, transparent 34%, rgba(0,0,0,0.42) 72%, rgba(0,0,0,0.76) 100%), linear-gradient(90deg, rgba(0,212,255,.035), transparent 18%, transparent 82%, rgba(139,92,246,.035)); }
@@ -603,10 +640,10 @@
       <div class="container">
         <div class="hero-layout">
           <div>
-            <div class="hero-eyebrow">Digital Headquarters · Autonomous Systems</div>
+            <div class="hero-eyebrow">Agent Infrastructure · Model Routing · Persistent Memory · Observability</div>
             <h1 class="hero-title">ZKA <span class="green">Labs</span></h1>
-            <p class="hero-sub">A command layer for agents, infrastructure, memory, and research. ZKA Labs is an operating system for an expanding AI ecosystem — not a collection of isolated projects.</p>
-            <div class="hero-proofline"><span class="proof-pill"><span>Live</span> intelligence field</span><span class="proof-pill"><span>Open</span> ecosystem nodes</span><span class="proof-pill"><span>Agent</span> runtime layer</span></div>
+            <p class="hero-sub">Building and operating AI agent infrastructure: multi-platform runtime, OpenRouter-powered model intelligence, persistent memory layers, and zero-budget deployment patterns — all observable from one headquarters.</p>
+            <div class="hero-proofline"><span class="proof-pill"><span>Live</span> model observatory</span><span class="proof-pill"><span>Open</span> repositories</span><span class="proof-pill"><span>Agent</span> runtime + memory</span></div>
             <div class="hero-ctas">
               <a href="#observatory" class="btn btn-primary">AI Observatory</a>
               <a href="#ecosystem" class="btn btn-ghost">Ecosystem</a>
@@ -650,9 +687,9 @@
           <p class="section-desc">A compact readout of what is already live, what is being assembled, and what the lab is watching.</p>
         </div>
         <div class="status-grid reveal">
-          <div class="status-card"><div class="status-value" data-count="1">0</div><div class="status-label"><span class="status-indicator green"></span>Active</div></div>
-          <div class="status-card"><div class="status-value" data-count="5">0</div><div class="status-label"><span class="status-indicator gold"></span>Planned</div></div>
-          <div class="status-card"><div class="status-value" data-count="6">0</div><div class="status-label">Repositories</div></div>
+          <div class="status-card"><div class="status-value">01</div><div class="status-label"><span class="status-indicator green"></span>Active</div></div>
+          <div class="status-card"><div class="status-value">05</div><div class="status-label"><span class="status-indicator gold"></span>Planned</div></div>
+          <div class="status-card"><div class="status-value">06</div><div class="status-label">Repositories</div></div>
           <div class="status-card"><div class="status-value" style="font-size:22px"><span class="status-indicator green"></span>ONLINE</div><div class="status-label">Ecosystem</div></div>
           <div class="status-card"><div class="status-value" style="font-size:22px"><span class="status-indicator blue"></span>LIVE</div><div class="status-label">Observatory</div></div>
         </div>
@@ -981,20 +1018,7 @@
     const vs = document.querySelector('.vision-statements');
     if (vs) visionObs.observe(vs);
 
-    // Stat counter
-    document.querySelectorAll('.status-value[data-count]').forEach(el => {
-      const io = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const target = parseInt(el.dataset.count); let cur = 0;
-            const stepMs = Math.max(22, Math.floor(420 / Math.max(target, 1)));
-            const step = () => { cur++; el.textContent = String(cur).padStart(2, '0'); if (cur < target) setTimeout(step, stepMs); };
-            step(); io.unobserve(el);
-          }
-        });
-      }, { threshold: 0.5 });
-      io.observe(el);
-    });
+
 
     // Activity feed
     (() => {
