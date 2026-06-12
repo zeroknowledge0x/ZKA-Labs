@@ -1523,10 +1523,17 @@
 
       // === Hover + Touch handling ===
       function handlePointerMove(mx, my) {
+        // Find closest node within hit radius
+        let closestDist = Infinity;
         hoveredNode = null;
         providerNodes.forEach(n => {
           if (n.r <= 0 || n.x < -100) return;
-          if (Math.hypot(mx - n.x, my - n.y) < n.r + 14) hoveredNode = n;
+          const dist = Math.hypot(mx - n.x, my - n.y);
+          const hitRadius = Math.max(n.r + 10, 20); // Minimum 20px hit target
+          if (dist < hitRadius && dist < closestDist) {
+            closestDist = dist;
+            hoveredNode = n;
+          }
         });
         if (hoveredNode) {
           canvas.style.cursor = 'pointer';
@@ -1567,10 +1574,33 @@
         });
       }
 
+      // Check cache first (5 min TTL)
+      const cacheKey = 'zka-obs-cache';
+      const cacheTTL = 5 * 60 * 1000;
+      let cached = null;
+      try {
+        const raw = localStorage.getItem(cacheKey);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Date.now() - parsed.ts < cacheTTL) cached = parsed.data;
+        }
+      } catch(e) {}
+
+      if (cached) {
+        handleData(cached);
+      }
+
       fetch('https://openrouter.ai/api/v1/models')
         .then(r => r.json())
-        .then(d => handleData(d.data || d))
+        .then(d => {
+          const models = d.data || d;
+          // Cache it
+          try { localStorage.setItem(cacheKey, JSON.stringify({ts: Date.now(), data: models})); } catch(e) {}
+          // Only rebuild if not from cache (or cache was stale)
+          if (!cached) handleData(models);
+        })
         .catch(() => {
+          if (cached) return; // Already showing cached data
           const fallback = [
             { id:'openai/gpt-4.1', name:'GPT-4.1', context_length:1047576 },
             { id:'openai/o3', name:'o3', context_length:200000 },
