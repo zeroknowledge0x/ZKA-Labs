@@ -6,35 +6,30 @@
   <title>ZKA Labs</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg: #050505;
-      --bg-subtle: #0a0a0a;
-      --surface: #0f0f0f;
-      --surface-raised: #141414;
-      --surface-hover: #1a1a1a;
-      --border: #1e1e1e;
-      --border-hover: #2a2a2a;
-
-      --text: #e8e8e8;
-      --text-secondary: #888888;
-      --text-muted: #555555;
-
+      --bg: #030303;
+      --surface: #0a0a0a;
+      --surface-2: #0f0f0f;
+      --surface-3: #141414;
+      --border: #1a1a1a;
+      --border-hover: #252525;
+      --text: #eaeaea;
+      --text-2: #999;
+      --text-3: #555;
       --green: #00ff88;
-      --green-dim: rgba(0, 255, 136, 0.08);
-      --green-glow: rgba(0, 255, 136, 0.15);
-      --green-border: rgba(0, 255, 136, 0.2);
-
+      --green-2: #00cc6a;
+      --green-dim: rgba(0,255,136,0.06);
+      --green-glow: rgba(0,255,136,0.12);
+      --green-border: rgba(0,255,136,0.15);
       --yellow: #fbbf24;
-      --yellow-dim: rgba(251, 191, 36, 0.08);
-      --yellow-border: rgba(251, 191, 36, 0.2);
-
-      --red: #ef4444;
-      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      --mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+      --yellow-dim: rgba(251,191,36,0.06);
+      --yellow-border: rgba(251,191,36,0.15);
+      --font: 'Inter', -apple-system, sans-serif;
+      --mono: 'JetBrains Mono', 'SF Mono', monospace;
     }
 
     html { scroll-behavior: smooth; }
@@ -43,47 +38,185 @@
       background: var(--bg);
       color: var(--text);
       font-family: var(--font);
-      line-height: 1.6;
-      min-height: 100vh;
+      overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
 
-    ::selection {
-      background: var(--green);
-      color: var(--bg);
-    }
+    ::selection { background: var(--green); color: var(--bg); }
 
-    /* ─── NOISE OVERLAY ─── */
-    body::before {
-      content: '';
+    /* ═══════════════════════════════
+       LOADING SCREEN
+    ═══════════════════════════════ */
+    #loader {
       position: fixed;
       inset: 0;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 999;
+      z-index: 10000;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
     }
 
-    /* ─── LAYOUT ─── */
+    #loader.hidden { opacity: 0; visibility: hidden; }
+
+    .loader-logo {
+      font-family: var(--mono);
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: -1px;
+      margin-bottom: 32px;
+    }
+
+    .loader-logo .g { color: var(--green); }
+
+    .loader-bar-track {
+      width: 200px;
+      height: 2px;
+      background: var(--border);
+      border-radius: 1px;
+      overflow: hidden;
+    }
+
+    .loader-bar {
+      height: 100%;
+      background: var(--green);
+      width: 0%;
+      border-radius: 1px;
+      animation: loadProgress 1.8s ease-in-out forwards;
+    }
+
+    @keyframes loadProgress {
+      0% { width: 0; }
+      30% { width: 45%; }
+      70% { width: 80%; }
+      100% { width: 100%; }
+    }
+
+    .loader-text {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-3);
+      margin-top: 16px;
+      letter-spacing: 2px;
+    }
+
+    /* ═══════════════════════════════
+       BACKGROUND EFFECTS
+    ═══════════════════════════════ */
+
+    /* Grid */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    /* Scanlines */
+    .bg-scanlines {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.03) 2px,
+        rgba(0,0,0,0.03) 4px
+      );
+      pointer-events: none;
+    }
+
+    /* Noise */
+    .bg-noise {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      opacity: 0.025;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    /* Floating orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .orb-1 {
+      width: 400px; height: 400px;
+      background: rgba(0,255,136,0.04);
+      top: -100px; right: -100px;
+      animation: float1 20s ease-in-out infinite;
+    }
+
+    .orb-2 {
+      width: 300px; height: 300px;
+      background: rgba(0,255,136,0.03);
+      bottom: 20%; left: -80px;
+      animation: float2 25s ease-in-out infinite;
+    }
+
+    .orb-3 {
+      width: 200px; height: 200px;
+      background: rgba(0,255,136,0.025);
+      top: 50%; right: 10%;
+      animation: float3 18s ease-in-out infinite;
+    }
+
+    @keyframes float1 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-40px,60px); } }
+    @keyframes float2 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(50px,-40px); } }
+    @keyframes float3 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-30px,30px); } }
+
+    /* Particles canvas */
+    #particles {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* ═══════════════════════════════
+       CONTENT WRAPPER
+    ═══════════════════════════════ */
+    .content {
+      position: relative;
+      z-index: 10;
+    }
+
     .container {
-      max-width: 900px;
+      max-width: 1000px;
       margin: 0 auto;
       padding: 0 32px;
     }
 
-    /* ─── NAV ─── */
+    /* ═══════════════════════════════
+       NAV
+    ═══════════════════════════════ */
     nav {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      background: rgba(5, 5, 5, 0.85);
-      backdrop-filter: blur(16px) saturate(120%);
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(3,3,3,0.7);
+      backdrop-filter: blur(20px) saturate(120%);
       border-bottom: 1px solid var(--border);
+      transform: translateY(-100%);
+      transition: transform 0.4s ease;
     }
 
+    nav.visible { transform: translateY(0); }
+
     .nav-inner {
-      max-width: 900px;
+      max-width: 1000px;
       margin: 0 auto;
       padding: 0 32px;
       height: 56px;
@@ -95,22 +228,17 @@
     .nav-logo {
       font-family: var(--mono);
       font-size: 15px;
-      font-weight: 500;
+      font-weight: 600;
       color: var(--text);
       text-decoration: none;
-      letter-spacing: -0.5px;
     }
 
     .nav-logo .g { color: var(--green); }
 
-    .nav-links {
-      display: flex;
-      gap: 28px;
-      list-style: none;
-    }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
 
     .nav-links a {
-      color: var(--text-secondary);
+      color: var(--text-2);
       text-decoration: none;
       font-size: 13px;
       font-weight: 500;
@@ -119,333 +247,623 @@
 
     .nav-links a:hover { color: var(--green); }
 
-    /* ─── HERO ─── */
-    .hero {
-      padding: 140px 0 60px;
+    /* ═══════════════════════════════
+       SECTION HELPERS
+    ═══════════════════════════════ */
+    section {
+      padding: 120px 0;
       position: relative;
     }
 
-    .hero::before {
+    .section-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-label::before {
       content: '';
+      width: 20px;
+      height: 1px;
+      background: var(--green);
+    }
+
+    .section-title {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .section-desc {
+      font-size: 16px;
+      color: var(--text-2);
+      max-width: 520px;
+      line-height: 1.7;
+    }
+
+    .green { color: var(--green); }
+
+    /* Reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ═══════════════════════════════
+       HERO
+    ═══════════════════════════════ */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-glow {
       position: absolute;
-      top: 80px;
+      top: 30%;
       left: 50%;
-      transform: translateX(-50%);
-      width: 500px;
-      height: 300px;
-      background: radial-gradient(ellipse, var(--green-glow) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      width: 700px;
+      height: 400px;
+      background: radial-gradient(ellipse, var(--green-glow) 0%, transparent 65%);
+      opacity: 0.5;
       pointer-events: none;
-      opacity: 0.4;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
     }
 
     .hero-eyebrow {
       font-family: var(--mono);
       font-size: 12px;
-      font-weight: 500;
       color: var(--green);
-      letter-spacing: 2px;
+      letter-spacing: 3px;
       text-transform: uppercase;
-      margin-bottom: 16px;
+      margin-bottom: 24px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 2s forwards;
     }
 
     .hero-eyebrow::before {
       content: '';
-      width: 16px;
+      width: 24px;
       height: 1px;
       background: var(--green);
     }
 
-    .hero h1 {
-      font-size: clamp(36px, 6vw, 56px);
-      font-weight: 800;
-      letter-spacing: -2px;
-      line-height: 1.05;
-      margin-bottom: 20px;
-      color: var(--text);
+    .hero-title {
+      font-size: clamp(48px, 8vw, 88px);
+      font-weight: 900;
+      letter-spacing: -3px;
+      line-height: 0.95;
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 2.2s forwards;
     }
 
-    .hero h1 .green { color: var(--green); }
+    .hero-subtitle {
+      font-size: 18px;
+      color: var(--text-2);
+      max-width: 500px;
+      line-height: 1.7;
+      margin-bottom: 48px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 2.4s forwards;
+    }
 
-    .hero-desc {
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease 2.6s forwards;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: var(--bg);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 0 30px rgba(0,255,136,0.25);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--green-border);
+      color: var(--green);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 48px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-3);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeIn 1s ease 3s forwards;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--green), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%,100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* ═══════════════════════════════
+       ABOUT
+    ═══════════════════════════════ */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      margin-top: 48px;
+    }
+
+    .about-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      transition: border-color 0.2s;
+    }
+
+    .about-card:hover { border-color: var(--border-hover); }
+
+    .about-card-icon {
+      font-size: 24px;
+      margin-bottom: 16px;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      background: var(--green-dim);
+      border: 1px solid var(--green-border);
+    }
+
+    .about-card h3 {
       font-size: 16px;
-      color: var(--text-secondary);
-      max-width: 480px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.3px;
+    }
+
+    .about-card p {
+      font-size: 14px;
+      color: var(--text-2);
       line-height: 1.7;
     }
 
-    /* ─── STATS ─── */
-    .stats {
+    /* ═══════════════════════════════
+       ECOSYSTEM
+    ═══════════════════════════════ */
+    .eco-visual {
+      margin-top: 56px;
       display: flex;
+      justify-content: center;
+    }
+
+    .eco-tree {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 40px 48px;
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 2.2;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .eco-tree::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--green), var(--border), transparent);
+    }
+
+    .eco-node { color: var(--text-2); }
+    .eco-active { color: var(--green); font-weight: 600; }
+    .eco-branch { color: var(--text-3); }
+
+    /* ═══════════════════════════════
+       STATS
+    ═══════════════════════════════ */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
       gap: 1px;
       background: var(--border);
       border: 1px solid var(--border);
       border-radius: 12px;
       overflow: hidden;
-      margin: 48px 0 64px;
+      margin-top: 48px;
     }
 
-    .stat {
-      flex: 1;
+    .stat-card {
       background: var(--surface);
-      padding: 24px;
+      padding: 32px 24px;
       text-align: center;
     }
 
     .stat-value {
       font-family: var(--mono);
-      font-size: 28px;
+      font-size: 36px;
       font-weight: 700;
       color: var(--green);
-      letter-spacing: -1px;
+      letter-spacing: -2px;
+      margin-bottom: 6px;
     }
 
     .stat-label {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 4px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    /* ─── SECTION ─── */
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
-
-    .section-title {
-      font-family: var(--mono);
       font-size: 11px;
-      font-weight: 500;
-      color: var(--text-muted);
+      color: var(--text-3);
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 1.5px;
+      font-weight: 500;
     }
 
-    .section-count {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    /* ─── PROJECT CARDS ─── */
-    .projects {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 80px;
-    }
-
-    .project-card {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    /* ═══════════════════════════════
+       FEATURED PROJECT
+    ═══════════════════════════════ */
+    .featured {
+      margin-top: 48px;
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px 24px;
-      text-decoration: none;
-      color: inherit;
-      transition: all 0.2s ease;
+      border: 1px solid var(--green-border);
+      border-radius: 16px;
+      padding: 48px;
       position: relative;
       overflow: hidden;
     }
 
-    .project-card::before {
+    .featured::before {
       content: '';
       position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: transparent;
-      transition: background 0.2s;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--green), transparent);
     }
 
-    .project-card:hover {
-      border-color: var(--border-hover);
-      background: var(--surface-hover);
+    .featured::after {
+      content: '';
+      position: absolute;
+      top: -50%; right: -20%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(0,255,136,0.04), transparent 60%);
+      pointer-events: none;
     }
 
-    .project-card.active:hover {
-      border-color: var(--green-border);
-      box-shadow: 0 0 30px rgba(0, 255, 136, 0.03);
-    }
-
-    .project-card.active:hover::before {
-      background: var(--green);
-    }
-
-    .project-card.disabled {
-      opacity: 0.4;
-      cursor: default;
-    }
-
-    .project-card.disabled:hover {
-      background: var(--surface);
-      border-color: var(--border);
-    }
-
-    .card-left {
+    .featured-header {
       display: flex;
       align-items: center;
       gap: 16px;
-    }
-
-    .card-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      flex-shrink: 0;
-    }
-
-    .project-card.active .card-icon {
-      border-color: var(--green-border);
-      background: var(--green-dim);
-    }
-
-    .card-info h3 {
-      font-size: 15px;
-      font-weight: 600;
-      letter-spacing: -0.3px;
-      margin-bottom: 2px;
-    }
-
-    .card-info p {
-      font-size: 13px;
-      color: var(--text-secondary);
-      max-width: 380px;
-    }
-
-    .card-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-shrink: 0;
-    }
-
-    .badge {
-      font-family: var(--mono);
-      font-size: 10px;
-      font-weight: 500;
-      padding: 4px 10px;
-      border-radius: 999px;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-    }
-
-    .badge-live {
-      background: var(--green-dim);
-      color: var(--green);
-      border: 1px solid var(--green-border);
-    }
-
-    .badge-soon {
-      background: var(--yellow-dim);
-      color: var(--yellow);
-      border: 1px solid var(--yellow-border);
-    }
-
-    .card-arrow {
-      color: var(--text-muted);
-      font-size: 16px;
-      transition: all 0.2s;
-    }
-
-    .project-card.active:hover .card-arrow {
-      color: var(--green);
-      transform: translateX(3px);
-    }
-
-    /* ─── ROADMAP ─── */
-    .roadmap {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 28px;
-      margin-bottom: 80px;
-    }
-
-    .roadmap-title {
-      font-family: var(--mono);
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 2px;
       margin-bottom: 20px;
     }
 
-    .roadmap-tree {
-      font-family: var(--mono);
-      font-size: 13px;
-      line-height: 2;
-      color: var(--text-secondary);
+    .featured-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: var(--green-dim);
+      border: 1px solid var(--green-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
     }
 
-    .roadmap-tree .active-node { color: var(--green); font-weight: 600; }
-    .roadmap-tree .branch { color: var(--text-muted); }
+    .featured-title {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
 
-    /* ─── FOOTER ─── */
+    .featured-badge {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: var(--green-dim);
+      color: var(--green);
+      border: 1px solid var(--green-border);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .featured-desc {
+      font-size: 16px;
+      color: var(--text-2);
+      line-height: 1.8;
+      max-width: 600px;
+      margin-bottom: 28px;
+    }
+
+    .featured-tech {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .tech-tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 5px 12px;
+      border-radius: 6px;
+      background: var(--surface-3);
+      border: 1px solid var(--border);
+      color: var(--text-2);
+    }
+
+    .featured-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--green);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+
+    .featured-link:hover { gap: 12px; }
+
+    /* ═══════════════════════════════
+       ROADMAP
+    ═══════════════════════════════ */
+    .roadmap-timeline {
+      margin-top: 56px;
+      position: relative;
+    }
+
+    .roadmap-timeline::before {
+      content: '';
+      position: absolute;
+      left: 23px;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--green), var(--border), transparent);
+    }
+
+    .roadmap-item {
+      display: flex;
+      gap: 24px;
+      padding: 24px 0;
+      position: relative;
+    }
+
+    .roadmap-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--border);
+      border: 2px solid var(--bg);
+      margin-top: 6px;
+      flex-shrink: 0;
+      position: relative;
+      left: 19px;
+      z-index: 2;
+    }
+
+    .roadmap-item.active .roadmap-dot {
+      background: var(--green);
+      box-shadow: 0 0 12px rgba(0,255,136,0.4);
+    }
+
+    .roadmap-content {
+      flex: 1;
+      padding-left: 16px;
+    }
+
+    .roadmap-name {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      letter-spacing: -0.3px;
+    }
+
+    .roadmap-status {
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .roadmap-status.soon { color: var(--yellow); }
+    .roadmap-status.planned { color: var(--text-3); }
+
+    /* ═══════════════════════════════
+       VISION
+    ═══════════════════════════════ */
+    #vision {
+      text-align: center;
+    }
+
+    #vision .section-label { justify-content: center; }
+    #vision .section-label::before { display: none; }
+    #vision .section-title { max-width: 700px; margin: 0 auto 20px; }
+    #vision .section-desc { max-width: 600px; margin: 0 auto; text-align: center; }
+
+    .vision-quote {
+      font-size: clamp(20px, 3vw, 28px);
+      font-weight: 300;
+      color: var(--text-2);
+      max-width: 700px;
+      margin: 48px auto 0;
+      line-height: 1.6;
+      font-style: italic;
+      position: relative;
+    }
+
+    .vision-quote::before {
+      content: '"';
+      font-size: 80px;
+      color: var(--green);
+      opacity: 0.2;
+      position: absolute;
+      top: -40px;
+      left: -20px;
+      font-style: normal;
+      line-height: 1;
+    }
+
+    /* ═══════════════════════════════
+       FOOTER
+    ═══════════════════════════════ */
     footer {
-      padding: 32px 0;
+      padding: 48px 0;
       border-top: 1px solid var(--border);
+    }
+
+    .footer-inner {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 40px;
+      flex-wrap: wrap;
+      gap: 16px;
     }
 
-    footer p {
-      font-size: 12px;
-      color: var(--text-muted);
+    .footer-brand {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-3);
     }
 
-    .footer-links {
-      display: flex;
-      gap: 20px;
-    }
+    .footer-brand .g { color: var(--green); }
+
+    .footer-links { display: flex; gap: 24px; }
 
     .footer-links a {
-      color: var(--text-muted);
+      color: var(--text-3);
       text-decoration: none;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 500;
       transition: color 0.15s;
     }
 
     .footer-links a:hover { color: var(--green); }
 
-    /* ─── RESPONSIVE ─── */
-    @media (max-width: 640px) {
+    /* ═══════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════ */
+    @media (max-width: 768px) {
+      section { padding: 80px 0; }
       .container { padding: 0 20px; }
       .nav-inner { padding: 0 20px; }
-      .stats { flex-direction: column; }
-      .card-info p { display: none; }
-      .project-card { padding: 16px 20px; }
-      .roadmap { padding: 20px; }
+      .about-grid { grid-template-columns: 1fr; gap: 16px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .featured { padding: 32px 24px; }
+      .eco-tree { padding: 24px; font-size: 12px; }
+      .hero-title { letter-spacing: -2px; }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .hero-ctas { flex-direction: column; }
+      .btn { justify-content: center; }
     }
   </style>
 </head>
 <body>
 
+  <!-- LOADER -->
+  <div id="loader">
+    <div class="loader-logo">ZK<span class="g">A</span></div>
+    <div class="loader-bar-track"><div class="loader-bar"></div></div>
+    <div class="loader-text">INITIALIZING</div>
+  </div>
+
+  <!-- BG EFFECTS -->
+  <div class="bg-grid"></div>
+  <div class="bg-scanlines"></div>
+  <div class="bg-noise"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <canvas id="particles"></canvas>
+
   <!-- NAV -->
-  <nav>
+  <nav id="nav">
     <div class="nav-inner">
       <a href="#" class="nav-logo">ZK<span class="g">A</span></a>
       <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#ecosystem">Ecosystem</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="#roadmap">Roadmap</a></li>
         <li><a href="https://github.com/zeroknowledge0x" target="_blank">GitHub</a></li>
@@ -453,153 +871,356 @@
     </div>
   </nav>
 
-  <!-- HERO -->
-  <div class="container">
-    <div class="hero">
-      <div class="hero-eyebrow">Research Lab</div>
-      <h1>Build the <span class="green">future</span></h1>
-      <p class="hero-desc">AI models, agents, and infrastructure. Open source, built in public, no limits.</p>
-    </div>
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- HERO -->
+    <section id="hero">
+      <div class="hero-glow"></div>
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-eyebrow">Research Laboratory</div>
+          <h1 class="hero-title">ZKA <span class="green">Labs</span></h1>
+          <p class="hero-subtitle">AI Agents, Automation, Research & Infrastructure. Building the next generation of intelligent systems — open source, built in public.</p>
+          <div class="hero-ctas">
+            <a href="#ecosystem" class="btn btn-primary">Explore Ecosystem ↓</a>
+            <a href="#projects" class="btn btn-secondary">View Projects</a>
+          </div>
+        </div>
+      </div>
+      <div class="hero-scroll">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="container">
+        <div class="reveal">
+          <div class="section-label">About</div>
+          <h2 class="section-title">What is <span class="green">ZKA Labs</span>?</h2>
+          <p class="section-desc">ZKA Labs is a technology laboratory focused on building AI agents, APIs, automation systems, and next-generation infrastructure. Every project is designed to scale from prototype to production.</p>
+        </div>
+        <div class="about-grid">
+          <div class="about-card reveal">
+            <div class="about-card-icon">🎯</div>
+            <h3>Mission</h3>
+            <p>Build organized, scalable, and professional AI infrastructure that can grow into hundreds of integrated projects without changing the foundation.</p>
+          </div>
+          <div class="about-card reveal">
+            <div class="about-card-icon">🔬</div>
+            <h3>Focus Areas</h3>
+            <p>AI Agents, API platforms, workflow automation, persistent memory systems, research experiments, and SaaS infrastructure.</p>
+          </div>
+          <div class="about-card reveal">
+            <div class="about-card-icon">⚡</div>
+            <h3>Philosophy</h3>
+            <p>Premium over fast. Scalable over simple. Every decision optimizes for long-term maintainability and professional quality.</p>
+          </div>
+          <div class="about-card reveal">
+            <div class="about-card-icon">🌐</div>
+            <h3>Open Source</h3>
+            <p>Built in public. Every repository, every tool, every experiment is open for anyone to learn from, use, and contribute to.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ECOSYSTEM -->
+    <section id="ecosystem">
+      <div class="container">
+        <div class="reveal">
+          <div class="section-label">Ecosystem</div>
+          <h2 class="section-title">Architecture</h2>
+          <p class="section-desc">One hub, many projects. Every component connects back to the ZKA Labs ecosystem.</p>
+        </div>
+        <div class="eco-visual reveal">
+          <div class="eco-tree">
+            <span class="eco-active">ZKA-Labs</span><br>
+            <span class="eco-branch">│</span><br>
+            <span class="eco-branch">├──</span> <span class="eco-active">ZKA Agent</span> <span class="eco-branch">← active</span><br>
+            <span class="eco-branch">├──</span> <span class="eco-node">Hermes</span> <span class="eco-branch">← planned</span><br>
+            <span class="eco-branch">├──</span> <span class="eco-node">Memory API</span> <span class="eco-branch">← planned</span><br>
+            <span class="eco-branch">├──</span> <span class="eco-node">Automation Tools</span> <span class="eco-branch">← planned</span><br>
+            <span class="eco-branch">├──</span> <span class="eco-node">Research Projects</span> <span class="eco-branch">← planned</span><br>
+            <span class="eco-branch">└──</span> <span class="eco-node">Future Projects</span> <span class="eco-branch">← planned</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- STATS -->
-    <div class="stats">
-      <div class="stat">
-        <div class="stat-value">1</div>
-        <div class="stat-label">Active</div>
-      </div>
-      <div class="stat">
-        <div class="stat-value">5</div>
-        <div class="stat-label">Planned</div>
-      </div>
-      <div class="stat">
-        <div class="stat-value">∞</div>
-        <div class="stat-label">Potential</div>
-      </div>
-    </div>
-
-    <!-- PROJECTS -->
-    <div id="projects">
-      <div class="section-header">
-        <span class="section-title">Projects</span>
-        <span class="section-count">6 registered</span>
-      </div>
-
-      <div class="projects">
-
-        <!-- ZK Agent -->
-        <a href="https://zeroknowledge0x.github.io/zk-api/" target="_blank" class="project-card active">
-          <div class="card-left">
-            <div class="card-icon">🤖</div>
-            <div class="card-info">
-              <h3>ZKA Agent</h3>
-              <p>AI Agent platform — automation, memory, tool usage, workflow orchestration</p>
-            </div>
+    <section id="stats">
+      <div class="container">
+        <div class="reveal">
+          <div class="section-label">Dashboard</div>
+          <h2 class="section-title">By the <span class="green">numbers</span></h2>
+        </div>
+        <div class="stats-grid reveal">
+          <div class="stat-card">
+            <div class="stat-value" data-count="1">0</div>
+            <div class="stat-label">Active</div>
           </div>
-          <div class="card-right">
-            <span class="badge badge-live">Live</span>
-            <span class="card-arrow">→</span>
+          <div class="stat-card">
+            <div class="stat-value" data-count="5">0</div>
+            <div class="stat-label">Planned</div>
           </div>
-        </a>
-
-        <!-- Hermes -->
-        <div class="project-card disabled">
-          <div class="card-left">
-            <div class="card-icon">⚡</div>
-            <div class="card-info">
-              <h3>Hermes</h3>
-              <p>AI agent framework — multi-platform, persistent memory, tool orchestration</p>
-            </div>
+          <div class="stat-card">
+            <div class="stat-value" data-count="6">0</div>
+            <div class="stat-label">Registered</div>
           </div>
-          <div class="card-right">
-            <span class="badge badge-soon">Soon</span>
+          <div class="stat-card">
+            <div class="stat-value">∞</div>
+            <div class="stat-label">Potential</div>
           </div>
         </div>
-
-        <!-- Memory API -->
-        <div class="project-card disabled">
-          <div class="card-left">
-            <div class="card-icon">🧠</div>
-            <div class="card-info">
-              <h3>Memory API</h3>
-              <p>Persistent memory systems for AI agents</p>
-            </div>
-          </div>
-          <div class="card-right">
-            <span class="badge badge-soon">Soon</span>
-          </div>
-        </div>
-
-        <!-- Automation Tools -->
-        <div class="project-card disabled">
-          <div class="card-left">
-            <div class="card-icon">🔧</div>
-            <div class="card-info">
-              <h3>Automation Tools</h3>
-              <p>Workflow automation and task execution infrastructure</p>
-            </div>
-          </div>
-          <div class="card-right">
-            <span class="badge badge-soon">Soon</span>
-          </div>
-        </div>
-
-        <!-- Research -->
-        <div class="project-card disabled">
-          <div class="card-left">
-            <div class="card-icon">🔬</div>
-            <div class="card-info">
-              <h3>Research Projects</h3>
-              <p>AI safety, alignment, and experimental models</p>
-            </div>
-          </div>
-          <div class="card-right">
-            <span class="badge badge-soon">Soon</span>
-          </div>
-        </div>
-
-        <!-- Future -->
-        <div class="project-card disabled">
-          <div class="card-left">
-            <div class="card-icon">🚀</div>
-            <div class="card-info">
-              <h3>Future Projects</h3>
-              <p>Next-generation technology experiments</p>
-            </div>
-          </div>
-          <div class="card-right">
-            <span class="badge badge-soon">Soon</span>
-          </div>
-        </div>
-
       </div>
-    </div>
+    </section>
+
+    <!-- FEATURED PROJECT -->
+    <section id="projects">
+      <div class="container">
+        <div class="reveal">
+          <div class="section-label">Featured Project</div>
+          <h2 class="section-title">Now <span class="green">building</span></h2>
+        </div>
+        <div class="featured reveal">
+          <div class="featured-header">
+            <div class="featured-icon">🤖</div>
+            <div>
+              <div class="featured-title">ZKA Agent</div>
+            </div>
+            <span class="featured-badge">Live</span>
+          </div>
+          <p class="featured-desc">AI Agent platform focused on automation, memory systems, tool usage, workflow orchestration, and task execution. The first project in the ZKA Labs ecosystem — and the foundation for everything that follows.</p>
+          <div class="featured-tech">
+            <span class="tech-tag">AI Agent</span>
+            <span class="tech-tag">Automation</span>
+            <span class="tech-tag">Memory Systems</span>
+            <span class="tech-tag">Tool Orchestration</span>
+            <span class="tech-tag">OpenAI Compatible</span>
+          </div>
+          <a href="https://zeroknowledge0x.github.io/zk-api/" target="_blank" class="featured-link">Explore ZKA Agent →</a>
+        </div>
+      </div>
+    </section>
 
     <!-- ROADMAP -->
-    <div id="roadmap">
-      <div class="roadmap">
-        <div class="roadmap-title">Architecture</div>
-        <div class="roadmap-tree">
-          <span class="branch">ZKA-Labs</span><br>
-          <span class="branch">├──</span> <span class="active-node">ZKA Agent</span> <span class="branch">(active)</span><br>
-          <span class="branch">├──</span> Hermes <span class="branch">(planned)</span><br>
-          <span class="branch">├──</span> Memory API <span class="branch">(planned)</span><br>
-          <span class="branch">├──</span> Automation Tools <span class="branch">(planned)</span><br>
-          <span class="branch">├──</span> Research Projects <span class="branch">(planned)</span><br>
-          <span class="branch">└──</span> Future Projects <span class="branch">(planned)</span>
+    <section id="roadmap">
+      <div class="container">
+        <div class="reveal">
+          <div class="section-label">Roadmap</div>
+          <h2 class="section-title">What's <span class="green">next</span></h2>
+          <p class="section-desc">The ZKA Labs ecosystem is just getting started.</p>
+        </div>
+        <div class="roadmap-timeline reveal">
+          <div class="roadmap-item active">
+            <div class="roadmap-dot"></div>
+            <div class="roadmap-content">
+              <div class="roadmap-name">ZKA Agent</div>
+              <div class="roadmap-status" style="color: var(--green);">Active — Live</div>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="roadmap-dot"></div>
+            <div class="roadmap-content">
+              <div class="roadmap-name">Hermes</div>
+              <div class="roadmap-status soon">Coming Soon</div>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="roadmap-dot"></div>
+            <div class="roadmap-content">
+              <div class="roadmap-name">Memory API</div>
+              <div class="roadmap-status planned">Planned</div>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="roadmap-dot"></div>
+            <div class="roadmap-content">
+              <div class="roadmap-name">Automation Tools</div>
+              <div class="roadmap-status planned">Planned</div>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="roadmap-dot"></div>
+            <div class="roadmap-content">
+              <div class="roadmap-name">Research Projects</div>
+              <div class="roadmap-status planned">Planned</div>
+            </div>
+          </div>
+          <div class="roadmap-item">
+            <div class="roadmap-dot"></div>
+            <div class="roadmap-content">
+              <div class="roadmap-name">Future Projects</div>
+              <div class="roadmap-status planned">Planned</div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- VISION -->
+    <section id="vision">
+      <div class="container">
+        <div class="reveal">
+          <div class="section-label">Future Vision</div>
+          <h2 class="section-title">The <span class="green">bigger picture</span></h2>
+          <p class="section-desc">ZKA Labs is building towards a future where AI agents, automation systems, and research infrastructure work together as one unified ecosystem.</p>
+          <div class="vision-quote">
+            Every project is a building block. Every experiment is a lesson. Every release is a step towards something that hasn't been built yet.
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- FOOTER -->
     <footer>
-      <p>&copy; 2026 ZKA Labs</p>
-      <div class="footer-links">
-        <a href="https://github.com/zeroknowledge0x" target="_blank">GitHub</a>
-        <a href="https://twitter.com/misaka0x" target="_blank">Twitter</a>
+      <div class="container">
+        <div class="footer-inner">
+          <span class="footer-brand">ZK<span class="g">A</span> Labs &copy; 2026</span>
+          <div class="footer-links">
+            <a href="https://github.com/zeroknowledge0x" target="_blank">GitHub</a>
+            <a href="https://twitter.com/misaka0x" target="_blank">Twitter</a>
+          </div>
+        </div>
       </div>
     </footer>
 
   </div>
+
+  <script>
+    // ── LOADER ──
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('hidden');
+      }, 2000);
+    });
+
+    // ── NAV SCROLL ──
+    const nav = document.getElementById('nav');
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (y > 300) {
+        nav.classList.add('visible');
+      } else {
+        nav.classList.remove('visible');
+      }
+      lastScroll = y;
+    });
+
+    // ── REVEAL ON SCROLL ──
+    const reveals = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => {
+            e.target.classList.add('visible');
+          }, i * 100);
+          revealObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    reveals.forEach(el => revealObserver.observe(el));
+
+    // ── STAT COUNTER ──
+    const statValues = document.querySelectorAll('.stat-value[data-count]');
+    const statObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.dataset.count);
+          let current = 0;
+          const step = () => {
+            current++;
+            el.textContent = current;
+            if (current < target) setTimeout(step, 150);
+          };
+          step();
+          statObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    statValues.forEach(el => statObserver.observe(el));
+
+    // ── PARTICLES ──
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 0.3;
+        this.vy = (Math.random() - 0.5) * 0.3;
+        this.size = Math.random() * 1.5 + 0.5;
+        this.opacity = Math.random() * 0.3 + 0.05;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(0, 255, 136, ${this.opacity})`;
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < 60; i++) particles.push(new Particle());
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => { p.update(); p.draw(); });
+
+      // Draw connections
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 150) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(0, 255, 136, ${0.03 * (1 - dist / 150)})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // ── SMOOTH SCROLL ──
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
 
 </body>
 </html>
