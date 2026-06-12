@@ -235,7 +235,8 @@
     .obs-footer-text { font-family:var(--mono); font-size:11px; color:var(--text-3); }
     .obs-footer-sep { color:var(--text-4); font-size:11px; }
     .obs-sync-badge { font-family:var(--mono); font-size:9px; padding:4px 10px; border-radius:999px; letter-spacing:1px; text-transform:uppercase; background:rgba(0,255,136,.08); color:var(--green); border:1px solid rgba(0,255,136,.15); }
-    @media (max-width:900px) { .obs-header { flex-direction:column; align-items:flex-start; gap:24px; } .obs-header-stats { gap:20px; } }
+    @media (max-width:900px) { .obs-header { flex-direction:column; align-items:flex-start; gap:20px; margin-bottom:24px; } .obs-header-stats { gap:16px; } }
+    @media (max-width:640px) { .obs-header { margin-bottom:16px; } .obs-header-stats { gap:12px; } }
 
     /* ═══════════════════════════════════════
        COMMAND CENTER STRIP
@@ -587,10 +588,13 @@
       .btn { justify-content: center; }
       .hero-panel { padding: 16px; }
       .vision-metrics { gap: 32px; }
-      #observatory { padding: 100px 0; }
+      #observatory { padding: 60px 0; }
 
       /* Observatory Canvas Mobile */
-      #obs-canvas { height: 400px !important; }
+      #obs-canvas { height: 320px !important; }
+      .obs-canvas-wrap { margin-top: 24px; }
+      .obs-grid { margin-top: 24px !important; }
+      .obs-footer { margin-top: 12px; }
       .obs-canvas-wrap { border-radius: 14px; }
       .obs-canvas-tooltip { display: none; }
       .obs-header { flex-direction: column; align-items: flex-start; gap: 16px; }
@@ -602,7 +606,7 @@
        OBSERVATORY LIVING CANVAS
     ═══════════════════════════════ */
     .obs-canvas-wrap {
-      margin-top: 40px; position: relative; width: 100%;
+      margin-top: 32px; position: relative; width: 100%;
       border-radius: 20px; overflow: hidden;
       background: radial-gradient(ellipse at 50% 50%, rgba(0,255,136,0.03), rgba(0,212,255,0.015), transparent 65%);
       border: 1px solid var(--border);
