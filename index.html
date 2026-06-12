@@ -3,86 +3,246 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZKA Labs — Research</title>
+  <title>ZKA Labs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg: #09090b;
-      --surface: #111113;
-      --surface-hover: #1a1a1e;
-      --border: #27272a;
-      --text: #fafafa;
-      --text-muted: #71717a;
-      --accent: #8b5cf6;
-      --accent-dim: rgba(139, 92, 246, 0.12);
-      --green: #22c55e;
-      --green-dim: rgba(34, 197, 94, 0.12);
-      --yellow: #eab308;
-      --yellow-dim: rgba(234, 179, 8, 0.12);
+      --bg: #050505;
+      --bg-subtle: #0a0a0a;
+      --surface: #0f0f0f;
+      --surface-raised: #141414;
+      --surface-hover: #1a1a1a;
+      --border: #1e1e1e;
+      --border-hover: #2a2a2a;
+
+      --text: #e8e8e8;
+      --text-secondary: #888888;
+      --text-muted: #555555;
+
+      --green: #00ff88;
+      --green-dim: rgba(0, 255, 136, 0.08);
+      --green-glow: rgba(0, 255, 136, 0.15);
+      --green-border: rgba(0, 255, 136, 0.2);
+
+      --yellow: #fbbf24;
+      --yellow-dim: rgba(251, 191, 36, 0.08);
+      --yellow-border: rgba(251, 191, 36, 0.2);
+
+      --red: #ef4444;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
     }
+
+    html { scroll-behavior: smooth; }
 
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+      font-family: var(--font);
+      line-height: 1.6;
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
 
+    ::selection {
+      background: var(--green);
+      color: var(--bg);
+    }
+
+    /* ─── NOISE OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* ─── LAYOUT ─── */
     .container {
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
-      padding: 0 24px;
+      padding: 0 32px;
     }
 
-    /* HEADER */
-    header {
-      padding: 48px 0 40px;
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(5, 5, 5, 0.85);
+      backdrop-filter: blur(16px) saturate(120%);
+      border-bottom: 1px solid var(--border);
     }
 
-    .logo {
-      font-size: 14px;
-      font-weight: 600;
+    .nav-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 32px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-logo .g { color: var(--green); }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover { color: var(--green); }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 140px 0 60px;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 500px;
+      height: 300px;
+      background: radial-gradient(ellipse, var(--green-glow) 0%, transparent 70%);
+      pointer-events: none;
+      opacity: 0.4;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--green);
       letter-spacing: 2px;
       text-transform: uppercase;
-      color: var(--text-muted);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .logo span { color: var(--accent); }
-
-    h1 {
-      font-size: clamp(28px, 4vw, 40px);
-      font-weight: 700;
-      letter-spacing: -1px;
-      margin-top: 20px;
-      line-height: 1.15;
-    }
-
-    h1 .accent { color: var(--accent); }
-
-    .subtitle {
-      font-size: 15px;
-      color: var(--text-muted);
-      margin-top: 10px;
-      max-width: 460px;
-    }
-
-    /* DIVIDER */
-    .divider {
+    .hero-eyebrow::before {
+      content: '';
+      width: 16px;
       height: 1px;
-      background: var(--border);
-      margin: 0 0 40px;
+      background: var(--green);
     }
 
-    /* PROJECT LIST */
-    .project-list {
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 800;
+      letter-spacing: -2px;
+      line-height: 1.05;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+
+    .hero h1 .green { color: var(--green); }
+
+    .hero-desc {
+      font-size: 16px;
+      color: var(--text-secondary);
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    /* ─── STATS ─── */
+    .stats {
+      display: flex;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 48px 0 64px;
+    }
+
+    .stat {
+      flex: 1;
+      background: var(--surface);
+      padding: 24px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-family: var(--mono);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--green);
+      letter-spacing: -1px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ─── SECTION ─── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .section-count {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* ─── PROJECT CARDS ─── */
+    .projects {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      padding-bottom: 80px;
+      gap: 8px;
+      margin-bottom: 80px;
     }
 
-    .project-row {
+    .project-card {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -92,176 +252,351 @@
       padding: 20px 24px;
       text-decoration: none;
       color: inherit;
-      transition: border-color 0.15s, background 0.15s;
-      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
     }
 
-    .project-row:hover {
-      border-color: var(--accent);
+    .project-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: transparent;
+      transition: background 0.2s;
+    }
+
+    .project-card:hover {
+      border-color: var(--border-hover);
       background: var(--surface-hover);
     }
 
-    .project-row.disabled {
-      opacity: 0.45;
-      pointer-events: none;
+    .project-card.active:hover {
+      border-color: var(--green-border);
+      box-shadow: 0 0 30px rgba(0, 255, 136, 0.03);
+    }
+
+    .project-card.active:hover::before {
+      background: var(--green);
+    }
+
+    .project-card.disabled {
+      opacity: 0.4;
       cursor: default;
     }
 
-    .project-left {
+    .project-card.disabled:hover {
+      background: var(--surface);
+      border-color: var(--border);
+    }
+
+    .card-left {
       display: flex;
       align-items: center;
       gap: 16px;
     }
 
-    .project-icon {
-      font-size: 28px;
-      width: 48px;
-      height: 48px;
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 10px;
-      background: var(--surface);
+      font-size: 20px;
       border: 1px solid var(--border);
+      background: var(--bg);
+      flex-shrink: 0;
     }
 
-    .project-info h3 {
-      font-size: 16px;
+    .project-card.active .card-icon {
+      border-color: var(--green-border);
+      background: var(--green-dim);
+    }
+
+    .card-info h3 {
+      font-size: 15px;
       font-weight: 600;
       letter-spacing: -0.3px;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
 
-    .project-info p {
+    .card-info p {
       font-size: 13px;
-      color: var(--text-muted);
+      color: var(--text-secondary);
+      max-width: 380px;
     }
 
-    .project-right {
+    .card-right {
       display: flex;
       align-items: center;
       gap: 12px;
+      flex-shrink: 0;
     }
 
     .badge {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 10px;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      padding: 4px 10px;
       border-radius: 999px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.8px;
     }
 
     .badge-live {
       background: var(--green-dim);
       color: var(--green);
+      border: 1px solid var(--green-border);
     }
 
     .badge-soon {
       background: var(--yellow-dim);
       color: var(--yellow);
+      border: 1px solid var(--yellow-border);
     }
 
-    .arrow {
+    .card-arrow {
       color: var(--text-muted);
-      font-size: 18px;
-      transition: color 0.15s;
+      font-size: 16px;
+      transition: all 0.2s;
     }
 
-    .project-row:hover .arrow { color: var(--accent); }
+    .project-card.active:hover .card-arrow {
+      color: var(--green);
+      transform: translateX(3px);
+    }
 
-    /* FOOTER */
+    /* ─── ROADMAP ─── */
+    .roadmap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      margin-bottom: 80px;
+    }
+
+    .roadmap-title {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+
+    .roadmap-tree {
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 2;
+      color: var(--text-secondary);
+    }
+
+    .roadmap-tree .active-node { color: var(--green); font-weight: 600; }
+    .roadmap-tree .branch { color: var(--text-muted); }
+
+    /* ─── FOOTER ─── */
     footer {
       padding: 32px 0;
       border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
       margin-bottom: 40px;
     }
 
     footer p {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--text-muted);
     }
 
-    footer a {
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a {
       color: var(--text-muted);
       text-decoration: none;
-      font-size: 13px;
+      font-size: 12px;
+      font-weight: 500;
       transition: color 0.15s;
     }
 
-    footer a:hover { color: var(--text); }
+    .footer-links a:hover { color: var(--green); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 640px) {
+      .container { padding: 0 20px; }
+      .nav-inner { padding: 0 20px; }
+      .stats { flex-direction: column; }
+      .card-info p { display: none; }
+      .project-card { padding: 16px 20px; }
+      .roadmap { padding: 20px; }
+    }
   </style>
 </head>
 <body>
 
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">ZK<span class="g">A</span></a>
+      <ul class="nav-links">
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#roadmap">Roadmap</a></li>
+        <li><a href="https://github.com/zeroknowledge0x" target="_blank">GitHub</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
   <div class="container">
+    <div class="hero">
+      <div class="hero-eyebrow">Research Lab</div>
+      <h1>Build the <span class="green">future</span></h1>
+      <p class="hero-desc">AI models, agents, and infrastructure. Open source, built in public, no limits.</p>
+    </div>
 
-    <!-- HEADER -->
-    <header>
-      <div class="logo">ZK<span>A</span> Labs</div>
-      <h1>Research <span class="accent">&</span> Projects</h1>
-      <p class="subtitle">AI models, agents, and infrastructure. Built in public.</p>
-    </header>
-
-    <div class="divider"></div>
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value">1</div>
+        <div class="stat-label">Active</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">5</div>
+        <div class="stat-label">Planned</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">∞</div>
+        <div class="stat-label">Potential</div>
+      </div>
+    </div>
 
     <!-- PROJECTS -->
-    <div class="project-list">
-
-      <!-- ZK Agent — LIVE -->
-      <a href="https://zeroknowledge0x.github.io/zk-api/" class="project-row" target="_blank">
-        <div class="project-left">
-          <div class="project-icon">🤖</div>
-          <div class="project-info">
-            <h3>ZK Agent</h3>
-            <p>Multi-model AI platform — 3 models, OpenAI-compatible API</p>
-          </div>
-        </div>
-        <div class="project-right">
-          <span class="badge badge-live">Live</span>
-          <span class="arrow">→</span>
-        </div>
-      </a>
-
-      <!-- Coming Soon 1 -->
-      <div class="project-row disabled">
-        <div class="project-left">
-          <div class="project-icon">🧠</div>
-          <div class="project-info">
-            <h3>ZK v1b</h3>
-            <p>Custom fine-tuned language model</p>
-          </div>
-        </div>
-        <div class="project-right">
-          <span class="badge badge-soon">Soon</span>
-        </div>
+    <div id="projects">
+      <div class="section-header">
+        <span class="section-title">Projects</span>
+        <span class="section-count">6 registered</span>
       </div>
 
-      <!-- Coming Soon 2 -->
-      <div class="project-row disabled">
-        <div class="project-left">
-          <div class="project-icon">🔬</div>
-          <div class="project-info">
-            <h3>ZK Research</h3>
-            <p>AI safety & alignment experiments</p>
+      <div class="projects">
+
+        <!-- ZK Agent -->
+        <a href="https://zeroknowledge0x.github.io/zk-api/" target="_blank" class="project-card active">
+          <div class="card-left">
+            <div class="card-icon">🤖</div>
+            <div class="card-info">
+              <h3>ZKA Agent</h3>
+              <p>AI Agent platform — automation, memory, tool usage, workflow orchestration</p>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge badge-live">Live</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </a>
+
+        <!-- Hermes -->
+        <div class="project-card disabled">
+          <div class="card-left">
+            <div class="card-icon">⚡</div>
+            <div class="card-info">
+              <h3>Hermes</h3>
+              <p>AI agent framework — multi-platform, persistent memory, tool orchestration</p>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge badge-soon">Soon</span>
           </div>
         </div>
-        <div class="project-right">
-          <span class="badge badge-soon">Soon</span>
+
+        <!-- Memory API -->
+        <div class="project-card disabled">
+          <div class="card-left">
+            <div class="card-icon">🧠</div>
+            <div class="card-info">
+              <h3>Memory API</h3>
+              <p>Persistent memory systems for AI agents</p>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge badge-soon">Soon</span>
+          </div>
+        </div>
+
+        <!-- Automation Tools -->
+        <div class="project-card disabled">
+          <div class="card-left">
+            <div class="card-icon">🔧</div>
+            <div class="card-info">
+              <h3>Automation Tools</h3>
+              <p>Workflow automation and task execution infrastructure</p>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge badge-soon">Soon</span>
+          </div>
+        </div>
+
+        <!-- Research -->
+        <div class="project-card disabled">
+          <div class="card-left">
+            <div class="card-icon">🔬</div>
+            <div class="card-info">
+              <h3>Research Projects</h3>
+              <p>AI safety, alignment, and experimental models</p>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge badge-soon">Soon</span>
+          </div>
+        </div>
+
+        <!-- Future -->
+        <div class="project-card disabled">
+          <div class="card-left">
+            <div class="card-icon">🚀</div>
+            <div class="card-info">
+              <h3>Future Projects</h3>
+              <p>Next-generation technology experiments</p>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="badge badge-soon">Soon</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ROADMAP -->
+    <div id="roadmap">
+      <div class="roadmap">
+        <div class="roadmap-title">Architecture</div>
+        <div class="roadmap-tree">
+          <span class="branch">ZKA-Labs</span><br>
+          <span class="branch">├──</span> <span class="active-node">ZKA Agent</span> <span class="branch">(active)</span><br>
+          <span class="branch">├──</span> Hermes <span class="branch">(planned)</span><br>
+          <span class="branch">├──</span> Memory API <span class="branch">(planned)</span><br>
+          <span class="branch">├──</span> Automation Tools <span class="branch">(planned)</span><br>
+          <span class="branch">├──</span> Research Projects <span class="branch">(planned)</span><br>
+          <span class="branch">└──</span> Future Projects <span class="branch">(planned)</span>
         </div>
       </div>
-
     </div>
 
     <!-- FOOTER -->
     <footer>
       <p>&copy; 2026 ZKA Labs</p>
-      <a href="https://github.com/zeroknowledge0x" target="_blank">GitHub</a>
+      <div class="footer-links">
+        <a href="https://github.com/zeroknowledge0x" target="_blank">GitHub</a>
+        <a href="https://twitter.com/misaka0x" target="_blank">Twitter</a>
+      </div>
     </footer>
 
   </div>
