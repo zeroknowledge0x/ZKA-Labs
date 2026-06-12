@@ -468,7 +468,16 @@
       .proof-pill { font-size:10px !important; }
       .hero-sub { font-size:14px !important; line-height:1.65 !important; }
       #hero { min-height:auto !important; padding:60px 0 24px !important; }
-      .hero-panels { display:none !important; }
+      .hero-panels { display:flex !important; flex-direction:row !important; gap:8px !important; order:-1 !important; margin-bottom:16px !important; }
+      .hero-panel:not(.command-portrait) { display:none !important; }
+      .command-portrait { width:100% !important; }
+      .portrait-core { min-height:140px !important; padding:16px !important; }
+      .core-ring.r1 { width:120px !important; height:120px !important; }
+      .core-ring.r2 { width:90px !important; height:90px !important; }
+      .core-ring.r3 { width:50px !important; height:50px !important; }
+      .mini-rail { grid-template-columns:repeat(3,1fr) !important; }
+      .mini-rail div { padding:10px 8px !important; }
+      .mini-rail .v { font-size:14px !important; }
       .hero-title { font-size: 32px !important; letter-spacing: -1.5px !important; }
       .hero-sub { font-size: 13px !important; max-width: 100% !important; }
       .hero-eyebrow { font-size: 9px !important; }
