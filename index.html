@@ -1574,9 +1574,40 @@
         });
       }
 
-      // Check cache first (5 min TTL)
+      // IMMEDIATE: Show data instantly, background refresh every 10min
       const cacheKey = 'zka-obs-cache';
-      const cacheTTL = 5 * 60 * 1000;
+      const cacheTTL = 10 * 60 * 1000;
+
+      // Static fallback — always available, zero network wait
+      const staticData = [
+        { id:'openai/gpt-4.1', name:'GPT-4.1', context_length:1047576 },
+        { id:'openai/o3', name:'o3', context_length:200000 },
+        { id:'openai/gpt-4o', name:'GPT-4o', context_length:128000 },
+        { id:'openai/gpt-4.1-mini', name:'GPT-4.1 Mini', context_length:1047576 },
+        { id:'anthropic/claude-sonnet-4', name:'Claude Sonnet 4', context_length:1000000 },
+        { id:'anthropic/claude-opus-4', name:'Claude Opus 4', context_length:200000 },
+        { id:'anthropic/claude-haiku-3.5', name:'Claude Haiku 3.5', context_length:200000 },
+        { id:'google/gemini-2.5-pro', name:'Gemini 2.5 Pro', context_length:1048576 },
+        { id:'google/gemini-2.5-flash', name:'Gemini 2.5 Flash', context_length:1048576 },
+        { id:'google/gemma-3-27b', name:'Gemma 3 27B', context_length:131072 },
+        { id:'qwen/qwen3', name:'Qwen3', context_length:131072 },
+        { id:'qwen/qwen3-coder', name:'Qwen3 Coder', context_length:262144 },
+        { id:'deepseek/deepseek-r1', name:'DeepSeek R1', context_length:128000 },
+        { id:'deepseek/deepseek-v3', name:'DeepSeek V3', context_length:131072 },
+        { id:'meta-llama/llama-4-maverick', name:'Llama 4 Maverick', context_length:1000000 },
+        { id:'meta-llama/llama-4-scout', name:'Llama 4 Scout', context_length:524288 },
+        { id:'mistralai/mistral-large', name:'Mistral Large', context_length:128000 },
+        { id:'mistralai/codestral', name:'Codestral', context_length:262144 },
+        { id:'x-ai/grok-4', name:'Grok 4', context_length:256000 },
+        { id:'x-ai/grok-3-mini', name:'Grok 3 Mini', context_length:131072 },
+        { id:'nvidia/llama-3.1-nemotron-70b', name:'Nemotron 70B', context_length:131072 },
+        { id:'cohere/command-r-plus', name:'Command R+', context_length:128000 },
+        { id:'microsoft/phi-4', name:'Phi-4', context_length:16384 },
+        { id:'amazon/nova-pro', name:'Nova Pro', context_length:300000 },
+        { id:'perplexity/sonar-pro', name:'Sonar Pro', context_length:200000 },
+      ];
+
+      // 1. Check cache
       let cached = null;
       try {
         const raw = localStorage.getItem(cacheKey);
@@ -1586,40 +1617,20 @@
         }
       } catch(e) {}
 
-      if (cached) {
-        handleData(cached);
-      }
+      // 2. Show cached OR static data IMMEDIATELY — zero wait
+      handleData(cached || staticData);
 
-      fetch('https://openrouter.ai/api/v1/models')
-        .then(r => r.json())
-        .then(d => {
-          const models = d.data || d;
-          // Cache it
-          try { localStorage.setItem(cacheKey, JSON.stringify({ts: Date.now(), data: models})); } catch(e) {}
-          // Only rebuild if not from cache (or cache was stale)
-          if (!cached) handleData(models);
-        })
-        .catch(() => {
-          if (cached) return; // Already showing cached data
-          const fallback = [
-            { id:'openai/gpt-4.1', name:'GPT-4.1', context_length:1047576 },
-            { id:'openai/o3', name:'o3', context_length:200000 },
-            { id:'openai/gpt-4o', name:'GPT-4o', context_length:128000 },
-            { id:'anthropic/claude-sonnet-4', name:'Claude Sonnet 4', context_length:1000000 },
-            { id:'anthropic/claude-opus-4', name:'Claude Opus 4', context_length:200000 },
-            { id:'google/gemini-2.5-pro', name:'Gemini 2.5 Pro', context_length:1048576 },
-            { id:'google/gemini-2.5-flash', name:'Gemini 2.5 Flash', context_length:1048576 },
-            { id:'qwen/qwen3', name:'Qwen3', context_length:131072 },
-            { id:'deepseek/deepseek-r1', name:'DeepSeek R1', context_length:128000 },
-            { id:'meta-llama/llama-4-maverick', name:'Llama 4 Maverick', context_length:1000000 },
-            { id:'mistralai/mistral-large', name:'Mistral Large', context_length:128000 },
-            { id:'x-ai/grok-4', name:'Grok 4', context_length:256000 },
-            { id:'nvidia/llama-3.1-nemotron-70b', name:'Nemotron 70B', context_length:131072 },
-            { id:'cohere/command-r-plus', name:'Command R+', context_length:128000 },
-            { id:'microsoft/phi-4', name:'Phi-4', context_length:16384 },
-          ];
-          handleData(fallback);
-        });
+      // 3. Background refresh if cache is stale
+      if (!cached) {
+        fetch('https://openrouter.ai/api/v1/models')
+          .then(r => r.json())
+          .then(d => {
+            const models = d.data || d;
+            try { localStorage.setItem(cacheKey, JSON.stringify({ts: Date.now(), data: models})); } catch(e) {}
+            if (Math.abs(models.length - allModels.length) > 5) handleData(models);
+          })
+          .catch(() => {});
+      }
 
       window.addEventListener('resize', resizeCanvas);
     })();
