@@ -268,8 +268,8 @@
     /* ═══════════════════════════════════════
        ECOSYSTEM NETWORK
     ═══════════════════════════════════════ */
-    .eco-canvas-wrap { margin-top: 56px; position: relative; width: 100%; max-width: 700px; margin-left: auto; margin-right: auto; }
-    #eco-canvas { width: 100%; height: 420px; display: block; }
+    .eco-canvas-wrap { margin-top: 56px; position: relative; width: 100%; max-width: 700px; margin-left: auto; margin-right: auto; background: radial-gradient(circle at 50% 50%, rgba(0,255,136,.04), transparent 60%); border-radius: 20px; }
+    #eco-canvas { width: 100%; height: 460px; display: block; }
     .eco-tooltip { position: absolute; pointer-events: none; background: rgba(10,10,10,0.94); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px 20px; min-width: 220px; opacity: 0; transition: opacity 0.2s; z-index: 100; }
     .eco-tooltip.show { opacity: 1; }
     .eco-tooltip .tt-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
@@ -528,6 +528,16 @@
     .obs-experience::before { background-image: radial-gradient(circle at 50% 50%, rgba(0,212,255,.05), transparent 22%), linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.016) 1px, transparent 1px); background-size:auto, 72px 72px, 72px 72px; }
     .signal-time { white-space:nowrap; }
 
+
+    /* ═══════════════════════════════════════
+       HERO PANEL LIVE TICKER
+    ═══════════════════════════════════════ */
+    .core-ring { border-radius:50%; position:absolute; border:1px solid; animation:coreRing 4s ease-in-out infinite; }
+    .core-ring.r1 { width:100px; height:100px; top:50%; left:50%; transform:translate(-50%,-50%); border-color:rgba(0,255,136,.15); animation-delay:0s; }
+    .core-ring.r2 { width:140px; height:140px; top:50%; left:50%; transform:translate(-50%,-50%); border-color:rgba(0,212,255,.10); animation-delay:1.3s; }
+    .core-ring.r3 { width:180px; height:180px; top:50%; left:50%; transform:translate(-50%,-50%); border-color:rgba(139,92,246,.08); animation-delay:2.6s; }
+    @keyframes coreRing { 0%,100%{opacity:.3;transform:translate(-50%,-50%) scale(.92)} 50%{opacity:1;transform:translate(-50%,-50%) scale(1.08)} }
+
     /* ═══════════════════════════════════════
        OBSERVATORY DEPTH ENHANCEMENT
     ═══════════════════════════════════════ */
@@ -559,6 +569,24 @@
     .obs-field-vignette { background: radial-gradient(circle at center, transparent 34%, rgba(0,0,0,0.42) 72%, rgba(0,0,0,0.76) 100%), linear-gradient(90deg, rgba(0,212,255,.035), transparent 18%, transparent 82%, rgba(139,92,246,.035)); }
     @media (max-width: 900px) { .doctrine-layout, .research-streams, .ops-console { grid-template-columns:1fr; } .doctrine-intro { position:relative; top:auto; } .evolution-map { grid-template-columns:1fr; } .evolution-phase { min-height:190px; } .evolution-phase h3 { margin-top:42px; } }
     @media (max-width: 640px) { .doctrine-item { grid-template-columns:42px 1fr; gap:14px; } .doctrine-item h3 { font-size:20px; } .stream-row, .ops-event { grid-template-columns:1fr; gap:8px; } .stream-row em, .ops-event em { text-align:left; } .inspection-grid { grid-template-columns:1fr; } .node-core { align-items:flex-start; flex-wrap:wrap; } .node-core b { margin-left:0; } .obs-hud-cell { min-height:auto; } .ops-console, .research-streams { margin-top:32px; } }
+
+
+    /* ═══════════════════════════════════════
+       VISION SECTION ENHANCEMENT
+    ═══════════════════════════════════════ */
+    #vision { padding:160px 0; position:relative; overflow:hidden; }
+    #vision::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 50% 60%, rgba(0,255,136,.04), transparent 50%), radial-gradient(circle at 30% 40%, rgba(0,212,255,.03), transparent 40%); pointer-events:none; }
+    .vision-headline { font-size:clamp(36px,6vw,72px); letter-spacing:-2px; line-height:1.05; margin-bottom:48px; }
+    .vision-metrics { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.06); border-radius:20px; overflow:hidden; margin-top:64px; }
+    .vision-metric { background:rgba(6,6,8,.85); padding:28px 20px; text-align:center; backdrop-filter:blur(8px); }
+    .vm-val { font-family:var(--mono); font-size:28px; font-weight:800; letter-spacing:-1px; margin-bottom:8px; }
+    .vm-val.g { color:var(--green); text-shadow:0 0 20px rgba(0,255,136,.2); }
+    .vm-val.b { color:var(--blue); text-shadow:0 0 20px rgba(0,212,255,.2); }
+    .vm-val.p { color:var(--purple); text-shadow:0 0 20px rgba(139,92,246,.2); }
+    .vm-val.gold { color:var(--gold); text-shadow:0 0 20px rgba(255,213,74,.2); }
+    .vm-label { font-family:var(--mono); font-size:9px; color:var(--text-3); text-transform:uppercase; letter-spacing:1.5px; }
+    .vision-tagline { margin-top:64px; font-family:var(--mono); font-size:13px; color:var(--green); letter-spacing:2px; text-transform:uppercase; text-shadow:0 0 30px rgba(0,255,136,.15); }
+    @media (max-width:640px) { .vision-metrics { grid-template-columns:repeat(2,1fr); } .vision-headline { letter-spacing:-1px; } }
 
     /* ═══════════════════════════════════════
        RESPONSIVE
@@ -1473,7 +1501,7 @@
 
       function resizeEco() {
         const rect = c.parentElement.getBoundingClientRect();
-        W = rect.width; H = 420;
+        W = rect.width; H = 460;
         c.width = W * devicePixelRatio; c.height = H * devicePixelRatio;
         c.style.width = W + 'px'; c.style.height = H + 'px';
         cx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
@@ -1494,7 +1522,7 @@
       function layoutNodes() {
         const cx_ = W / 2, cy = H / 2;
         centerNode = { x: cx_, y: cy, r: 44, pulse: 0 };
-        const radius = Math.min(W, H) * 0.35;
+        const radius = Math.min(W, H) * 0.32;
         nodes = nodeData.map((d, i) => {
           const angle = (i / nodeData.length) * Math.PI * 2 - Math.PI / 2;
           return { ...d, x: cx_ + Math.cos(angle) * radius, y: cy + Math.sin(angle) * radius, baseX: cx_ + Math.cos(angle) * radius, baseY: cy + Math.sin(angle) * radius, r: 32, pulse: Math.random() * Math.PI * 2, hover: 0 };
@@ -1503,6 +1531,10 @@
 
       function drawEco() {
         cx.clearRect(0, 0, W, H);
+        // Background radial glow
+        const bgGrad = cx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.min(W,H)*0.5);
+        bgGrad.addColorStop(0, 'rgba(0,255,136,0.04)'); bgGrad.addColorStop(0.5, 'rgba(0,212,255,0.02)'); bgGrad.addColorStop(1, 'rgba(0,0,0,0)');
+        cx.fillStyle = bgGrad; cx.fillRect(0, 0, W, H);
         animFrame += 0.01;
 
         nodes.forEach(n => {
@@ -1512,24 +1544,29 @@
           const flowX = centerNode.x + dx * flowPhase, flowY = centerNode.y + dy * flowPhase;
 
           const grad = cx.createLinearGradient(centerNode.x, centerNode.y, n.x, n.y);
-          grad.addColorStop(0, 'rgba(0,255,136,0.06)');
+          grad.addColorStop(0, 'rgba(0,255,136,0.35)');
           grad.addColorStop(0.5, col + '25');
-          grad.addColorStop(1, 'rgba(0,255,136,0.06)');
+          grad.addColorStop(1, 'rgba(0,255,136,0.35)');
+          // Connection line (thicker when hovered)
           cx.beginPath(); cx.moveTo(centerNode.x, centerNode.y); cx.lineTo(n.x, n.y);
-          cx.strokeStyle = grad; cx.lineWidth = n === hoveredNode ? 2 : 1; cx.stroke();
+          cx.strokeStyle = grad; cx.lineWidth = n === hoveredNode ? 3 : 1.8; cx.stroke();
 
-          cx.beginPath(); cx.arc(flowX, flowY, 2, 0, Math.PI * 2);
-          cx.fillStyle = col + '70'; cx.fill();
+          // Flow particle (bigger, glowing)
+          const pg = cx.createRadialGradient(flowX, flowY, 0, flowX, flowY, 8);
+          pg.addColorStop(0, col + 'cc'); pg.addColorStop(1, 'transparent');
+          cx.beginPath(); cx.arc(flowX, flowY, 8, 0, Math.PI * 2); cx.fillStyle = pg; cx.fill();
+          cx.beginPath(); cx.arc(flowX, flowY, 5, 0, Math.PI * 2);
+          cx.fillStyle = col; cx.fill();
         });
 
         // Center
         centerNode.pulse += 0.03;
         const cp = Math.sin(centerNode.pulse) * 0.15 + 0.85;
         cx.beginPath(); cx.arc(centerNode.x, centerNode.y, centerNode.r * cp, 0, Math.PI * 2);
-        cx.fillStyle = 'rgba(0,255,136,0.03)'; cx.fill();
-        cx.strokeStyle = 'rgba(0,255,136,0.15)'; cx.lineWidth = 2; cx.stroke();
+        cx.fillStyle = 'rgba(0,255,136,0.18)'; cx.fill();
+        cx.strokeStyle = 'rgba(0,255,136,0.7)'; cx.lineWidth = 3; cx.stroke();
         const cg = cx.createRadialGradient(centerNode.x, centerNode.y, 0, centerNode.x, centerNode.y, centerNode.r * 2);
-        cg.addColorStop(0, 'rgba(0,255,136,0.05)'); cg.addColorStop(1, 'transparent');
+        cg.addColorStop(0, 'rgba(0,255,136,0.25)'); cg.addColorStop(1, 'transparent');
         cx.beginPath(); cx.arc(centerNode.x, centerNode.y, centerNode.r * 2, 0, Math.PI * 2); cx.fillStyle = cg; cx.fill();
         cx.font = '700 13px "JetBrains Mono"'; cx.fillStyle = '#00ff88'; cx.textAlign = 'center'; cx.textBaseline = 'middle';
         cx.fillText('ZKA', centerNode.x, centerNode.y - 7); cx.fillText('Labs', centerNode.x, centerNode.y + 7);
@@ -1546,6 +1583,10 @@
           const col = nodeColors[n.status];
           const pr = Math.sin(n.pulse) * 0.12 + 0.88;
 
+          // Always show subtle glow
+          const baseGlow = cx.createRadialGradient(n.x, n.y, 0, n.x, n.y, r * 1.8);
+          baseGlow.addColorStop(0, col + '12'); baseGlow.addColorStop(1, 'transparent');
+          cx.beginPath(); cx.arc(n.x, n.y, r * 1.8, 0, Math.PI * 2); cx.fillStyle = baseGlow; cx.fill();
           if (n.hover > 0) {
             const glow = cx.createRadialGradient(n.x, n.y, 0, n.x, n.y, r * 2.5);
             glow.addColorStop(0, col + '18'); glow.addColorStop(1, 'transparent');
@@ -1554,18 +1595,47 @@
           }
 
           cx.beginPath(); cx.arc(n.x, n.y, r * pr, 0, Math.PI * 2);
-          cx.fillStyle = n === hoveredNode ? 'rgba(20,20,20,0.9)' : 'rgba(10,10,10,0.8)';
+          cx.fillStyle = n === hoveredNode ? 'rgba(18,20,26,0.95)' : 'rgba(12,14,20,0.9)';
           cx.fill();
-          cx.strokeStyle = col + (n === hoveredNode ? 'aa' : '33');
-          cx.lineWidth = n === hoveredNode ? 2 : 1; cx.stroke();
+          cx.strokeStyle = col + (n === hoveredNode ? 'ff' : 'aa');
+          cx.lineWidth = n === hoveredNode ? 2.5 : 1.8; cx.stroke();
 
           cx.font = `800 ${12 + n.hover * 2}px "JetBrains Mono"`; cx.textAlign = 'center'; cx.textBaseline = 'middle';
           cx.fillText(n.icon, n.x, n.y - 2);
-          cx.font = `600 ${11 + n.hover}px "Inter"`; cx.fillStyle = '#e8e8e8';
+          cx.font = `700 ${12 + n.hover}px "Inter"`; cx.fillStyle = '#f0f0f0';
           cx.fillText(n.name, n.x, n.y + r + 14);
           cx.font = '500 9px "JetBrains Mono"'; cx.fillStyle = col;
           cx.fillText(n.status.toUpperCase(), n.x, n.y + r + 26);
         });
+
+
+        // Inter-node connections (cross-links between related nodes)
+        const ecoLinks = [[0,1],[0,2],[1,2],[0,3],[2,4],[3,5],[4,5]];
+        ecoLinks.forEach(([ai,bi]) => {
+          const a = nodes[ai], b = nodes[bi];
+          const midX = (a.x + b.x) / 2, midY = (a.y + b.y) / 2 - 20;
+          cx.beginPath(); cx.moveTo(a.x, a.y);
+          cx.quadraticCurveTo(midX, midY, b.x, b.y);
+          cx.strokeStyle = 'rgba(255,255,255,.22)'; cx.lineWidth = 1.2; cx.stroke();
+          // Subtle flow on cross-links
+          const cp2 = (animFrame * 1.5 + ai * 0.3) % 1;
+          const fx2 = a.x + (b.x - a.x) * cp2, fy2 = a.y + (b.y - a.y) * cp2 - 20 * Math.sin(cp2 * Math.PI);
+          cx.beginPath(); cx.arc(fx2, fy2, 1.5, 0, Math.PI * 2);
+          cx.fillStyle = 'rgba(255,255,255,.55)'; cx.fill();
+        });
+
+        // Ambient particles floating around
+        for (let i = 0; i < 12; i++) {
+          const px2 = (Math.sin(animFrame * 0.3 + i * 2.1) * 0.5 + 0.5) * W;
+          const py2 = (Math.cos(animFrame * 0.25 + i * 1.7) * 0.5 + 0.5) * H;
+          cx.beginPath(); cx.arc(px2, py2, 1.8, 0, Math.PI * 2);
+          cx.fillStyle = 'rgba(0,255,136,.35)'; cx.fill();
+        }
+
+        // Status label at bottom
+        cx.font = '600 9px "JetBrains Mono"'; cx.textAlign = 'center';
+        cx.fillStyle = 'rgba(255,255,255,.18)';
+        cx.fillText(nodes.length + ' nodes · ' + ecoLinks.length + ' connections · ecosystem architecture', W / 2, H - 12);
 
         requestAnimationFrame(drawEco);
       }
