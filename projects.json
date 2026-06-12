@@ -1,0 +1,81 @@
+[
+  {
+    "id": "zka-agent",
+    "name": "ZKA Agent",
+    "icon": "🤖",
+    "status": "online",
+    "statusLabel": "Online",
+    "desc": "AI Agent platform — automation, memory systems, tool usage, workflow orchestration, and task execution.",
+    "tech": ["AI Agent", "Automation", "Memory Systems", "Tool Orchestration", "OpenAI Compatible"],
+    "url": "https://zeroknowledge0x.github.io/zk-api/",
+    "repo": "https://github.com/zeroknowledge0x/zk-api",
+    "progress": 100,
+    "year": 2026,
+    "featured": true
+  },
+  {
+    "id": "hermes",
+    "name": "Hermes",
+    "icon": "⚡",
+    "status": "development",
+    "statusLabel": "In Development",
+    "desc": "AI agent framework — multi-platform, persistent memory, tool orchestration.",
+    "tech": ["Framework", "Multi-Platform", "Persistent Memory"],
+    "url": "https://zeroknowledge0x.github.io/hermes/",
+    "repo": "https://github.com/zeroknowledge0x/hermes",
+    "progress": 15,
+    "year": 2026
+  },
+  {
+    "id": "memory-api",
+    "name": "Memory API",
+    "icon": "🧠",
+    "status": "planned",
+    "statusLabel": "Planned",
+    "desc": "Persistent memory systems for AI agents.",
+    "tech": ["Memory", "API", "Persistence"],
+    "url": "https://zeroknowledge0x.github.io/memory-api/",
+    "repo": "https://github.com/zeroknowledge0x/memory-api",
+    "progress": 0,
+    "year": 2026
+  },
+  {
+    "id": "automation-tools",
+    "name": "Automation Tools",
+    "icon": "🔧",
+    "status": "planned",
+    "statusLabel": "Planned",
+    "desc": "Workflow automation and task execution infrastructure.",
+    "tech": ["Automation", "Workflow", "Infrastructure"],
+    "url": "https://zeroknowledge0x.github.io/automation-tools/",
+    "repo": "https://github.com/zeroknowledge0x/automation-tools",
+    "progress": 0,
+    "year": 2026
+  },
+  {
+    "id": "research-projects",
+    "name": "Research Projects",
+    "icon": "🔬",
+    "status": "planned",
+    "statusLabel": "Planned",
+    "desc": "AI safety, alignment, and experimental models.",
+    "tech": ["Research", "AI Safety", "Alignment"],
+    "url": "https://zeroknowledge0x.github.io/research-projects/",
+    "repo": "https://github.com/zeroknowledge0x/research-projects",
+    "progress": 0,
+    "year": 2026
+  },
+  {
+    "id": "future-projects",
+    "name": "Future Projects",
+    "icon": "🚀",
+    "status": "planned",
+    "statusLabel": "Planned",
+    "desc": "Next-generation technology experiments.",
+    "tech": ["Experiments", "R&D", "Innovation"],
+    "url": "https://zeroknowledge0x.github.io/future-projects/",
+    "repo": "https://github.com/zeroknowledge0x/future-projects",
+    "progress": 0,
+    "year": 2026
+  }
+]
