@@ -467,8 +467,14 @@
       .hero-proofline { flex-wrap:wrap; gap:6px; }
       .proof-pill { font-size:10px !important; }
       .hero-sub { font-size:14px !important; line-height:1.65 !important; }
-      #hero { min-height:auto !important; padding:80px 0 40px !important; }
+      #hero { min-height:auto !important; padding:60px 0 24px !important; }
       .hero-panels { display:none !important; }
+      .hero-title { font-size: 32px !important; letter-spacing: -1.5px !important; }
+      .hero-sub { font-size: 13px !important; max-width: 100% !important; }
+      .hero-eyebrow { font-size: 9px !important; }
+      .hero-proofline { display: none !important; }
+      .hero-ctas { margin-top: 16px !important; }
+      .hero-scroll { display: none !important; }
  }
 
 
@@ -576,7 +582,37 @@
       .dash-header, .dash-row { grid-template-columns: 2fr 1fr 100px; }
       .dash-header > :nth-child(4), .dash-row > :nth-child(4) { display: none; }
     }
+    /* ── MOBILE STATUS STRIP ── */
+    .mobile-status-strip {
+      display: none;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 20px;
+      gap: 16px;
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .mobile-status-strip::-webkit-scrollbar { display: none; }
+    .mss-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-3);
+      letter-spacing: 0.5px;
+    }
+    .mss-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+    .mss-dot.g { background: var(--green); animation: pulse 2s infinite; }
+    .mss-dot.b { background: var(--blue); animation: pulse 2s infinite; }
+    .mss-dot.p { background: var(--purple); }
+    .mss-dot.gold { background: var(--gold); }
+
     @media (max-width: 640px) {
+      .mobile-status-strip { display: flex; }
       section { padding: 48px 0; }
       #vision { padding: 64px 0 80px; }
       .container { padding: 0 20px; }
@@ -734,6 +770,14 @@
 
     <!-- CC STRIP -->
     <div class="cc-strip"><div class="cc-strip-inner" id="cc-strip"></div></div>
+
+    <!-- MOBILE LIVE STATUS STRIP -->
+    <div class="mobile-status-strip">
+      <div class="mss-item"><span class="mss-dot g"></span> <span>ONLINE</span></div>
+      <div class="mss-item"><span class="mss-dot b"></span> <span>OBSERVATORY LIVE</span></div>
+      <div class="mss-item"><span class="mss-dot p"></span> <span>01 ACTIVE</span></div>
+      <div class="mss-item"><span class="mss-dot gold"></span> <span>06 REPOS</span></div>
+    </div>
 
     <!-- AI OBSERVATORY — LIVING CANVAS -->
     <section id="observatory">
