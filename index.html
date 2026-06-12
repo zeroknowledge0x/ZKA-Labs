@@ -467,6 +467,8 @@
       .hero-proofline { flex-wrap:wrap; gap:6px; }
       .proof-pill { font-size:10px !important; }
       .hero-sub { font-size:14px !important; line-height:1.65 !important; }
+      #hero { min-height:auto !important; padding:80px 0 40px !important; }
+      .hero-panels { display:none !important; }
  }
 
 
@@ -961,33 +963,14 @@
     // ═══════════════════════════════
     // BOOT
     // ═══════════════════════════════
-    const bootLines = [
-      ['Core Systems...', 90], ['Agent Registry...', 80],
-      ['Infrastructure...', 80], ['AI Observatory...', 70],
-    ];
     async function runBoot() {
       const logo = document.getElementById('boot-logo');
-      const linesEl = document.getElementById('boot-lines');
       const bar = document.getElementById('boot-bar');
-      logo.innerHTML = `<span class="hl">╔══════════════════════════════════╗</span>\n<span class="hl">║</span>        ZKA LABS SYSTEM          <span class="hl">║</span>\n<span class="hl">║</span>       Digital Headquarters       <span class="hl">║</span>\n<span class="hl">╚══════════════════════════════════╝</span>`;
-      await sleep(180);
-      for (let i = 0; i < bootLines.length; i++) {
-        const [text, delay] = bootLines[i];
-        const line = document.createElement('div');
-        line.className = 'boot-line';
-        const ms = String(Math.floor(Math.random() * 400 + 100)).padStart(3, '0');
-        line.innerHTML = `<span class="ok">[OK]</span> ${text} <span class="val">done</span><span class="time">${ms}ms</span>`;
-        linesEl.appendChild(line);
-        await sleep(60); line.classList.add('show');
-        bar.style.width = ((i + 1) / bootLines.length * 80) + '%';
-        await sleep(delay);
-      }
-      await sleep(80); bar.style.width = '100%';
-      document.getElementById('boot-status').classList.add('show');
-      await sleep(120); document.getElementById('boot-enter').classList.add('show');
-      await sleep(260);
+      logo.innerHTML = `<span class="hl">╔══════════════════════╗</span>\n<span class="hl">║</span>    ZKA LABS SYSTEM   <span class="hl">║</span>\n<span class="hl">╚══════════════════════╝</span>`;
+      bar.style.width = '100%';
+      await sleep(200);
       document.getElementById('loader').classList.add('hidden');
-      setTimeout(() => { const l = document.getElementById('loader'); if (l) l.style.display = 'none'; }, 450);
+      setTimeout(() => { const l = document.getElementById('loader'); if (l) l.style.display = 'none'; }, 100);
     }
     function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
     runBoot();
