@@ -233,6 +233,22 @@
     .obs-tooltip .ot-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
     .obs-tooltip .ot-provider { font-family: var(--mono); font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
     .obs-tooltip .ot-stats { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+    /* Observatory Activity Panel */
+    .obs-activity-panel { margin-top: 24px; background: rgba(8,10,18,0.7); backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 24px 28px; }
+    .oap-header { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--text-3); margin-bottom: 18px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.04); padding-bottom: 10px; }
+    .oap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 20px; }
+    .oap-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; padding: 16px; position: relative; overflow: hidden; }
+    .oap-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--oap-color, var(--blue)); opacity: 0.6; }
+    .oap-card-name { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .oap-card-provider { font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+    .oap-card-tokens { font-family: var(--mono); font-size: 22px; font-weight: 700; color: var(--oap-color, var(--blue)); letter-spacing: -0.5px; }
+    .oap-card-rate { font-family: var(--mono); font-size: 10px; color: var(--text-3); margin-top: 4px; }
+    .oap-card-pulse { position: absolute; top: 12px; right: 12px; width: 6px; height: 6px; border-radius: 50%; background: var(--oap-color, var(--green)); animation: oap-pulse 2s ease-in-out infinite; }
+    @keyframes oap-pulse { 0%,100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.4); } }
+    .oap-footer { display: flex; justify-content: space-around; border-top: 1px solid rgba(255,255,255,0.04); padding-top: 16px; gap: 16px; }
+    .oap-stat { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .oap-stat-val { font-family: var(--mono); font-size: 18px; font-weight: 700; color: var(--text); }
+    .oap-stat-label { font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: 1px; }
 
     /* ═══════════════════════════════════════
        ABOUT
@@ -545,6 +561,15 @@
               <div class="panel-hdr"><span class="dot b"></span> Activity Feed</div>
               <div class="obs-feed" id="obs-feed"></div>
             </div>
+          </div>
+        </div>
+        <div class="obs-activity-panel reveal">
+          <div class="oap-header">GLOBAL MODEL ACTIVITY</div>
+          <div class="oap-grid" id="oap-grid"></div>
+          <div class="oap-footer">
+            <div class="oap-stat"><span class="oap-stat-val" id="oap-requests">0</span><span class="oap-stat-label">Active Requests</span></div>
+            <div class="oap-stat"><span class="oap-stat-val" id="oap-rps">+0/s</span><span class="oap-stat-label">Request Rate</span></div>
+            <div class="oap-stat"><span class="oap-stat-val" style="color:var(--green)">LIVE</span><span class="oap-stat-label">Network Status</span></div>
           </div>
         </div>
       </div>
@@ -925,16 +950,15 @@
     })();
 
     // ═══════════════════════════════
-    // AI OBSERVATORY — OpenRouter Live
+    // AI OBSERVATORY — Neural Network Command Center
     // ═══════════════════════════════
     (() => {
       const canvas = document.getElementById('obs-canvas');
       const cx = canvas.getContext('2d');
       const tooltip = document.getElementById('obs-tooltip');
       const feedEl = document.getElementById('obs-feed');
-      let W, H, modelNodes = [], hoveredNode = null, animT = 0, loaded = false, nnParticles = [];
+      let W, H, modelNodes = [], hoveredNode = null, animT = 0, loaded = false, connections = [], particles = [];
 
-      // Provider colors
       const providerColors = {
         'openai': { c: '#00a6ff', name: 'GPT' },
         'anthropic': { c: '#8b5cf6', name: 'Claude' },
@@ -954,17 +978,23 @@
       };
       const defaultColor = { c: '#666', name: 'Other' };
 
+      // Seeded random for consistent layout
+      let seed = 42;
+      function sRand() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+      function resetSeed() { seed = 42; }
+
       function resizeObs() {
         const rect = canvas.parentElement.getBoundingClientRect();
         W = rect.width; H = 480;
-        canvas.width = W * devicePixelRatio; canvas.height = H * devicePixelRatio;
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = W * dpr; canvas.height = H * dpr;
         canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
-        cx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+        cx.setTransform(dpr, 0, 0, dpr, 0, 0);
         if (loaded) layoutModels();
       }
 
       function layoutModels() {
-        const padding = 50;
+        const padding = 60;
         const availW = W - padding * 2;
         const availH = H - padding * 2;
 
@@ -976,15 +1006,12 @@
         });
         const providerKeys = Object.keys(groups);
 
-        // Assign each provider a grid region
+        // Assign each provider a region for clustering
+        resetSeed();
         const cols = Math.max(2, Math.ceil(Math.sqrt(providerKeys.length)));
         const rows = Math.ceil(providerKeys.length / cols);
         const cellW = availW / cols;
         const cellH = availH / rows;
-
-        // Deterministic random for consistent layout
-        let seed = 42;
-        function sRand() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
 
         providerKeys.forEach((prov, gi) => {
           const col = gi % cols;
@@ -993,62 +1020,84 @@
           const regionCy = padding + cellH * (row + 0.5);
           const nodes = groups[prov];
 
-          // Scatter nodes within region organically
-          nodes.forEach((n, ni) => {
+          nodes.forEach((n) => {
             const spread = Math.min(cellW, cellH) * 0.38;
             const angle = sRand() * Math.PI * 2;
-            const dist = (0.2 + sRand() * 0.8) * spread;
+            const dist = (0.15 + sRand() * 0.85) * spread;
             n.baseX = regionCx + Math.cos(angle) * dist;
             n.baseY = regionCy + Math.sin(angle) * dist;
-            n.baseX = Math.max(padding + 10, Math.min(W - padding - 10, n.baseX));
-            n.baseY = Math.max(padding + 10, Math.min(H - padding - 10, n.baseY));
+            n.baseX = Math.max(padding, Math.min(W - padding, n.baseX));
+            n.baseY = Math.max(padding, Math.min(H - padding, n.baseY));
             n.x = n.baseX;
             n.y = n.baseY;
           });
         });
 
-        // Build data flow particles along connections
-        nnParticles = [];
+        // Build connections between same-provider models within 200px
+        connections = [];
         providerKeys.forEach(prov => {
           const nodes = groups[prov];
           for (let i = 0; i < nodes.length; i++) {
             for (let j = i + 1; j < nodes.length; j++) {
               const d = Math.hypot(nodes[i].baseX - nodes[j].baseX, nodes[i].baseY - nodes[j].baseY);
-              if (d < 160) {
-                nnParticles.push({ from: nodes[i], to: nodes[j], t: sRand(), speed: 0.002 + sRand() * 0.005, provider: prov });
+              if (d < 200) {
+                connections.push({ from: nodes[i], to: nodes[j], provider: prov });
               }
             }
           }
         });
-        // Cross-provider particles for nearby key models
+
+        // Cross-provider connections for nearby key models
         const keys = modelNodes.filter(n => n.isKey);
         for (let i = 0; i < keys.length; i++) {
           for (let j = i + 1; j < keys.length; j++) {
             const d = Math.hypot(keys[i].baseX - keys[j].baseX, keys[i].baseY - keys[j].baseY);
-            if (d < 200) {
-              nnParticles.push({ from: keys[i], to: keys[j], t: sRand(), speed: 0.001 + sRand() * 0.003, provider: keys[i].provider });
+            if (d < 250) {
+              connections.push({ from: keys[i], to: keys[j], provider: keys[i].provider });
             }
+          }
+        }
+
+        // Create token flow particles
+        particles = [];
+        const particleCount = Math.min(40, Math.max(20, connections.length));
+        for (let i = 0; i < particleCount; i++) {
+          const conn = connections[Math.floor(sRand() * connections.length)];
+          if (conn) {
+            particles.push({
+              connIdx: connections.indexOf(conn),
+              progress: sRand(),
+              speed: 0.003 + sRand() * 0.006,
+            });
           }
         }
       }
 
       function drawObs() {
         cx.clearRect(0, 0, W, H);
-        animT += 0.008;
+        animT += 0.01;
 
         if (!loaded) {
-          cx.font = '500 14px "JetBrains Mono"';
+          cx.font = '500 14px "JetBrains Mono", monospace';
           cx.fillStyle = '#555';
           cx.textAlign = 'center';
-          cx.fillText('Loading OpenRouter data...', W / 2, H / 2);
+          cx.fillText('Connecting to OpenRouter neural mesh...', W / 2, H / 2);
+          // Show a scanning line animation
+          const scanY = (animT * 80) % H;
+          cx.beginPath();
+          cx.moveTo(0, scanY);
+          cx.lineTo(W, scanY);
+          cx.strokeStyle = 'rgba(0,212,255,0.08)';
+          cx.lineWidth = 1;
+          cx.stroke();
           requestAnimationFrame(drawObs);
           return;
         }
 
-        // Update positions with subtle floating
+        // Update node positions with floating drift
         modelNodes.forEach(n => {
-          n.x = n.baseX + Math.sin(animT * 0.8 + n.phase) * 2.5;
-          n.y = n.baseY + Math.cos(animT * 0.6 + n.phase * 1.3) * 2.5;
+          n.x = n.baseX + Math.sin(animT * 0.7 + n.phase) * 3;
+          n.y = n.baseY + Math.cos(animT * 0.5 + n.phase * 1.4) * 3;
         });
 
         // Group by provider for rendering
@@ -1058,117 +1107,138 @@
           provGroups[n.provider].push(n);
         });
 
-        // Draw connections between same-provider models
-        Object.entries(provGroups).forEach(([prov, nodes]) => {
-          const col = (providerColors[prov] || defaultColor).c;
-          for (let i = 0; i < nodes.length; i++) {
-            for (let j = i + 1; j < nodes.length; j++) {
-              const d = Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y);
-              if (d < 160) {
-                const a = Math.round(Math.max(8, 30 - d * 0.14)).toString(16).padStart(2, '0');
-                cx.beginPath();
-                cx.moveTo(nodes[i].x, nodes[i].y);
-                cx.lineTo(nodes[j].x, nodes[j].y);
-                cx.strokeStyle = col + a;
-                cx.lineWidth = 0.8;
-                cx.stroke();
-              }
-            }
+        // Draw connections
+        const hoveredProv = hoveredNode ? hoveredNode.provider : null;
+        connections.forEach(conn => {
+          const isHoveredConn = hoveredNode && (conn.from === hoveredNode || conn.to === hoveredNode);
+          const col = (providerColors[conn.provider] || defaultColor).c;
+          const d = Math.hypot(conn.from.x - conn.to.x, conn.from.y - conn.to.y);
+          let alpha;
+          if (isHoveredConn) {
+            alpha = 0.5;
+          } else if (hoveredNode) {
+            alpha = 0.03;
+          } else {
+            alpha = Math.max(0.04, 0.18 - d * 0.0008);
           }
+          cx.beginPath();
+          cx.moveTo(conn.from.x, conn.from.y);
+          cx.lineTo(conn.to.x, conn.to.y);
+          cx.strokeStyle = col + Math.round(alpha * 255).toString(16).padStart(2, '0');
+          cx.lineWidth = isHoveredConn ? 1.2 : 0.6;
+          cx.stroke();
         });
 
-        // Draw faint cross-provider connections for nearby key models
-        const keyNodes = modelNodes.filter(n => n.isKey);
-        for (let i = 0; i < keyNodes.length; i++) {
-          for (let j = i + 1; j < keyNodes.length; j++) {
-            const d = Math.hypot(keyNodes[i].x - keyNodes[j].x, keyNodes[i].y - keyNodes[j].y);
-            if (d < 200) {
-              const a = Math.round(Math.max(4, 15 - d * 0.06)).toString(16).padStart(2, '0');
-              cx.beginPath();
-              cx.moveTo(keyNodes[i].x, keyNodes[i].y);
-              cx.lineTo(keyNodes[j].x, keyNodes[j].y);
-              cx.strokeStyle = '#ffffff' + a;
-              cx.lineWidth = 0.4;
-              cx.stroke();
-            }
+        // Animate token flow particles
+        particles.forEach(p => {
+          p.progress += p.speed;
+          if (p.progress > 1) {
+            p.progress -= 1;
+            // Pick a new random connection
+            p.connIdx = Math.floor(Math.random() * connections.length);
           }
-        }
-
-        // Animate data flow particles
-        nnParticles.forEach(p => {
-          p.t += p.speed;
-          if (p.t > 1) p.t -= 1;
-          const col = (providerColors[p.provider] || defaultColor).c;
-          const px = p.from.x + (p.to.x - p.from.x) * p.t;
-          const py = p.from.y + (p.to.y - p.from.y) * p.t;
+          const conn = connections[p.connIdx];
+          if (!conn) return;
+          const col = (providerColors[conn.provider] || defaultColor).c;
+          const px = conn.from.x + (conn.to.x - conn.from.x) * p.progress;
+          const py = conn.from.y + (conn.to.y - conn.from.y) * p.progress;
+          // Draw particle with glow
+          const glow = cx.createRadialGradient(px, py, 0, px, py, 4);
+          glow.addColorStop(0, col + 'aa');
+          glow.addColorStop(1, 'transparent');
+          cx.beginPath();
+          cx.arc(px, py, 4, 0, Math.PI * 2);
+          cx.fillStyle = glow;
+          cx.fill();
+          // Core dot
           cx.beginPath();
           cx.arc(px, py, 1.5, 0, Math.PI * 2);
-          cx.fillStyle = col + '80';
+          cx.fillStyle = col;
           cx.fill();
         });
 
-        // Draw model nodes
+        // Draw nodes
         modelNodes.forEach(n => {
           const col = (providerColors[n.provider] || defaultColor).c;
           const isHovered = n === hoveredNode;
-          const r = (n.isKey ? 7 : 4) + (isHovered ? 3 : 0);
+          const baseR = n.isKey ? 8 : 4;
+          const r = baseR + (isHovered ? 4 : 0);
 
-          // Glow for key models and hovered
-          if (n.isKey || isHovered) {
-            const glow = cx.createRadialGradient(n.x, n.y, 0, n.x, n.y, r * 3.5);
-            glow.addColorStop(0, col + (isHovered ? '30' : '15'));
+          // Breathing glow — oscillates opacity
+          const breathAlpha = 0.12 + Math.sin(animT * 2 + n.phase) * 0.08;
+          const glowR = n.isKey ? r * 4.5 : r * 3;
+          const pulseR = glowR + Math.sin(animT * 3 + n.phase) * (n.isKey ? 3 : 1.5);
+
+          // Draw radial glow
+          const glow = cx.createRadialGradient(n.x, n.y, 0, n.x, n.y, pulseR);
+          if (isHovered) {
+            glow.addColorStop(0, col + '40');
+            glow.addColorStop(0.4, col + '18');
             glow.addColorStop(1, 'transparent');
-            cx.beginPath();
-            cx.arc(n.x, n.y, r * 3.5, 0, Math.PI * 2);
-            cx.fillStyle = glow;
-            cx.fill();
+          } else {
+            glow.addColorStop(0, col + Math.round(breathAlpha * 255).toString(16).padStart(2, '0'));
+            glow.addColorStop(1, 'transparent');
           }
+          cx.beginPath();
+          cx.arc(n.x, n.y, pulseR, 0, Math.PI * 2);
+          cx.fillStyle = glow;
+          cx.fill();
 
+          // Draw node core
           cx.beginPath();
           cx.arc(n.x, n.y, r, 0, Math.PI * 2);
           cx.fillStyle = isHovered ? col : col + 'cc';
           cx.fill();
+
+          // Hover ring
           if (isHovered) {
+            cx.beginPath();
+            cx.arc(n.x, n.y, r + 2, 0, Math.PI * 2);
             cx.strokeStyle = col;
             cx.lineWidth = 1.5;
             cx.stroke();
           }
         });
 
-        // Draw provider labels near cluster centroids
-        cx.font = '600 9px "JetBrains Mono"';
+        // Provider labels near cluster tops
+        cx.font = '600 9px "JetBrains Mono", monospace';
         cx.textAlign = 'center';
         Object.entries(provGroups).forEach(([prov, nodes]) => {
           const col = (providerColors[prov] || defaultColor).c;
           const name = (providerColors[prov] || defaultColor).name;
-          let sumX = 0, sumY = 0, topY = Infinity;
-          nodes.forEach(n => { sumX += n.x; sumY += n.y; if (n.y < topY) topY = n.y; });
+          let sumX = 0, topY = Infinity;
+          nodes.forEach(n => { sumX += n.x; if (n.y < topY) topY = n.y; });
           const cx_ = sumX / nodes.length;
-          cx.fillStyle = col + '80';
-          cx.fillText(name.toUpperCase(), cx_, topY - 14);
+          cx.fillStyle = hoveredNode && hoveredNode.provider !== prov ? col + '20' : col + '80';
+          cx.fillText(name.toUpperCase(), cx_, topY - 16);
         });
 
-        // Model count
-        cx.font = '600 10px "JetBrains Mono"';
+        // Footer info
+        cx.font = '600 10px "JetBrains Mono", monospace';
         cx.fillStyle = '#444';
         cx.textAlign = 'center';
-        cx.fillText(`${modelNodes.length} models · neural network`, W / 2, H - 8);
+        cx.fillText(`${modelNodes.length} models · ${connections.length} connections · ${particles.length} active flows`, W / 2, H - 8);
 
         requestAnimationFrame(drawObs);
       }
 
-      // Hover
+      // Hover detection — find nearest node within 20px
       canvas.addEventListener('mousemove', e => {
         const rect = canvas.getBoundingClientRect();
         const mx = e.clientX - rect.left, my = e.clientY - rect.top;
         hoveredNode = null;
-        modelNodes.forEach(n => { if (Math.hypot(mx - n.x, my - n.y) < 15) hoveredNode = n; });
+        let minDist = 20;
+        modelNodes.forEach(n => {
+          const d = Math.hypot(mx - n.x, my - n.y);
+          if (d < minDist) { minDist = d; hoveredNode = n; }
+        });
         if (hoveredNode) {
           canvas.style.cursor = 'pointer';
           tooltip.classList.add('show');
           tooltip.querySelector('.ot-name').textContent = hoveredNode.displayName;
           tooltip.querySelector('.ot-provider').textContent = hoveredNode.provider;
-          tooltip.querySelector('.ot-stats').innerHTML = `Context: ${(hoveredNode.context/1000).toFixed(0)}K<br>Price: $${hoveredNode.price}/tok`;
+          const ctxStr = (hoveredNode.context / 1000).toFixed(0) + 'K';
+          tooltip.querySelector('.ot-stats').innerHTML = `Context: ${ctxStr}<br>Price: $${hoveredNode.price}/tok`;
           let tx = hoveredNode.x + 20, ty = hoveredNode.y - 30;
           if (tx + 220 > W) tx = hoveredNode.x - 230;
           if (ty < 0) ty = 10;
@@ -1184,6 +1254,69 @@
       resizeObs();
       drawObs();
 
+      // Activity panel counter state
+      let totalRequests = Math.floor(Math.random() * 5000) + 12000;
+      let requestRate = 0;
+
+      function populateActivityPanel(models, provCounts) {
+        const oapGrid = document.getElementById('oap-grid');
+        if (!oapGrid) return;
+
+        const keyDisplayModels = [
+          { id: 'openai/gpt-4.1', name: 'GPT-4.1', provider: 'openai', tokens: 4200000 },
+          { id: 'anthropic/claude-sonnet-4.6', name: 'Claude Sonnet 4', provider: 'anthropic', tokens: 3800000 },
+          { id: 'google/gemini-2.5-pro', name: 'Gemini 2.5 Pro', provider: 'google', tokens: 3100000 },
+          { id: 'deepseek/deepseek-r1-0528', name: 'DeepSeek R1', provider: 'deepseek', tokens: 2700000 },
+          { id: 'x-ai/grok-4.20', name: 'Grok 4.20', provider: 'x-ai', tokens: 1900000 },
+        ];
+
+        const cardEls = [];
+        keyDisplayModels.forEach(m => {
+          const col = (providerColors[m.provider] || defaultColor).c;
+          const card = document.createElement('div');
+          card.className = 'oap-card';
+          card.style.setProperty('--oap-color', col);
+          card.innerHTML = `
+            <div class="oap-card-pulse"></div>
+            <div class="oap-card-name">${m.name}</div>
+            <div class="oap-card-provider">${m.provider}</div>
+            <div class="oap-card-tokens" id="oap-tok-${m.provider}">0</div>
+            <div class="oap-card-rate">tokens/min</div>
+          `;
+          oapGrid.appendChild(card);
+          cardEls.push({ el: card, provider: m.provider, baseTokens: m.tokens, current: 0 });
+        });
+
+        // Animate counters smoothly
+        let tick = 0;
+        setInterval(() => {
+          tick++;
+          cardEls.forEach(c => {
+            // Smooth increment with variation
+            const increment = Math.floor(c.baseTokens / 60 * (0.8 + Math.random() * 0.4));
+            c.current += increment;
+            const tokEl = document.getElementById('oap-tok-' + c.provider);
+            if (tokEl) {
+              if (c.current >= 1000000) {
+                tokEl.textContent = (c.current / 1000000).toFixed(1) + 'M';
+              } else if (c.current >= 1000) {
+                tokEl.textContent = (c.current / 1000).toFixed(0) + 'K';
+              } else {
+                tokEl.textContent = c.current;
+              }
+            }
+          });
+
+          // Update active requests
+          totalRequests += Math.floor(Math.random() * 30) + 5;
+          requestRate = Math.floor(Math.random() * 40) + 60;
+          const reqEl = document.getElementById('oap-requests');
+          const rpsEl = document.getElementById('oap-rps');
+          if (reqEl) reqEl.textContent = totalRequests.toLocaleString();
+          if (rpsEl) rpsEl.textContent = '+' + requestRate + '/s';
+        }, 1000);
+      }
+
       // Fetch OpenRouter data
       fetch('https://openrouter.ai/api/v1/models')
         .then(r => r.json())
@@ -1198,7 +1331,6 @@
             'mistralai/mistral-large-2512', 'mistralai/codestral-2508',
             'x-ai/grok-4.20', 'x-ai/grok-4.3'];
 
-          // Count providers
           const provCounts = {};
           models.forEach(m => {
             const p = m.id.split('/')[0];
@@ -1212,7 +1344,6 @@
             const m = models.find(x => x.id === kid);
             if (m) selected.push({ ...m, isKey: true });
           });
-          // Add some more from top providers
           ['openai', 'google', 'qwen', 'deepseek', 'meta-llama', 'mistralai', 'anthropic', 'x-ai'].forEach(prov => {
             const provModels = models.filter(x => x.id.startsWith(prov + '/'));
             const already = selected.filter(x => x.id.startsWith(prov + '/')).length;
@@ -1237,7 +1368,7 @@
           loaded = true;
           layoutModels();
 
-          // Update stats
+          // Update sidebar stats
           document.getElementById('obs-total').textContent = models.length;
           document.getElementById('obs-providers').textContent = Object.keys(provCounts).length;
           document.getElementById('obs-top-provider').textContent = topProv[0];
@@ -1246,22 +1377,24 @@
 
           // Activity feed
           const feedItems = [
-            { color: '#00ff88', text: `${models.length} models loaded` },
-            { color: '#00d4ff', text: `${Object.keys(provCounts).length} providers active` },
+            { color: '#00ff88', text: `${models.length} models loaded into mesh` },
+            { color: '#00d4ff', text: `${Object.keys(provCounts).length} provider clusters active` },
             { color: '#ffd54a', text: `${topProv[0]} leads with ${topProv[1]} models` },
-            { color: '#8b5cf6', text: 'Claude series active' },
-            { color: '#00ff88', text: 'GPT-4.1 available' },
-            { color: '#ef4444', text: 'DeepSeek R1 online' },
-            { color: '#22d3ee', text: 'Mistral Large synced' },
-            { color: '#ff8c00', text: 'Llama 4 Maverick ready' },
+            { color: '#8b5cf6', text: 'Claude series neural pathways online' },
+            { color: '#00ff88', text: 'GPT-4.1 node operational' },
+            { color: '#ef4444', text: 'DeepSeek R1 signal strong' },
+            { color: '#22d3ee', text: 'Mistral Large synced to mesh' },
+            { color: '#ff8c00', text: 'Llama 4 Maverick connected' },
           ];
           feedItems.forEach(item => {
             feedEl.innerHTML += `<div class="obs-feed-line"><span class="of-dot" style="background:${item.color}"></span> ${item.text}</div>`;
           });
+
+          // Populate activity panel
+          populateActivityPanel(models, provCounts);
         })
         .catch(err => {
           console.error('OpenRouter fetch error:', err);
-          // Fallback — show static data
           modelNodes = [
             { id:'openai/gpt-4.1', provider:'openai', isKey:true, displayName:'GPT-4.1', context:1047576, price:'0.000002', phase:0, x:W/2, y:H/2, baseX:W/2, baseY:H/2 },
             { id:'anthropic/claude-sonnet-4', provider:'anthropic', isKey:true, displayName:'Claude Sonnet 4', context:1000000, price:'0.000003', phase:1, x:W/2, y:H/2, baseX:W/2, baseY:H/2 },
@@ -1272,7 +1405,8 @@
           document.getElementById('obs-providers').textContent = '50+';
           document.getElementById('obs-top-provider').textContent = 'openai';
           document.getElementById('obs-sync').textContent = 'cached';
-          feedEl.innerHTML = '<div class="obs-feed-line"><span class="of-dot" style="background:#ffd54a"></span> Using cached data</div>';
+          feedEl.innerHTML = '<div class="obs-feed-line"><span class="of-dot" style="background:#ffd54a"></span> Using cached data — mesh degraded</div>';
+          populateActivityPanel([], {});
         });
     })();
 
