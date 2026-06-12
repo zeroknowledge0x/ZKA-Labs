@@ -198,6 +198,37 @@
     .status-indicator.blue { background: var(--blue); animation: pulse 2s infinite; }
     .status-indicator.gold { background: var(--gold); }
 
+    /* ═══════════════════════════════
+       AI OBSERVATORY — CLEAN PREMIUM
+    ═══════════════════════════════ */
+    #observatory { padding:120px 0; }
+    .obs-header { display:flex; justify-content:space-between; align-items:flex-end; gap:48px; margin-bottom:40px; }
+    .obs-header-left { flex:1; }
+    .obs-header-stats { display:flex; gap:32px; }
+    .obs-stat { text-align:center; }
+    .obs-stat-val { font-family:var(--mono); font-size:28px; font-weight:800; letter-spacing:-1px; line-height:1; }
+    .obs-stat-val.blue { color:var(--blue); }
+    .obs-stat-val.green { color:var(--green); }
+    .obs-stat-val.purple { color:var(--purple); }
+    .obs-stat-val.gold { color:var(--gold); }
+    .obs-stat-label { font-family:var(--mono); font-size:9px; color:var(--text-3); text-transform:uppercase; letter-spacing:1.5px; margin-top:6px; }
+    .obs-canvas-wrap { position:relative; border-radius:20px; overflow:hidden; border:1px solid var(--border); background:var(--bg); }
+    #obs-canvas { width:100%; height:520px; display:block; }
+    .obs-tooltip { position:absolute; pointer-events:none; opacity:0; transition:opacity .15s; background:rgba(8,8,12,.92); border:1px solid var(--border); border-radius:12px; padding:16px 20px; z-index:20; backdrop-filter:blur(16px); min-width:220px; }
+    .obs-tooltip.show { opacity:1; }
+    .ot-name { font-size:14px; font-weight:700; margin-bottom:4px; }
+    .ot-provider { font-family:var(--mono); font-size:9px; color:var(--blue); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:10px; }
+    .ot-stats { font-family:var(--mono); font-size:11px; color:var(--text-2); line-height:1.7; }
+    .obs-footer { display:flex; justify-content:space-between; align-items:center; margin-top:16px; padding:0 4px; }
+    .obs-footer-left { display:flex; align-items:center; gap:12px; }
+    .obs-footer-right { display:flex; align-items:center; gap:6px; }
+    .obs-footer-text { font-family:var(--mono); font-size:11px; color:var(--text-3); }
+    .obs-footer-sep { color:var(--text-4); font-size:11px; }
+    .obs-sync-badge { font-family:var(--mono); font-size:9px; padding:4px 10px; border-radius:999px; letter-spacing:1px; text-transform:uppercase; background:rgba(0,255,136,.08); color:var(--green); border:1px solid rgba(0,255,136,.15); }
+    @media (max-width:900px) { .obs-header { flex-direction:column; align-items:flex-start; gap:24px; } .obs-header-stats { gap:20px; } }
+    @media (max-width:640px) { .obs-header-stats { gap:16px; } .obs-stat-val { font-size:22px; } #obs-canvas { height:360px; } }
+
+
     /* ═══════════════════════════════════════
        COMMAND CENTER STRIP
     ═══════════════════════════════════════ */
@@ -207,45 +238,6 @@
     .cc-strip-inner .cc-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
     .cc-strip-inner .cc-val { color: var(--text-2); }
     @keyframes scroll-strip { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-
-    /* AI OBSERVATORY - LIVING INTELLIGENCE NETWORK */
-    #observatory { padding: 150px 0; overflow: hidden; }
-    #observatory::before { content:''; position:absolute; inset:0; background: radial-gradient(ellipse at 50% 36%, rgba(0,212,255,0.055), transparent 58%); pointer-events:none; }
-    .obs-kicker { font-family:var(--mono); font-size:10px; color:var(--blue); letter-spacing:3px; text-transform:uppercase; margin-bottom:12px; }
-    .obs-hud { display:grid; grid-template-columns: repeat(4, 1fr); gap:1px; margin-top:36px; background:rgba(255,255,255,0.045); border:1px solid rgba(255,255,255,0.06); border-radius:16px; overflow:hidden; }
-    .obs-hud-cell { background:rgba(5,7,10,0.74); padding:18px 20px; position:relative; min-height:84px; }
-    .obs-hud-cell::after { content:''; position:absolute; inset:0; background:radial-gradient(circle at 70% 20%, var(--hud-glow, rgba(0,212,255,0.08)), transparent 48%); opacity:.9; pointer-events:none; }
-    .obs-hud-label { font-family:var(--mono); font-size:9px; color:var(--text-3); letter-spacing:1.6px; text-transform:uppercase; position:relative; z-index:1; }
-    .obs-hud-value { font-family:var(--mono); font-size:24px; font-weight:800; letter-spacing:-1px; margin-top:10px; position:relative; z-index:1; }
-    .obs-hud-note { font-family:var(--mono); font-size:9px; color:var(--text-4); margin-top:4px; position:relative; z-index:1; }
-    .obs-experience { margin-top:22px; position:relative; min-height:660px; border-radius:24px; overflow:hidden; border:1px solid rgba(255,255,255,0.07); background: radial-gradient(circle at 50% 45%, rgba(0,212,255,0.08), transparent 38%), linear-gradient(180deg, rgba(2,4,7,0.95), rgba(5,5,5,0.98)); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.025), 0 40px 120px rgba(0,0,0,0.55); }
-    .obs-experience::before { content:''; position:absolute; inset:0; background-image: linear-gradient(rgba(255,255,255,0.026) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px); background-size: 64px 64px; mask-image: radial-gradient(circle at center, black, transparent 74%); pointer-events:none; z-index:2; }
-    .obs-experience::after { content:''; position:absolute; inset:0; background: linear-gradient(180deg, transparent 0%, rgba(0,212,255,0.035) 48%, transparent 52%); transform: translateY(-100%); animation: obsScan 7s ease-in-out infinite; pointer-events:none; z-index:5; }
-    @keyframes obsScan { 0%,12%{ transform:translateY(-100%); opacity:0; } 24%{ opacity:1; } 82%{ transform:translateY(100%); opacity:.65; } 100%{ transform:translateY(100%); opacity:0; } }
-    #obs-canvas { width:100%; height:660px; display:block; position:relative; z-index:3; }
-    .obs-field-vignette { position:absolute; inset:0; pointer-events:none; z-index:4; background: radial-gradient(circle at center, transparent 42%, rgba(0,0,0,0.62) 100%); }
-    .obs-corner { position:absolute; z-index:6; font-family:var(--mono); font-size:9px; color:rgba(255,255,255,0.28); letter-spacing:1.8px; text-transform:uppercase; }
-    .obs-corner.tl { top:20px; left:22px; } .obs-corner.tr { top:20px; right:22px; text-align:right; } .obs-corner.bl { bottom:20px; left:22px; } .obs-corner.br { bottom:20px; right:22px; text-align:right; }
-    .obs-tooltip { position:absolute; pointer-events:none; background:rgba(5,8,12,0.92); backdrop-filter:blur(22px); border:1px solid rgba(0,212,255,0.18); border-radius:14px; padding:16px 18px; min-width:230px; opacity:0; transform:translateY(6px); transition:opacity .18s, transform .18s; z-index:20; box-shadow:0 24px 80px rgba(0,0,0,0.45); }
-    .obs-tooltip.show { opacity:1; transform:translateY(0); }
-    .obs-tooltip .ot-name { font-size:14px; font-weight:800; margin-bottom:5px; }
-    .obs-tooltip .ot-provider { font-family:var(--mono); font-size:9px; color:var(--blue); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:10px; }
-    .obs-tooltip .ot-stats { font-family:var(--mono); font-size:11px; color:var(--text-2); line-height:1.7; }
-    .obs-signal-log { margin-top:18px; display:grid; grid-template-columns: 1.2fr 1fr; gap:14px; }
-    .signal-panel { background:rgba(8,10,14,0.64); border:1px solid rgba(255,255,255,0.055); border-radius:16px; padding:20px 22px; backdrop-filter:blur(22px); overflow:hidden; position:relative; }
-    .signal-panel::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg, transparent, rgba(0,212,255,0.26), transparent); }
-    .signal-header { display:flex; justify-content:space-between; align-items:center; font-family:var(--mono); font-size:10px; color:var(--text-3); letter-spacing:2px; text-transform:uppercase; padding-bottom:12px; margin-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.035); }
-    .signal-live { color:var(--green); display:flex; align-items:center; gap:6px; }
-    .signal-live::before { content:''; width:5px; height:5px; border-radius:50%; background:var(--green); box-shadow:0 0 12px rgba(0,255,136,.65); animation:pulse 1.5s infinite; }
-    .signal-feed { display:flex; flex-direction:column; gap:0; min-height:154px; }
-    .signal-line { display:grid; grid-template-columns:64px 78px 1fr; gap:10px; align-items:center; font-family:var(--mono); font-size:10px; color:var(--text-3); padding:7px 0; border-bottom:1px solid rgba(255,255,255,0.02); }
-    .signal-time { color:var(--text-4); } .signal-type { font-size:9px; font-weight:800; letter-spacing:.8px; text-transform:uppercase; color:var(--sig-color,var(--blue)); } .signal-text strong{ color:var(--text); font-weight:700; }
-    .signal-metrics { display:grid; grid-template-columns: repeat(2, 1fr); gap:1px; background:rgba(255,255,255,.045); border-radius:12px; overflow:hidden; }
-    .signal-metric { background:rgba(255,255,255,.018); padding:16px; }
-    .signal-metric .k { font-family:var(--mono); font-size:9px; color:var(--text-3); text-transform:uppercase; letter-spacing:1.3px; }
-    .signal-metric .v { font-family:var(--mono); font-size:21px; font-weight:800; margin-top:8px; }
-    .signal-metric .s { font-family:var(--mono); font-size:9px; color:var(--text-4); margin-top:3px; }
-
 
     /* ═══════════════════════════════════════
        ABOUT
@@ -397,8 +389,6 @@
     .footer-links a { color: var(--text-3); text-decoration: none; font-size: 12px; font-weight: 500; transition: color 0.15s; }
     .footer-links a:hover { color: var(--text); }
 
-
-
     /* ═══════════════════════════════════════
        100/10 PREMIUM UPGRADE — cinematic command center
     ═══════════════════════════════════════ */
@@ -445,7 +435,7 @@
     .status-card:nth-child(2) .status-value { color:var(--gold); }
     .status-card:nth-child(3) .status-value { color:var(--blue); }
     .status-card:nth-child(5) .status-value { color:var(--blue); }
-    .obs-experience { min-height:720px; border-radius:30px; border-color:rgba(0,212,255,.13); box-shadow: inset 0 0 0 1px rgba(255,255,255,.03), 0 50px 160px rgba(0,0,0,.66), 0 0 120px rgba(0,212,255,.055); }
+
     #obs-canvas { height:720px; }
     .obs-title-stack { max-width:790px; margin:0 auto; }
     .obs-orbit-readout { margin:22px auto 0; display:inline-flex; gap:16px; flex-wrap:wrap; justify-content:center; font-family:var(--mono); font-size:10px; color:var(--text-3); letter-spacing:1.4px; text-transform:uppercase; }
@@ -461,14 +451,11 @@
     @media (max-width: 640px) {
       .status-grid { grid-template-columns:repeat(3,1fr) !important; }
       .status-card:nth-child(4), .status-card:nth-child(5) { grid-column:span 1; }
-      .obs-experience { min-height:420px !important; }
-      .obs-hud { grid-template-columns:repeat(2,1fr) !important; }
-      .obs-signal-log { grid-template-columns:1fr !important; }
-      .obs-orbit-readout { flex-direction:column; gap:4px; }
+
       .hero-proofline { flex-wrap:wrap; gap:6px; }
       .proof-pill { font-size:10px !important; }
       .hero-sub { font-size:14px !important; line-height:1.65 !important; }
- .hero-sub { font-size:15px; } .obs-experience { min-height:500px; } #obs-canvas { height:500px; } .hero-proofline { margin-top:0; } }
+ .hero-sub { font-size:15px; } #obs-canvas { height:500px; } .hero-proofline { margin-top:0; } }
 
 
     /* ═══════════════════════════════════════
@@ -525,9 +512,6 @@
     .evolution-phase span { font-family:var(--mono); font-size:10px; color:var(--text-4); text-transform:uppercase; letter-spacing:1.4px; }
     .evolution-phase h3 { margin-top:60px; font-size:20px; letter-spacing:-.6px; }
     .evolution-phase p { margin-top:10px; color:var(--text-3); font-size:13px; line-height:1.65; }
-    .obs-experience::before { background-image: radial-gradient(circle at 50% 50%, rgba(0,212,255,.05), transparent 22%), linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.016) 1px, transparent 1px); background-size:auto, 72px 72px, 72px 72px; }
-    .signal-time { white-space:nowrap; }
-
 
     /* ═══════════════════════════════════════
        HERO PANEL LIVE TICKER
@@ -541,34 +525,9 @@
     /* ═══════════════════════════════════════
        OBSERVATORY DEPTH ENHANCEMENT
     ═══════════════════════════════════════ */
-    .obs-experience::before {
-      content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
-      background-image:
-        repeating-linear-gradient(0deg, rgba(0,212,255,.012) 0px, rgba(0,212,255,.012) 1px, transparent 1px, transparent 3px),
-        radial-gradient(circle at 50% 50%, rgba(0,212,255,.04), transparent 50%);
-      mix-blend-mode: screen;
-    }
-    .obs-field-vignette {
-      background:
-        radial-gradient(circle at center, transparent 28%, rgba(0,0,0,.35) 60%, rgba(0,0,0,.82) 100%),
-        linear-gradient(90deg, rgba(0,212,255,.02), transparent 15%, transparent 85%, rgba(139,92,246,.02)) !important;
-    }
-    .obs-corner { color:rgba(0,212,255,.45) !important; font-size:10px !important; text-shadow:0 0 12px rgba(0,212,255,.15); }
-    .obs-hud-cell {
-      border:1px solid rgba(255,255,255,.06);
-      background: rgba(4,6,10,.72);
-      backdrop-filter:blur(12px);
-      box-shadow: 0 0 30px var(--hud-glow), inset 0 1px 0 rgba(255,255,255,.04);
-    }
-    .obs-hud-value { text-shadow: 0 0 20px currentColor; }
-    .obs-signal-log { border:1px solid rgba(255,255,255,.06); border-radius:20px; }
-    .signal-panel { background:rgba(4,6,10,.65); backdrop-filter:blur(10px); }
 
-
-    .obs-experience { background: radial-gradient(circle at 50% 48%, rgba(0,212,255,0.14), transparent 34%), radial-gradient(circle at 26% 20%, rgba(139,92,246,0.09), transparent 30%), radial-gradient(circle at 76% 28%, rgba(0,255,136,0.075), transparent 32%), linear-gradient(180deg, rgba(2,4,7,0.98), rgba(4,5,8,0.98)); }
-    .obs-field-vignette { background: radial-gradient(circle at center, transparent 34%, rgba(0,0,0,0.42) 72%, rgba(0,0,0,0.76) 100%), linear-gradient(90deg, rgba(0,212,255,.035), transparent 18%, transparent 82%, rgba(139,92,246,.035)); }
     @media (max-width: 900px) { .doctrine-layout, .research-streams, .ops-console { grid-template-columns:1fr; } .doctrine-intro { position:relative; top:auto; } .evolution-map { grid-template-columns:1fr; } .evolution-phase { min-height:190px; } .evolution-phase h3 { margin-top:42px; } }
-    @media (max-width: 640px) { .doctrine-item { grid-template-columns:42px 1fr; gap:14px; } .doctrine-item h3 { font-size:20px; } .stream-row, .ops-event { grid-template-columns:1fr; gap:8px; } .stream-row em, .ops-event em { text-align:left; } .inspection-grid { grid-template-columns:1fr; } .node-core { align-items:flex-start; flex-wrap:wrap; } .node-core b { margin-left:0; } .obs-hud-cell { min-height:auto; } .ops-console, .research-streams { margin-top:32px; } }
+    @media (max-width: 640px) { .doctrine-item { grid-template-columns:42px 1fr; gap:14px; } .doctrine-item h3 { font-size:20px; } .stream-row, .ops-event { grid-template-columns:1fr; gap:8px; } .stream-row em, .ops-event em { text-align:left; } .inspection-grid { grid-template-columns:1fr; } .node-core { align-items:flex-start; flex-wrap:wrap; } .node-core b { margin-left:0; } .ops-console, .research-streams { margin-top:32px; } }
 
 
     /* ═══════════════════════════════════════
@@ -598,7 +557,7 @@
       .research-grid { grid-template-columns: 1fr 1fr; }
       .status-grid { grid-template-columns: repeat(3, 1fr); }
       .obs-hud { grid-template-columns: repeat(2, 1fr); }
-      .obs-signal-log { grid-template-columns: 1fr; }
+
       .dash-monitor { grid-template-columns: 1fr; }
       .dash-header, .dash-row { grid-template-columns: 2fr 1fr 100px; }
       .dash-header > :nth-child(4), .dash-row > :nth-child(4) { display: none; }
@@ -622,9 +581,9 @@
       .vision-metrics { gap: 32px; }
       #observatory { padding: 100px 0; }
       .obs-hud { grid-template-columns: 1fr; }
-      .obs-experience { min-height: 460px; border-radius: 18px; }
+
       #obs-canvas { height: 460px; }
-      .signal-line { grid-template-columns: 54px 68px 1fr; font-size: 9px; }
+
     }
   </style>
 </head>
@@ -730,43 +689,42 @@
     <!-- AI OBSERVATORY -->
     <section id="observatory">
       <div class="container">
-        <div class="reveal obs-title-stack" style="text-align:center">
-          <div class="obs-kicker">AI Observatory</div>
-          <h2 class="section-title">Living <span class="blue">Intelligence</span> Network</h2>
-          <p class="section-desc" style="margin:0 auto">A live intelligence field built from the OpenRouter model catalog: provider constellations, context-window bodies, open-source signals, and distribution patterns moving through one observable layer.</p>
-          <div class="obs-orbit-readout"><span><b>Source</b> OpenRouter catalog</span><span><b>Mode</b> Living intelligence field</span><span><b>Lens</b> Provider constellations</span></div>
+        <div class="obs-header reveal">
+          <div class="obs-header-left">
+            <div class="section-label">AI Observatory</div>
+            <h2 class="section-title">Model <span class="green">Intelligence</span></h2>
+            <p class="section-desc">Live data from the OpenRouter model catalog. Every provider, every context window, every pricing tier — mapped and observable.</p>
+          </div>
+          <div class="obs-header-stats">
+            <div class="obs-stat"><div class="obs-stat-val blue" id="obs-field-index">—</div><div class="obs-stat-label">Models</div></div>
+            <div class="obs-stat"><div class="obs-stat-val green" id="obs-provider-index">—</div><div class="obs-stat-label">Providers</div></div>
+            <div class="obs-stat"><div class="obs-stat-val purple" id="obs-open-ratio">—</div><div class="obs-stat-label">Open Source</div></div>
+            <div class="obs-stat"><div class="obs-stat-val gold" id="obs-context-max">—</div><div class="obs-stat-label">Max Context</div></div>
+          </div>
         </div>
 
-        <div class="obs-hud reveal">
-          <div class="obs-hud-cell" style="--hud-glow:rgba(0,212,255,.12)"><div class="obs-hud-label">Field Index</div><div class="obs-hud-value blue" id="obs-field-index">—</div><div class="obs-hud-note">models returned by OpenRouter</div></div>
-          <div class="obs-hud-cell" style="--hud-glow:rgba(0,255,136,.10)"><div class="obs-hud-label">Provider Constellations</div><div class="obs-hud-value green" id="obs-provider-index">—</div><div class="obs-hud-note">unique provider families</div></div>
-          <div class="obs-hud-cell" style="--hud-glow:rgba(139,92,246,.12)"><div class="obs-hud-label">Open Source Signals</div><div class="obs-hud-value purple" id="obs-open-ratio">—</div><div class="obs-hud-note">open model families detected</div></div>
-          <div class="obs-hud-cell" style="--hud-glow:rgba(255,213,74,.10)"><div class="obs-hud-label">Max Context Window</div><div class="obs-hud-value gold" id="obs-context-max">—</div><div class="obs-hud-note">largest observable context</div></div>
-        </div>
-
-        <div class="obs-experience reveal">
+        <div class="obs-canvas-wrap reveal">
           <canvas id="obs-canvas"></canvas>
-          <div class="obs-field-vignette"></div>
-          <div class="obs-corner tl">ZKA / MODEL OBSERVATORY</div>
-          <div class="obs-corner tr">LENS: PROVIDER FIELD<br>DATA: LIVE CATALOG</div>
-          <div class="obs-corner bl">OPENROUTER: PUBLIC MODEL INDEX</div>
-          <div class="obs-corner br">LAYERS: DEEP FIELD<br>FOCUS: PROVIDERS</div>
           <div class="obs-tooltip" id="obs-tooltip"><div class="ot-name"></div><div class="ot-provider"></div><div class="ot-stats"></div></div>
         </div>
 
-        <div class="obs-signal-log reveal">
-          <div class="signal-panel">
-            <div class="signal-header"><span>Signal Log</span><span class="signal-live">Live</span></div>
-            <div class="signal-feed" id="obs-feed"></div>
+        <div class="obs-footer reveal">
+          <div class="obs-footer-left">
+            <span id="obs-sync" class="obs-sync-badge">SYNCING</span>
+            <span class="obs-footer-text">Source: OpenRouter public catalog</span>
           </div>
-          <div class="signal-panel">
-            <div class="signal-header"><span>Field Telemetry</span><span id="obs-sync">SYNCING</span></div>
-            <div class="signal-metrics">
-              <div class="signal-metric"><div class="k">Models</div><div class="v blue" id="obs-total">—</div><div class="s">observable nodes</div></div>
-              <div class="signal-metric"><div class="k">Providers</div><div class="v green" id="obs-providers">—</div><div class="s">cluster families</div></div>
-              <div class="signal-metric"><div class="k">Dominant Source</div><div class="v gold" id="obs-top-provider" style="font-size:15px">—</div><div class="s">highest density</div></div>
-              <div class="signal-metric"><div class="k">Open Signals</div><div class="v purple" id="obs-oss">—</div><div class="s">open-source families</div></div>
-            </div>
+          <div class="obs-footer-right">
+            <span class="obs-footer-text" id="obs-total">—</span>
+            <span class="obs-footer-text">models</span>
+            <span class="obs-footer-sep">·</span>
+            <span class="obs-footer-text" id="obs-providers">—</span>
+            <span class="obs-footer-text">providers</span>
+            <span class="obs-footer-sep">·</span>
+            <span class="obs-footer-text" id="obs-top-provider">—</span>
+            <span class="obs-footer-text">dominant</span>
+            <span class="obs-footer-sep">·</span>
+            <span class="obs-footer-text" id="obs-oss">—</span>
+            <span class="obs-footer-text">open</span>
           </div>
         </div>
       </div>
@@ -1046,8 +1004,6 @@
     const vs = document.querySelector('.vision-statements');
     if (vs) visionObs.observe(vs);
 
-
-
     // Activity feed
     (() => {
       const feed = document.getElementById('activity-feed');
@@ -1140,7 +1096,6 @@
       if (!canvas) return;
       const cx = canvas.getContext('2d');
       const tooltip = document.getElementById('obs-tooltip');
-      const feedEl = document.getElementById('obs-feed');
       const hud = {
         field: document.getElementById('obs-field-index'),
         providers: document.getElementById('obs-provider-index'),
@@ -1181,7 +1136,7 @@
       function resize() {
         const rect = canvas.parentElement.getBoundingClientRect();
         W = rect.width;
-        H = rect.height || 660;
+        H = rect.height || 520;
         const dpr = window.devicePixelRatio || 1;
         canvas.width = Math.floor(W * dpr);
         canvas.height = Math.floor(H * dpr);
@@ -1205,7 +1160,7 @@
           group.slice(0, 5).forEach(m => add(m, false));
         });
         if (selected.length < 24) models.slice(0, 36).forEach(m => add(m, false));
-        return selected.slice(0, 74);
+        return selected.slice(0, 40);
       }
 
       function buildNodesFromModels(models) {
@@ -1230,7 +1185,7 @@
             weight: (m.isKey ? 1 : 0.52) + sRand() * 0.25,
             phase: sRand() * Math.PI * 2,
             x: W / 2, y: H / 2, bx: W / 2, by: H / 2,
-            r: m.isKey ? 10 : 5.8,
+            r: m.isKey ? 7 : 4,
           };
         });
       }
@@ -1307,11 +1262,11 @@
           }
         }
 
-        pulses = Array.from({ length: links.length ? Math.min(160, Math.max(70, links.length)) : 0 }, (_, i) => ({
+        pulses = Array.from({ length: links.length ? Math.min(80, Math.max(30, links.length)) : 0 }, (_, i) => ({
           link: links[Math.floor(sRand() * links.length)],
           p: sRand(),
           speed: 0.003 + sRand() * 0.009,
-          size: 2 + sRand() * 3,
+          size: 1.5 + sRand() * 2,
         }));
       }
 
@@ -1378,15 +1333,15 @@
         nodes.forEach(n => {
           const hot = n === hovered;
           const breath = 0.72 + Math.sin(t * 2 + n.phase) * 0.24;
-          const glowR = (hot ? 58 : (n.isKey ? 46 : 28)) * n.weight;
+          const glowR = (hot ? 36 : (n.isKey ? 28 : 16)) * n.weight;
           const g = cx.createRadialGradient(n.x, n.y, 0, n.x, n.y, glowR);
-          g.addColorStop(0, hexAlpha(n.color, hot ? 0.52 : 0.23 * breath));
+          g.addColorStop(0, hexAlpha(n.color, hot ? 0.35 : 0.12 * breath));
           g.addColorStop(1, 'transparent');
           cx.fillStyle = g; cx.beginPath(); cx.arc(n.x, n.y, glowR, 0, Math.PI * 2); cx.fill();
           cx.fillStyle = hot ? n.color : hexAlpha(n.color, 0.96);
           cx.beginPath(); cx.arc(n.x, n.y, hot ? n.r + 3 : n.r, 0, Math.PI * 2); cx.fill();
           cx.strokeStyle = hexAlpha(n.color, hot ? 0.95 : 0.32);
-          cx.lineWidth = hot ? 1.9 : 1.05;
+          cx.lineWidth = hot ? 1.5 : 0.8;
           cx.beginPath(); cx.arc(n.x, n.y, (hot ? n.r + 7 : n.r + 3) + Math.sin(t * 3 + n.phase) * 1.2, 0, Math.PI * 2); cx.stroke();
         });
 
@@ -1498,16 +1453,7 @@
       });
       canvas.addEventListener('mouseleave', () => { hovered = null; tooltip.classList.remove('show'); });
 
-      function pushSignal(type, text, color) {
-        if (!feedEl) return;
-        const time = new Date().toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit', second:'2-digit', timeZone:'Asia/Jakarta' }) + ' WIB';
-        const line = document.createElement('div');
-        line.className = 'signal-line';
-        line.style.setProperty('--sig-color', color);
-        line.innerHTML = `<span class="signal-time">${time}</span><span class="signal-type">${type}</span><span class="signal-text">${text}</span>`;
-        feedEl.prepend(line);
-        while (feedEl.children.length > 7) feedEl.removeChild(feedEl.lastChild);
-      }
+
 
       function fmtContext(n) {
         if (!n) return '—';
@@ -1531,13 +1477,7 @@
         if (hud.providers) hud.providers.textContent = providerTotal;
         if (hud.openRatio) hud.openRatio.textContent = ossCount;
         if (hud.contextMax) hud.contextMax.textContent = fmtContext(maxContext);
-        catalogEvents = [
-          ['index', `<strong>${totalModels}</strong> systems mapped from OpenRouter`, '#00d4ff'],
-          ['field', `<strong>${providerTotal}</strong> provider constellations distributed`, '#00ff88'],
-          ['open', `<strong>${ossCount}</strong> open-source family signals detected`, '#8b5cf6'],
-          ['context', `<strong>${fmtContext(maxContext)}</strong> maximum context body observed`, '#ffd54a'],
-          ['density', `<strong>${topProvider}</strong> leads provider density at ${topShare}%`, '#22d3ee'],
-        ];
+
       }
 
       setInterval(() => {
@@ -1563,9 +1503,7 @@
           const maxContext = models.reduce((max, m) => Math.max(max, Number(m.context_length || 0)), 0);
           const topShare = models.length ? Math.round((top[1] / models.length) * 100) : 0;
           updateTelemetry(models.length, Object.keys(providerCounts).length, top[0], oss, maxContext, topShare, 'SYNCED');
-          pushSignal('index', `<strong>${models.length}</strong> OpenRouter models mapped into the intelligence field`, '#00d4ff');
-          pushSignal('density', `<strong>${top[0]}</strong> leads distribution with ${top[1]} catalog entries`, '#ffd54a');
-          pushSignal('context', `<strong>${fmtContext(maxContext)}</strong> max context window detected`, '#8b5cf6');
+
         })
         .catch(err => {
           console.error('OpenRouter fetch error:', err);
@@ -1573,7 +1511,7 @@
           loaded = true;
           layoutLiveMesh();
           updateTelemetry('fallback', '8', 'openai', 'open families', 1048576, 12, 'LOCAL');
-          pushSignal('sync', '<strong>cached model mesh</strong> active without external catalog', '#ffd54a');
+
         });
     })();
 
@@ -1636,13 +1574,13 @@
           grad.addColorStop(1, 'rgba(0,255,136,0.35)');
           // Connection line (thicker when hovered)
           cx.beginPath(); cx.moveTo(centerNode.x, centerNode.y); cx.lineTo(n.x, n.y);
-          cx.strokeStyle = grad; cx.lineWidth = n === hoveredNode ? 3 : 1.8; cx.stroke();
+          cx.strokeStyle = grad; cx.lineWidth = n === hoveredNode ? 2 : 1; cx.stroke();
 
           // Flow particle (bigger, glowing)
           const pg = cx.createRadialGradient(flowX, flowY, 0, flowX, flowY, 8);
           pg.addColorStop(0, col + 'cc'); pg.addColorStop(1, 'transparent');
           cx.beginPath(); cx.arc(flowX, flowY, 8, 0, Math.PI * 2); cx.fillStyle = pg; cx.fill();
-          cx.beginPath(); cx.arc(flowX, flowY, 5, 0, Math.PI * 2);
+          cx.beginPath(); cx.arc(flowX, flowY, 3, 0, Math.PI * 2);
           cx.fillStyle = col; cx.fill();
         });
 
