@@ -589,6 +589,13 @@
       .vision-metrics { gap: 32px; }
       #observatory { padding: 100px 0; }
 
+      /* Observatory Canvas Mobile */
+      #obs-canvas { height: 400px !important; }
+      .obs-canvas-wrap { border-radius: 14px; }
+      .obs-canvas-tooltip { display: none; }
+      .obs-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .obs-header-stats { gap: 16px; flex-wrap: wrap; }
+      .obs-stat-val { font-size: 22px; }
     }
 
     /* ═══════════════════════════════
@@ -1183,33 +1190,61 @@
 
       function layoutProviderNodes() {
         if (!providerNodes.length) return;
+        const isMobile = W < 640;
         const cx = W / 2, cy = H / 2;
         const count = providerNodes.length;
-        // Spiral-like layout: inner ring for top providers, outer for smaller
-        const innerCount = Math.min(8, count);
-        const outerCount = count - innerCount;
-        const innerR = Math.min(W, H) * 0.22;
-        const outerR = Math.min(W, H) * 0.38;
 
-        providerNodes.forEach((n, i) => {
-          let angle, radius;
-          if (i < innerCount) {
-            angle = (i / innerCount) * Math.PI * 2 - Math.PI / 2;
-            radius = innerR;
-          } else {
-            const oi = i - innerCount;
-            angle = (oi / Math.max(outerCount, 1)) * Math.PI * 2 - Math.PI / 2 + 0.3;
-            radius = outerR;
+        if (isMobile) {
+          // Mobile: 3 concentric rings, fewer nodes per ring
+          const ringCounts = [5, 8, Math.min(12, count - 13)];
+          const ringRadii = [H * 0.16, H * 0.28, H * 0.38];
+          let idx = 0;
+          for (let ring = 0; ring < 3; ring++) {
+            const nInRing = Math.min(ringCounts[ring], count - idx);
+            for (let j = 0; j < nInRing && idx < count; j++, idx++) {
+              const angle = (j / nInRing) * Math.PI * 2 - Math.PI / 2;
+              const weight = Math.min(1, providerNodes[idx].models.length / 40);
+              providerNodes[idx].r = 14 + weight * 14;
+              providerNodes[idx].baseX = cx + Math.cos(angle) * ringRadii[ring];
+              providerNodes[idx].baseY = cy + Math.sin(angle) * ringRadii[ring];
+              providerNodes[idx].x = providerNodes[idx].baseX;
+              providerNodes[idx].y = providerNodes[idx].baseY;
+              providerNodes[idx].pulse = Math.random() * Math.PI * 2;
+              providerNodes[idx].hover = 0;
+            }
           }
-          // Weight-based radius
-          const weight = Math.min(1, n.models.length / 40);
-          n.r = 18 + weight * 24;
-          n.baseX = cx + Math.cos(angle) * radius;
-          n.baseY = cy + Math.sin(angle) * radius;
-          n.x = n.baseX; n.y = n.baseY;
-          n.pulse = Math.random() * Math.PI * 2;
-          n.hover = 0;
-        });
+          // Hide remaining nodes (move off-screen)
+          for (let i = idx; i < count; i++) {
+            providerNodes[i].baseX = -999; providerNodes[i].baseY = -999;
+            providerNodes[i].x = -999; providerNodes[i].y = -999;
+            providerNodes[i].r = 0;
+          }
+        } else {
+          // Desktop: 2 rings
+          const innerCount = Math.min(8, count);
+          const outerCount = count - innerCount;
+          const innerR = Math.min(W, H) * 0.22;
+          const outerR = Math.min(W, H) * 0.38;
+
+          providerNodes.forEach((n, i) => {
+            let angle, radius;
+            if (i < innerCount) {
+              angle = (i / innerCount) * Math.PI * 2 - Math.PI / 2;
+              radius = innerR;
+            } else {
+              const oi = i - innerCount;
+              angle = (oi / Math.max(outerCount, 1)) * Math.PI * 2 - Math.PI / 2 + 0.3;
+              radius = outerR;
+            }
+            const weight = Math.min(1, n.models.length / 40);
+            n.r = 18 + weight * 24;
+            n.baseX = cx + Math.cos(angle) * radius;
+            n.baseY = cy + Math.sin(angle) * radius;
+            n.x = n.baseX; n.y = n.baseY;
+            n.pulse = Math.random() * Math.PI * 2;
+            n.hover = 0;
+          });
+        }
       }
 
       function buildProviderData(models) {
@@ -1316,8 +1351,13 @@
           }
         }
 
+        const isMobileCanvas = W < 640;
         linkPairs.forEach(([ai, bi]) => {
           const a = providerNodes[ai], b = providerNodes[bi];
+          // Skip connections to hidden nodes
+          if (a.r <= 0 || b.r <= 0 || a.x < -100 || b.x < -100) return;
+          // On mobile, only show connections involving top nodes
+          if (isMobileCanvas && (ai > 12 || bi > 12)) return;
           const midX = (a.x + b.x) / 2, midY = (a.y + b.y) / 2 - 15;
 
           // Connection line with gradient
@@ -1346,7 +1386,8 @@
         });
 
         // === Ambient floating particles ===
-        for (let i = 0; i < 30; i++) {
+        const particleCount = W < 640 ? 15 : 30;
+        for (let i = 0; i < particleCount; i++) {
           const px = (Math.sin(animT * 0.4 + i * 2.3) * 0.5 + 0.5) * W;
           const py = (Math.cos(animT * 0.35 + i * 1.9) * 0.5 + 0.5) * H;
           const size = 1 + Math.sin(animT * 2 + i) * 0.8;
@@ -1416,27 +1457,36 @@
           ctx.beginPath(); ctx.arc(n.x, n.y, r * 0.4, 0, Math.PI * 2);
           ctx.fillStyle = dotGrad; ctx.fill();
 
+          // Skip hidden nodes (mobile overflow)
+          if (n.r <= 0 || n.x < -100) return;
+
           // === Model count text ===
-          ctx.font = `800 ${11 + n.hover * 3}px "JetBrains Mono"`;
+          const isMob = W < 640;
+          ctx.font = `800 ${isMob ? (8 + n.hover * 2) : (11 + n.hover * 3)}px "JetBrains Mono"`;
           ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
           ctx.fillStyle = col;
-          ctx.fillText(n.models.length, n.x, n.y - 2);
+          ctx.fillText(n.models.length, n.x, n.y - 1);
 
-          // === Provider name below ===
-          ctx.font = `700 ${10 + n.hover}px "Inter"`;
-          ctx.fillStyle = n === hoveredNode ? '#fff' : 'rgba(255,255,255,0.7)';
-          ctx.fillText(n.name, n.x, n.y + r + 14);
+          // === Provider name below (skip on mobile for outer ring) ===
+          if (!isMob || n.r > 20) {
+            ctx.font = `700 ${isMob ? 8 : (10 + n.hover)}px "Inter"`;
+            ctx.fillStyle = n === hoveredNode ? '#fff' : 'rgba(255,255,255,0.7)';
+            ctx.fillText(n.name, n.x, n.y + r + (isMob ? 10 : 14));
+          }
 
-          // === Status label ===
-          ctx.font = `500 8px "JetBrains Mono"`;
-          ctx.fillStyle = `rgba(${rgb},0.6)`;
-          ctx.fillText(fmtCtx(n.models.reduce((max, m) => Math.max(max, Number(m.context_length || 0)), 0)) + ' ctx', n.x, n.y + r + 26);
+          // === Status label (skip on mobile) ===
+          if (!isMob) {
+            ctx.font = `500 8px "JetBrains Mono"`;
+            ctx.fillStyle = `rgba(${rgb},0.6)`;
+            ctx.fillText(fmtCtx(n.models.reduce((max, m) => Math.max(max, Number(m.context_length || 0)), 0)) + ' ctx', n.x, n.y + r + 26);
+          }
         });
 
         // === Center label ===
-        ctx.font = '600 9px "JetBrains Mono"'; ctx.textAlign = 'center';
-        ctx.fillStyle = 'rgba(255,255,255,0.12)';
-        ctx.fillText(providerNodes.length + ' providers · ' + allModels.length + ' models · live from OpenRouter', W / 2, H - 14);
+        const isMobileDraw = W < 640;
+        ctx.font = `600 ${isMobileDraw ? 8 : 9}px "JetBrains Mono"`; ctx.textAlign = 'center';
+        ctx.fillStyle = 'rgba(255,255,255,0.15)';
+        ctx.fillText(providerNodes.length + ' providers · ' + allModels.length + ' models · live from OpenRouter', W / 2, H - 12);
 
         requestAnimationFrame(drawObservatory);
       }
