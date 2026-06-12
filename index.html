@@ -113,8 +113,11 @@
     .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
     @keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 8px rgba(0,255,136,0.5)} 50%{opacity:0.4;box-shadow:none} }
     .nav-links { display: flex; gap: 20px; list-style: none; }
-    .nav-links a { color: var(--text-3); text-decoration: none; font-size: 12px; font-weight: 500; transition: color 0.15s; }
+    .nav-links a { color: var(--text-3); text-decoration: none; font-size: 12px; font-weight: 500; transition: color 0.15s; padding: 8px 4px; min-height: 44px; display: inline-flex; align-items: center; }
     .nav-links a:hover { color: var(--text); }
+    .nav-hamburger { display: none; background: none; border: none; color: var(--text-2); cursor: pointer; padding: 10px; min-width: 44px; min-height: 44px; align-items: center; justify-content: center; border-radius: 8px; transition: background 0.15s; }
+    .nav-hamburger:hover { background: rgba(255,255,255,0.06); }
+    .nav-hamburger svg { width: 20px; height: 20px; }
 
     /* ═══════════════════════════════════════
        SECTION HELPERS
@@ -653,6 +656,155 @@
       .obs-stat-val { font-size: 22px; }
     }
 
+    /* ═══════════════════════════════════════
+       MOBILE NAV & COMPREHENSIVE 768px
+    ═══════════════════════════════════════ */
+    @media (max-width: 768px) {
+      /* Hamburger nav */
+      .nav-hamburger { display: flex; }
+      .nav-links {
+        display: none;
+        position: fixed;
+        top: 52px;
+        left: 0; right: 0;
+        background: rgba(5,5,5,0.96);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border-bottom: 1px solid var(--border);
+        flex-direction: column;
+        padding: 8px 0;
+        z-index: 9999;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li { width: 100%; }
+      .nav-links a {
+        display: flex; width: 100%;
+        padding: 14px 24px; font-size: 14px;
+        min-height: 48px; align-items: center;
+        border-bottom: 1px solid rgba(255,255,255,0.03);
+      }
+      .nav-links a:last-child { border-bottom: none; }
+      .nav-links a:hover { background: rgba(255,255,255,0.04); }
+
+      /* Container & spacing */
+      .container { padding: 0 16px; }
+      .nav-inner { padding: 0 16px; }
+      section { padding: 64px 0; }
+      #vision { padding: 80px 0 96px; }
+
+      /* Hero */
+      #hero { min-height: auto; padding-top: 60px; padding-bottom: 24px; }
+      .hero-layout { grid-template-columns: 1fr; gap: 24px; }
+      .hero-panels { order: 2 !important; }
+      .hero-title { font-size: 36px !important; letter-spacing: -2px !important; }
+      .hero-sub { font-size: 15px !important; max-width: 100%; line-height: 1.65; }
+      .hero-eyebrow { font-size: 10px; letter-spacing: 1.5px; }
+      .hero-ctas { flex-direction: column; gap: 10px; }
+      .btn { width: 100%; justify-content: center; padding: 14px 22px; font-size: 14px; }
+      .hero-scroll { display: none; }
+      .hero-proofline { display: none !important; }
+      .hero-panels { display: flex !important; flex-direction: column !important; gap: 10px !important; }
+      .hero-panel:not(.command-portrait) { display: none !important; }
+      .command-portrait { width: 100%; }
+      .portrait-core { min-height: 160px; padding: 16px; }
+      .core-ring.r1 { width: 130px !important; height: 130px !important; }
+      .core-ring.r2 { width: 100px !important; height: 100px !important; }
+      .core-ring.r3 { width: 60px !important; height: 60px !important; }
+      .mini-rail .v { font-size: 15px; }
+
+      /* Section headings */
+      .section-title { font-size: clamp(22px, 5vw, 32px); letter-spacing: -1px; }
+      .section-desc { font-size: 14px; line-height: 1.65; }
+      .section-label { font-size: 9px; letter-spacing: 2px; }
+
+      /* Status grid */
+      .status-grid { grid-template-columns: repeat(2, 1fr) !important; margin-top: 32px; }
+      .status-value { font-size: 26px; }
+      .status-card { padding: 20px 16px; }
+
+      /* Observatory */
+      #observatory { padding: 64px 0; }
+      .obs-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .obs-header-stats { gap: 12px; flex-wrap: wrap; }
+      .obs-stat-val { font-size: 22px; }
+      .obs-grid { grid-template-columns: 1fr; margin-top: 20px !important; }
+      .obs-card { padding: 18px; }
+      #obs-canvas { height: 300px !important; }
+      .obs-footer { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .obs-footer-right { flex-wrap: wrap; }
+
+      /* Doctrine */
+      .doctrine-layout { grid-template-columns: 1fr; gap: 32px; }
+      .doctrine-intro { position: relative; top: auto; }
+      .doctrine-item { grid-template-columns: 40px 1fr; gap: 12px; padding: 20px 0; }
+      .doctrine-item h3 { font-size: 18px; }
+      .doctrine-item p { font-size: 13px; }
+
+      /* Ecosystem */
+      .eco-canvas-wrap { margin-top: 28px; border-radius: 14px; }
+      #eco-canvas { height: 320px; }
+
+      /* Research */
+      .research-grid { grid-template-columns: 1fr; margin-top: 32px; }
+      .research-streams { grid-template-columns: 1fr; margin-top: 32px; }
+      .stream-primary { min-height: 240px; padding: 24px; }
+      .stream-primary h3 { font-size: 24px; }
+      .stream-row { grid-template-columns: 1fr; gap: 6px; padding: 18px; }
+      .stream-row em { text-align: left; }
+
+      /* Dashboard / Ops */
+      .dash-monitor { grid-template-columns: 1fr; margin-top: 32px; }
+      .dash-header, .dash-row { grid-template-columns: 1fr 80px; padding: 12px 16px; }
+      .dash-header > :nth-child(2), .dash-row > :nth-child(2),
+      .dash-header > :nth-child(3), .dash-row > :nth-child(3) { display: none; }
+      .dash-name { font-size: 12px; }
+      .ops-console { grid-template-columns: 1fr; margin-top: 32px; }
+      .ops-event { grid-template-columns: 1fr; gap: 6px; padding: 18px; }
+      .ops-event em { text-align: left; }
+
+      /* Featured */
+      .featured { padding: 24px 18px; margin-top: 32px; }
+      .featured-title { font-size: 20px; }
+      .featured-icon { width: 40px; height: 40px; font-size: 18px; }
+      .featured-desc { font-size: 13px; }
+
+      /* Node inspection */
+      .node-inspection { margin-top: 32px; padding: 22px 18px; border-radius: 18px; }
+      .inspection-grid { grid-template-columns: 1fr; }
+      .node-core { flex-wrap: wrap; gap: 12px; }
+      .node-core b { margin-left: 0; }
+      .node-glyph { width: 44px; height: 44px; font-size: 16px; }
+      .node-core strong { font-size: 22px; }
+
+      /* Evolution / Roadmap */
+      .evolution-map { grid-template-columns: 1fr; margin-top: 32px; }
+      .evolution-phase { min-height: 160px; padding: 20px 18px; }
+      .evolution-phase h3 { font-size: 18px; margin-top: 36px; }
+      .evolution-phase p { font-size: 13px; }
+
+      /* Vision */
+      .vision-headline { font-size: clamp(28px, 6vw, 42px); letter-spacing: -1.5px; }
+      .vision-statement { font-size: 15px; }
+      .vision-metrics { grid-template-columns: repeat(2, 1fr); margin-top: 40px; }
+      .vision-metric { padding: 20px 16px; }
+      .vm-val { font-size: 22px; }
+      .vision-tagline { font-size: 11px; letter-spacing: 1.5px; margin-top: 40px; }
+
+      /* Footer */
+      footer { padding: 24px 0; }
+      .footer-inner { flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+      .footer-links { gap: 16px; }
+
+      /* Mobile status strip */
+      .mobile-status-strip { display: flex; }
+
+      /* Reduce orb sizes for mobile */
+      .orb-1 { width: 300px; height: 300px; }
+      .orb-2 { width: 250px; height: 250px; }
+      .orb-3 { width: 200px; height: 200px; }
+      .orb-4, .orb-5 { display: none; }
+    }
+
     /* ═══════════════════════════════
        OBSERVATORY LIVING CANVAS
     ═══════════════════════════════ */
@@ -705,7 +857,10 @@
     <nav id="nav">
       <div class="nav-inner">
         <a href="#" class="nav-logo"><span class="nav-dot"></span> ZK<span class="g">A</span></a>
-        <ul class="nav-links">
+        <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <ul class="nav-links" id="nav-links">
           <li><a href="#status">Status</a></li>
           <li><a href="#observatory">Observatory</a></li>
           <li><a href="#ecosystem">Ecosystem</a></li>
@@ -1090,6 +1245,25 @@
     // Nav
     const nav = document.getElementById('nav');
     window.addEventListener('scroll', () => nav.classList.toggle('visible', window.scrollY > 400));
+
+    // Hamburger menu
+    const hamburger = document.getElementById('nav-hamburger');
+    const navLinks = document.getElementById('nav-links');
+    if (hamburger && navLinks) {
+      hamburger.addEventListener('click', () => {
+        navLinks.classList.toggle('open');
+        const isOpen = navLinks.classList.contains('open');
+        hamburger.setAttribute('aria-expanded', isOpen);
+      });
+      // Close on link click
+      navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => navLinks.classList.remove('open'));
+      });
+      // Close on outside click
+      document.addEventListener('click', (e) => {
+        if (!nav.contains(e.target)) navLinks.classList.remove('open');
+      });
+    }
 
     // Reveal
     document.querySelectorAll('.reveal').forEach(el => {
