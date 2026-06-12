@@ -212,13 +212,19 @@
     .obs-stat-val.purple { color:var(--purple); }
     .obs-stat-val.gold { color:var(--gold); }
     .obs-stat-label { font-family:var(--mono); font-size:9px; color:var(--text-3); text-transform:uppercase; letter-spacing:1.5px; margin-top:6px; }
-    .obs-canvas-wrap { position:relative; border-radius:20px; overflow:hidden; border:1px solid var(--border); background:var(--bg); }
-    #obs-canvas { width:100%; height:520px; display:block; }
-    .obs-tooltip { position:absolute; pointer-events:none; opacity:0; transition:opacity .15s; background:rgba(8,8,12,.92); border:1px solid var(--border); border-radius:12px; padding:16px 20px; z-index:20; backdrop-filter:blur(16px); min-width:220px; }
-    .obs-tooltip.show { opacity:1; }
-    .ot-name { font-size:14px; font-weight:700; margin-bottom:4px; }
-    .ot-provider { font-family:var(--mono); font-size:9px; color:var(--blue); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:10px; }
-    .ot-stats { font-family:var(--mono); font-size:11px; color:var(--text-2); line-height:1.7; }
+    .obs-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:16px; overflow:hidden; margin-top:36px; }
+    .obs-grid-loading { padding:60px; text-align:center; font-family:var(--mono); font-size:12px; color:var(--text-3); grid-column:1/-1; }
+    .obs-card { background:var(--surface); padding:24px; transition:background .15s; }
+    .obs-card:hover { background:var(--surface-2); }
+    .obs-card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+    .obs-card-provider { font-family:var(--mono); font-size:13px; font-weight:700; letter-spacing:-.3px; }
+    .obs-card-count { font-family:var(--mono); font-size:11px; color:var(--text-3); padding:3px 8px; border-radius:6px; background:rgba(255,255,255,.04); }
+    .obs-card-models { list-style:none; padding:0; margin:0; }
+    .obs-card-model { font-family:var(--mono); font-size:11px; color:var(--text-2); padding:5px 0; border-bottom:1px solid rgba(255,255,255,.03); display:flex; justify-content:space-between; align-items:center; }
+    .obs-card-model:last-child { border-bottom:0; }
+    .obs-card-model-name { color:var(--text); font-weight:500; }
+    .obs-card-model-ctx { color:var(--text-3); font-size:10px; }
+    .obs-card-bar { height:2px; border-radius:1px; margin-top:12px; opacity:.6; }
     .obs-footer { display:flex; justify-content:space-between; align-items:center; margin-top:16px; padding:0 4px; }
     .obs-footer-left { display:flex; align-items:center; gap:12px; }
     .obs-footer-right { display:flex; align-items:center; gap:6px; }
@@ -226,8 +232,6 @@
     .obs-footer-sep { color:var(--text-4); font-size:11px; }
     .obs-sync-badge { font-family:var(--mono); font-size:9px; padding:4px 10px; border-radius:999px; letter-spacing:1px; text-transform:uppercase; background:rgba(0,255,136,.08); color:var(--green); border:1px solid rgba(0,255,136,.15); }
     @media (max-width:900px) { .obs-header { flex-direction:column; align-items:flex-start; gap:24px; } .obs-header-stats { gap:20px; } }
-    @media (max-width:640px) { .obs-header-stats { gap:16px; } .obs-stat-val { font-size:22px; } #obs-canvas { height:360px; } }
-
 
     /* ═══════════════════════════════════════
        COMMAND CENTER STRIP
@@ -436,7 +440,7 @@
     .status-card:nth-child(3) .status-value { color:var(--blue); }
     .status-card:nth-child(5) .status-value { color:var(--blue); }
 
-    #obs-canvas { height:720px; }
+
     .obs-title-stack { max-width:790px; margin:0 auto; }
     .obs-orbit-readout { margin:22px auto 0; display:inline-flex; gap:16px; flex-wrap:wrap; justify-content:center; font-family:var(--mono); font-size:10px; color:var(--text-3); letter-spacing:1.4px; text-transform:uppercase; }
     .obs-orbit-readout span { border:1px solid rgba(255,255,255,.07); background:rgba(255,255,255,.025); border-radius:999px; padding:8px 10px; }
@@ -455,7 +459,7 @@
       .hero-proofline { flex-wrap:wrap; gap:6px; }
       .proof-pill { font-size:10px !important; }
       .hero-sub { font-size:14px !important; line-height:1.65 !important; }
- .hero-sub { font-size:15px; } #obs-canvas { height:500px; } .hero-proofline { margin-top:0; } }
+ }
 
 
     /* ═══════════════════════════════════════
@@ -556,7 +560,7 @@
       .about-grid { grid-template-columns: 1fr 1fr; }
       .research-grid { grid-template-columns: 1fr 1fr; }
       .status-grid { grid-template-columns: repeat(3, 1fr); }
-      .obs-hud { grid-template-columns: repeat(2, 1fr); }
+
 
       .dash-monitor { grid-template-columns: 1fr; }
       .dash-header, .dash-row { grid-template-columns: 2fr 1fr 100px; }
@@ -580,9 +584,6 @@
       .hero-panel { padding: 16px; }
       .vision-metrics { gap: 32px; }
       #observatory { padding: 100px 0; }
-      .obs-hud { grid-template-columns: 1fr; }
-
-      #obs-canvas { height: 460px; }
 
     }
   </style>
@@ -703,9 +704,8 @@
           </div>
         </div>
 
-        <div class="obs-canvas-wrap reveal">
-          <canvas id="obs-canvas"></canvas>
-          <div class="obs-tooltip" id="obs-tooltip"><div class="ot-name"></div><div class="ot-provider"></div><div class="ot-stats"></div></div>
+        <div class="obs-grid reveal" id="obs-grid">
+          <div class="obs-grid-loading">Loading provider data...</div>
         </div>
 
         <div class="obs-footer reveal">
@@ -1090,432 +1090,113 @@
       loop();
     })();
 
-    // AI OBSERVATORY — Living Intelligence Network (OpenRouter live mesh)
+        // AI OBSERVATORY — Provider Cards
     (() => {
-      const canvas = document.getElementById('obs-canvas');
-      if (!canvas) return;
-      const cx = canvas.getContext('2d');
-      const tooltip = document.getElementById('obs-tooltip');
+      const grid = document.getElementById('obs-grid');
       const hud = {
         field: document.getElementById('obs-field-index'),
         providers: document.getElementById('obs-provider-index'),
         openRatio: document.getElementById('obs-open-ratio'),
         contextMax: document.getElementById('obs-context-max'),
       };
-      let catalogEvents = [];
-
-      let W = 0, H = 660, t = 0, loaded = false, hovered = null;
-      let nodes = [], links = [], pulses = [], providerCounts = {};
 
       const providerColors = {
-        'openai': { c: '#00a6ff', name: 'OpenAI' },
-        'anthropic': { c: '#8b5cf6', name: 'Anthropic' },
-        'google': { c: '#ffd54a', name: 'Google' },
-        'qwen': { c: '#00ff88', name: 'Qwen' },
-        'deepseek': { c: '#ef4444', name: 'DeepSeek' },
-        'meta-llama': { c: '#ff8c00', name: 'Llama' },
-        'mistralai': { c: '#22d3ee', name: 'Mistral' },
-        'x-ai': { c: '#ffffff', name: 'xAI' },
-        'nvidia': { c: '#76b900', name: 'NVIDIA' },
-        'moonshotai': { c: '#c084fc', name: 'Moonshot' },
-        'nousresearch': { c: '#a78bfa', name: 'Nous' },
-        'cohere': { c: '#39d353', name: 'Cohere' },
+        'openai': '#00a6ff', 'anthropic': '#8b5cf6', 'google': '#ffd54a',
+        'qwen': '#00ff88', 'deepseek': '#ef4444', 'meta-llama': '#ff8c00',
+        'mistralai': '#22d3ee', 'x-ai': '#ffffff', 'nvidia': '#76b900',
+        'moonshotai': '#c084fc', 'nousresearch': '#a78bfa', 'cohere': '#39d353',
       };
-      const fallbackColor = { c: '#7c7c7c', name: 'Other' };
-      const watchedProviders = ['openai','anthropic','google','qwen','deepseek','meta-llama','mistralai','x-ai','moonshotai','nousresearch'];
-      const keyModelHints = ['gpt-4.1','o3','claude-sonnet','claude-opus','gemini-2.5-pro','qwen3','deepseek-r1','llama-4','mistral-large','grok'];
+      const providerNames = {
+        'openai': 'OpenAI', 'anthropic': 'Anthropic', 'google': 'Google',
+        'qwen': 'Qwen', 'deepseek': 'DeepSeek', 'meta-llama': 'Meta',
+        'mistralai': 'Mistral', 'x-ai': 'xAI', 'nvidia': 'NVIDIA',
+        'moonshotai': 'Moonshot', 'nousresearch': 'Nous Research', 'cohere': 'Cohere',
+      };
 
-      let seed = 42;
-      function sRand() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
-      function resetSeed() { seed = 42; }
-      function hexAlpha(hex, a) { return hex + Math.round(Math.max(0, Math.min(1, a)) * 255).toString(16).padStart(2, '0'); }
-      function providerMeta(provider) { return providerColors[provider] || fallbackColor; }
-      function cleanName(model) { return (model.name || model.id || 'model').replace(/:free$/i, '').slice(0, 44); }
-      function isKeyModel(model) { const id = (model.id || '').toLowerCase(); return keyModelHints.some(k => id.includes(k)); }
-
-      function resize() {
-        const rect = canvas.parentElement.getBoundingClientRect();
-        W = rect.width;
-        H = rect.height || 520;
-        const dpr = window.devicePixelRatio || 1;
-        canvas.width = Math.floor(W * dpr);
-        canvas.height = Math.floor(H * dpr);
-        canvas.style.width = W + 'px';
-        canvas.style.height = H + 'px';
-        cx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        if (loaded) layoutLiveMesh();
-      }
-
-      function selectModels(models) {
-        const selected = [];
-        const seen = new Set();
-        const add = (m, key=false) => {
-          if (!m || seen.has(m.id)) return;
-          seen.add(m.id);
-          selected.push({ ...m, isKey: key || isKeyModel(m) });
-        };
-        watchedProviders.forEach(provider => {
-          const group = models.filter(m => (m.id || '').startsWith(provider + '/'));
-          group.filter(isKeyModel).slice(0, 3).forEach(m => add(m, true));
-          group.slice(0, 5).forEach(m => add(m, false));
-        });
-        if (selected.length < 24) models.slice(0, 36).forEach(m => add(m, false));
-        return selected.slice(0, 40);
-      }
-
-      function buildNodesFromModels(models) {
-        const selected = selectModels(models);
-        providerCounts = {};
-        models.forEach(m => {
-          const p = (m.id || 'unknown').split('/')[0];
-          providerCounts[p] = (providerCounts[p] || 0) + 1;
-        });
-        nodes = selected.map((m, i) => {
-          const provider = (m.id || 'unknown').split('/')[0];
-          const pricing = m.pricing || {};
-          return {
-            id: m.id,
-            name: cleanName(m),
-            provider,
-            label: providerMeta(provider).name,
-            color: providerMeta(provider).c,
-            context: m.context_length || 0,
-            price: pricing.prompt || '0',
-            isKey: !!m.isKey,
-            weight: (m.isKey ? 1 : 0.52) + sRand() * 0.25,
-            phase: sRand() * Math.PI * 2,
-            x: W / 2, y: H / 2, bx: W / 2, by: H / 2,
-            r: m.isKey ? 7 : 4,
-          };
-        });
-      }
-
-      function buildFallbackNodes() {
-        const fallback = [
-          { id:'openai/gpt-4.1', name:'GPT-4.1', context_length:1047576, pricing:{prompt:'0.000002'} },
-          { id:'anthropic/claude-sonnet-4', name:'Claude Sonnet 4', context_length:1000000, pricing:{prompt:'0.000003'} },
-          { id:'google/gemini-2.5-pro', name:'Gemini 2.5 Pro', context_length:1048576, pricing:{prompt:'0.00000125'} },
-          { id:'qwen/qwen3', name:'Qwen3', context_length:131072, pricing:{prompt:'0.0000003'} },
-          { id:'deepseek/deepseek-r1', name:'DeepSeek R1', context_length:128000, pricing:{prompt:'0.0000005'} },
-          { id:'meta-llama/llama-4-maverick', name:'Llama 4 Maverick', context_length:1000000, pricing:{prompt:'0.0000002'} },
-          { id:'mistralai/mistral-large', name:'Mistral Large', context_length:128000, pricing:{prompt:'0.000002'} },
-          { id:'x-ai/grok-4', name:'Grok 4', context_length:256000, pricing:{prompt:'0.000003'} },
-        ];
-        buildNodesFromModels(fallback.concat(fallback, fallback, fallback));
-        providerCounts = { openai: 4, anthropic: 4, google: 4, qwen: 4, deepseek: 4, 'meta-llama': 4, mistralai: 4, 'x-ai': 4 };
-      }
-
-      function layoutLiveMesh() {
-        if (!W || !nodes.length) return;
-        resetSeed();
-        const cx_ = W / 2, cy = H / 2;
-        const providers = [...new Set(nodes.map(n => n.provider))];
-        const clusterMeta = {};
-        
-        // Assign cluster positions in a brain-like arrangement around center
-        const brainPositions = [
-          { angle: -Math.PI/2, dist: 0.32 },    // top
-          { angle: -Math.PI/4, dist: 0.35 },    // top-right
-          { angle: Math.PI/6, dist: 0.33 },     // right
-          { angle: Math.PI/2, dist: 0.30 },     // bottom
-          { angle: 5*Math.PI/6, dist: 0.34 },   // bottom-left
-          { angle: -3*Math.PI/4, dist: 0.36 },  // top-left
-          { angle: 0, dist: 0.38 },             // far right
-          { angle: Math.PI, dist: 0.32 },       // far left
-          { angle: -Math.PI/3, dist: 0.28 },    // inner top-right
-          { angle: 2*Math.PI/3, dist: 0.30 },   // inner bottom-left
-        ];
-        
-        providers.forEach((provider, idx) => {
-          const group = nodes.filter(n => n.provider === provider);
-          const pos = brainPositions[idx % brainPositions.length];
-          const radius = Math.min(W, H) * pos.dist;
-          const clusterX = cx_ + Math.cos(pos.angle) * radius + (sRand() - 0.5) * 30;
-          const clusterY = cy + Math.sin(pos.angle) * radius + (sRand() - 0.5) * 30;
-          const meta = providerMeta(provider);
-          clusterMeta[provider] = { x: clusterX, y: clusterY, name: meta.name, color: meta.c, count: group.length };
-          
-          group.forEach((n, i) => {
-            const angle = sRand() * Math.PI * 2;
-            const r = (0.15 + sRand() * 0.75) * Math.min(W, H) * 0.06;
-            n.bx = Math.max(32, Math.min(W - 32, clusterX + Math.cos(angle) * r));
-            n.by = Math.max(42, Math.min(H - 42, clusterY + Math.sin(angle) * r));
-            n.x = n.bx; n.y = n.by;
-            n.clusterX = clusterX; n.clusterY = clusterY;
-          });
-        });
-
-        // Store cluster metadata for drawing labels
-        window._obsClusters = Object.values(clusterMeta);
-
-        // Links: intra-cluster + cross-cluster via key models
-        links = [];
-        for (let i = 0; i < nodes.length; i++) {
-          for (let j = i + 1; j < nodes.length; j++) {
-            const a = nodes[i], b = nodes[j];
-            const d = Math.hypot(a.bx - b.bx, a.by - b.by);
-            if (a.provider === b.provider && d < 120) {
-              links.push({ a, b, color: a.color, strength: 0.18 + (a.isKey || b.isKey ? 0.12 : 0) });
-            } else if ((a.isKey || b.isKey) && d < 260 && sRand() > 0.5) {
-              links.push({ a, b, color: a.isKey ? a.color : b.color, strength: 0.06 });
-            }
-          }
-        }
-
-        pulses = Array.from({ length: links.length ? Math.min(80, Math.max(30, links.length)) : 0 }, (_, i) => ({
-          link: links[Math.floor(sRand() * links.length)],
-          p: sRand(),
-          speed: 0.003 + sRand() * 0.009,
-          size: 1.5 + sRand() * 2,
-        }));
-      }
-
-      function drawLoading() {
-        cx.clearRect(0, 0, W, H);
-        cx.font = '600 12px "JetBrains Mono", monospace';
-        cx.textAlign = 'center';
-        cx.fillStyle = 'rgba(255,255,255,.36)';
-        cx.fillText('connecting to OpenRouter intelligence mesh...', W / 2, H / 2);
-        const y = (t * 90) % H;
-        cx.beginPath(); cx.moveTo(0, y); cx.lineTo(W, y);
-        cx.strokeStyle = 'rgba(0,212,255,.10)'; cx.lineWidth = 1; cx.stroke();
-      }
-
-      function draw() {
-        t += 0.012;
-        if (!loaded) {
-          drawLoading();
-          requestAnimationFrame(draw);
-          return;
-        }
-        cx.clearRect(0, 0, W, H);
-        
-        // Deep background glow
-        const bg = cx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.max(W,H)*0.55);
-        bg.addColorStop(0, 'rgba(0,212,255,0.08)');
-        bg.addColorStop(0.3, 'rgba(139,92,246,0.04)');
-        bg.addColorStop(0.7, 'rgba(0,255,136,0.02)');
-        bg.addColorStop(1, 'rgba(0,0,0,0)');
-        cx.fillStyle = bg; cx.fillRect(0, 0, W, H);
-        
-        // Grid overlay (subtle)
-        cx.strokeStyle = 'rgba(255,255,255,0.015)'; cx.lineWidth = 0.5;
-        const gs = 60;
-        for (let gx = 0; gx < W; gx += gs) { cx.beginPath(); cx.moveTo(gx, 0); cx.lineTo(gx, H); cx.stroke(); }
-        for (let gy = 0; gy < H; gy += gs) { cx.beginPath(); cx.moveTo(0, gy); cx.lineTo(W, gy); cx.stroke(); }
-
-        nodes.forEach(n => {
-          n.x = n.bx + Math.sin(t * (0.45 + n.weight * 0.24) + n.phase) * 5;
-          n.y = n.by + Math.cos(t * (0.38 + n.weight * 0.20) + n.phase) * 5;
-        });
-
-        links.forEach(l => {
-          const hot = hovered && (hovered === l.a || hovered === l.b);
-          cx.beginPath(); cx.moveTo(l.a.x, l.a.y); cx.lineTo(l.b.x, l.b.y);
-          cx.strokeStyle = hexAlpha(l.color, hot ? 0.62 : Math.max(l.strength * 1.75, 0.085));
-          cx.lineWidth = hot ? 1.65 : 0.9;
-          cx.stroke();
-        });
-
-        pulses.forEach(p => {
-          if (!p.link) return;
-          p.p += p.speed;
-          if (p.p > 1) { p.p = 0; if (links.length) p.link = links[Math.floor(Math.random() * links.length)]; }
-          const a = p.link.a, b = p.link.b;
-          const x = a.x + (b.x - a.x) * p.p, y = a.y + (b.y - a.y) * p.p;
-          const c = p.link.color;
-          const g = cx.createRadialGradient(x, y, 0, x, y, 9);
-          g.addColorStop(0, hexAlpha(c, 0.95)); g.addColorStop(1, 'transparent');
-          cx.fillStyle = g; cx.beginPath(); cx.arc(x, y, 13, 0, Math.PI * 2); cx.fill();
-          cx.fillStyle = c; cx.beginPath(); cx.arc(x, y, p.size, 0, Math.PI * 2); cx.fill();
-        });
-
-        nodes.forEach(n => {
-          const hot = n === hovered;
-          const breath = 0.72 + Math.sin(t * 2 + n.phase) * 0.24;
-          const glowR = (hot ? 36 : (n.isKey ? 28 : 16)) * n.weight;
-          const g = cx.createRadialGradient(n.x, n.y, 0, n.x, n.y, glowR);
-          g.addColorStop(0, hexAlpha(n.color, hot ? 0.35 : 0.12 * breath));
-          g.addColorStop(1, 'transparent');
-          cx.fillStyle = g; cx.beginPath(); cx.arc(n.x, n.y, glowR, 0, Math.PI * 2); cx.fill();
-          cx.fillStyle = hot ? n.color : hexAlpha(n.color, 0.96);
-          cx.beginPath(); cx.arc(n.x, n.y, hot ? n.r + 3 : n.r, 0, Math.PI * 2); cx.fill();
-          cx.strokeStyle = hexAlpha(n.color, hot ? 0.95 : 0.32);
-          cx.lineWidth = hot ? 1.5 : 0.8;
-          cx.beginPath(); cx.arc(n.x, n.y, (hot ? n.r + 7 : n.r + 3) + Math.sin(t * 3 + n.phase) * 1.2, 0, Math.PI * 2); cx.stroke();
-        });
-
-        // Cluster labels with neuron counts (brain-like)
-        const clusters = window._obsClusters || [];
-        clusters.forEach(cl => {
-          const alpha = hovered && hovered.clusterX !== cl.x ? 0.25 : 0.7;
-          // Cluster glow
-          const clGlow = cx.createRadialGradient(cl.x, cl.y, 0, cl.x, cl.y, Math.min(W,H)*0.08);
-          clGlow.addColorStop(0, hexAlpha(cl.color, 0.06));
-          clGlow.addColorStop(1, 'transparent');
-          cx.fillStyle = clGlow; cx.beginPath(); cx.arc(cl.x, cl.y, Math.min(W,H)*0.08, 0, Math.PI*2); cx.fill();
-          
-          // Label background pill
-          cx.font = '800 10px "JetBrains Mono", monospace';
-          const labelW = cx.measureText(cl.name.toUpperCase()).width + 24;
-          const labelH = 22;
-          const labelX = cl.x - labelW/2;
-          const labelY = cl.y - Math.min(W,H)*0.08 - 28;
-          
-          cx.fillStyle = hexAlpha(cl.color, alpha * 0.15);
-          cx.beginPath();
-          cx.roundRect(labelX, labelY, labelW, labelH, 6);
-          cx.fill();
-          cx.strokeStyle = hexAlpha(cl.color, alpha * 0.35);
-          cx.lineWidth = 1;
-          cx.stroke();
-          
-          // Label text
-          cx.fillStyle = hexAlpha(cl.color, alpha);
-          cx.textAlign = 'center'; cx.textBaseline = 'middle';
-          cx.fillText(cl.name.toUpperCase(), cl.x, labelY + labelH/2);
-          
-          // Neuron count below
-          cx.font = '600 8px "JetBrains Mono", monospace';
-          cx.fillStyle = hexAlpha('#ffffff', alpha * 0.35);
-          cx.fillText(cl.count + ' NEURONS', cl.x, labelY + labelH + 10);
-        });
-
-        // Central hub connection lines (curved, like brain pathways)
-        const hubX = W/2, hubY = H/2;
-        clusters.forEach(cl => {
-          const cp = (t * 0.8 + cl.x * 0.01) % 1;
-          const midX = (hubX + cl.x) / 2 + Math.sin(t + cl.y * 0.01) * 15;
-          const midY = (hubY + cl.y) / 2 + Math.cos(t + cl.x * 0.01) * 15;
-          
-          // Connection line
-          cx.beginPath(); cx.moveTo(hubX, hubY);
-          cx.quadraticCurveTo(midX, midY, cl.x, cl.y);
-          cx.strokeStyle = hexAlpha(cl.color, 0.12);
-          cx.lineWidth = 1.5; cx.stroke();
-          
-          // Flow particle on connection
-          const fx = hubX + (cl.x - hubX) * cp + (midX - hubX) * 4 * cp * (1-cp);
-          const fy = hubY + (cl.y - hubY) * cp + (midY - hubY) * 4 * cp * (1-cp);
-          const pg = cx.createRadialGradient(fx, fy, 0, fx, fy, 10);
-          pg.addColorStop(0, hexAlpha(cl.color, 0.7));
-          pg.addColorStop(1, 'transparent');
-          cx.beginPath(); cx.arc(fx, fy, 10, 0, Math.PI*2); cx.fillStyle = pg; cx.fill();
-          cx.beginPath(); cx.arc(fx, fy, 3, 0, Math.PI*2); cx.fillStyle = cl.color; cx.fill();
-        });
-
-        // Central hub (ZKA Labs)
-        const hubPulse = Math.sin(t * 2) * 0.15 + 0.85;
-        const hubGlow = cx.createRadialGradient(hubX, hubY, 0, hubX, hubY, 55);
-        hubGlow.addColorStop(0, 'rgba(0,255,136,0.15)');
-        hubGlow.addColorStop(0.5, 'rgba(0,212,255,0.06)');
-        hubGlow.addColorStop(1, 'transparent');
-        cx.fillStyle = hubGlow; cx.beginPath(); cx.arc(hubX, hubY, 55, 0, Math.PI*2); cx.fill();
-        cx.strokeStyle = 'rgba(0,255,136,0.35)'; cx.lineWidth = 2;
-        cx.beginPath(); cx.arc(hubX, hubY, 38 * hubPulse, 0, Math.PI*2); cx.stroke();
-        cx.fillStyle = 'rgba(0,255,136,0.08)';
-        cx.beginPath(); cx.arc(hubX, hubY, 38 * hubPulse, 0, Math.PI*2); cx.fill();
-        cx.font = '800 13px "JetBrains Mono", monospace'; cx.fillStyle = '#00ff88';
-        cx.textAlign = 'center'; cx.textBaseline = 'middle';
-        cx.fillText('ZKA', hubX, hubY - 8); cx.fillText('LABS', hubX, hubY + 8);
-
-        // Status bar at bottom
-        cx.font = '600 10px "JetBrains Mono", monospace';
-        cx.textAlign = 'center';
-        cx.fillStyle = 'rgba(255,255,255,.30)';
-        cx.fillText(`${nodes.length} visible model nodes · ${clusters.length} provider constellations · ${links.length} synapses · ${pulses.length} signal flows · OpenRouter live`, W / 2, H - 18);
-        requestAnimationFrame(draw);
-      }
-
-      canvas.addEventListener('mousemove', e => {
-        const rect = canvas.getBoundingClientRect();
-        const mx = e.clientX - rect.left, my = e.clientY - rect.top;
-        hovered = null;
-        let best = 22;
-        nodes.forEach(n => {
-          const d = Math.hypot(mx - n.x, my - n.y);
-          if (d < best) { best = d; hovered = n; }
-        });
-        if (hovered) {
-          canvas.style.cursor = 'pointer';
-          tooltip.classList.add('show');
-          tooltip.querySelector('.ot-name').textContent = hovered.name;
-          tooltip.querySelector('.ot-provider').textContent = hovered.label;
-          const ctx = hovered.context ? (hovered.context / 1000).toFixed(0) + 'K' : 'unknown';
-          tooltip.querySelector('.ot-stats').innerHTML = `Provider: ${hovered.provider}<br>Context: ${ctx}<br>Prompt: $${hovered.price}/tok<br>Layer: live OpenRouter catalog`;
-          let tx = hovered.x + 24, ty = hovered.y - 38;
-          if (tx + 250 > W) tx = hovered.x - 270;
-          if (ty < 0) ty = 12;
-          tooltip.style.left = tx + 'px'; tooltip.style.top = ty + 'px';
-        } else {
-          canvas.style.cursor = 'default'; tooltip.classList.remove('show');
-        }
-      });
-      canvas.addEventListener('mouseleave', () => { hovered = null; tooltip.classList.remove('show'); });
-
-
-
-      function fmtContext(n) {
+      function fmtCtx(n) {
         if (!n) return '—';
         if (n >= 1000000) return (n / 1000000).toFixed(n % 1000000 ? 1 : 0) + 'M';
         if (n >= 1000) return Math.round(n / 1000) + 'K';
         return String(n);
       }
 
-      function updateTelemetry(totalModels, providerTotal, topProvider, ossCount, maxContext, topShare, syncText) {
-        const totalEl = document.getElementById('obs-total');
-        const provEl = document.getElementById('obs-providers');
-        const topEl = document.getElementById('obs-top-provider');
-        const ossEl = document.getElementById('obs-oss');
-        const syncEl = document.getElementById('obs-sync');
-        if (totalEl) totalEl.textContent = totalModels;
-        if (provEl) provEl.textContent = providerTotal;
-        if (topEl) topEl.textContent = topProvider;
-        if (ossEl) ossEl.textContent = ossCount;
-        if (syncEl) syncEl.textContent = syncText;
-        if (hud.field) hud.field.textContent = totalModels;
-        if (hud.providers) hud.providers.textContent = providerTotal;
-        if (hud.openRatio) hud.openRatio.textContent = ossCount;
-        if (hud.contextMax) hud.contextMax.textContent = fmtContext(maxContext);
+      function buildCards(models) {
+        const providers = {};
+        models.forEach(m => {
+          const p = (m.id || 'unknown').split('/')[0];
+          if (!providers[p]) providers[p] = [];
+          providers[p].push(m);
+        });
 
+        // Sort providers by model count
+        const sorted = Object.entries(providers).sort((a, b) => b[1].length - a[1].length);
+        const total = models.length;
+        const provCount = sorted.length;
+        const maxCtx = models.reduce((max, m) => Math.max(max, Number(m.context_length || 0)), 0);
+
+        // Update HUD
+        if (hud.field) hud.field.textContent = total;
+        if (hud.providers) hud.providers.textContent = provCount;
+        if (hud.openRatio) {
+          const oss = sorted.filter(([p]) => ['meta-llama','mistralai','qwen','deepseek','nousresearch','microsoft','nvidia'].includes(p)).reduce((s,[,m]) => s + m.length, 0);
+          hud.openRatio.textContent = oss;
+        }
+        if (hud.contextMax) hud.contextMax.textContent = fmtCtx(maxCtx);
+        document.getElementById('obs-sync').textContent = 'SYNCED';
+        document.getElementById('obs-total').textContent = total;
+        document.getElementById('obs-providers').textContent = provCount;
+        document.getElementById('obs-top-provider').textContent = sorted[0] ? sorted[0][0] : '—';
+        const ossEl = document.getElementById('obs-oss');
+        if (ossEl) ossEl.textContent = sorted.filter(([p]) => ['meta-llama','mistralai','qwen','deepseek','nousresearch'].includes(p)).reduce((s,[,m]) => s + m.length, 0);
+
+        // Build cards
+        grid.innerHTML = '';
+        sorted.forEach(([provider, pModels]) => {
+          const color = providerColors[provider] || '#7c7c7c';
+          const name = providerNames[provider] || provider;
+          const top5 = pModels.slice(0, 5);
+
+          const card = document.createElement('div');
+          card.className = 'obs-card';
+          card.innerHTML = `
+            <div class="obs-card-header">
+              <span class="obs-card-provider" style="color:${color}">${name}</span>
+              <span class="obs-card-count">${pModels.length} models</span>
+            </div>
+            <ul class="obs-card-models">
+              ${top5.map(m => `<li class="obs-card-model"><span class="obs-card-model-name">${(m.name || m.id || '').replace(/:free$/i, '').slice(0, 32)}</span><span class="obs-card-model-ctx">${fmtCtx(m.context_length)}</span></li>`).join('')}
+            </ul>
+            <div class="obs-card-bar" style="background:${color}"></div>
+          `;
+          grid.appendChild(card);
+        });
       }
 
-      setInterval(() => {
-        if (!catalogEvents.length) return;
-        const e = catalogEvents[Math.floor(Math.random() * catalogEvents.length)];
-        pushSignal(e[0], e[1], e[2]);
-      }, 4200);
-
-      window.addEventListener('resize', resize);
-      resize();
-      draw();
-
+      // Fetch OpenRouter data
       fetch('https://openrouter.ai/api/v1/models')
         .then(r => r.json())
-        .then(data => {
-          const models = data.data || [];
-          buildNodesFromModels(models);
-          loaded = true;
-          layoutLiveMesh();
-          const top = Object.entries(providerCounts).sort((a,b) => b[1] - a[1])[0] || ['unknown', 0];
-          const openFamilies = ['meta-llama','mistralai','qwen','deepseek','nousresearch','microsoft','nvidia'];
-          const oss = openFamilies.reduce((sum, p) => sum + (providerCounts[p] || 0), 0);
-          const maxContext = models.reduce((max, m) => Math.max(max, Number(m.context_length || 0)), 0);
-          const topShare = models.length ? Math.round((top[1] / models.length) * 100) : 0;
-          updateTelemetry(models.length, Object.keys(providerCounts).length, top[0], oss, maxContext, topShare, 'SYNCED');
-
+        .then(d => {
+          const models = d.data || d;
+          buildCards(models);
         })
-        .catch(err => {
-          console.error('OpenRouter fetch error:', err);
-          buildFallbackNodes();
-          loaded = true;
-          layoutLiveMesh();
-          updateTelemetry('fallback', '8', 'openai', 'open families', 1048576, 12, 'LOCAL');
-
+        .catch(() => {
+          // Fallback
+          const fallback = [
+            { id:'openai/gpt-4.1', name:'GPT-4.1', context_length:1047576 },
+            { id:'openai/o3', name:'o3', context_length:200000 },
+            { id:'anthropic/claude-sonnet-4', name:'Claude Sonnet 4', context_length:1000000 },
+            { id:'google/gemini-2.5-pro', name:'Gemini 2.5 Pro', context_length:1048576 },
+            { id:'qwen/qwen3', name:'Qwen3', context_length:131072 },
+            { id:'deepseek/deepseek-r1', name:'DeepSeek R1', context_length:128000 },
+            { id:'meta-llama/llama-4-maverick', name:'Llama 4 Maverick', context_length:1000000 },
+            { id:'mistralai/mistral-large', name:'Mistral Large', context_length:128000 },
+            { id:'x-ai/grok-4', name:'Grok 4', context_length:256000 },
+          ];
+          buildCards(fallback);
         });
     })();
 
-    // ═══════════════════════════════
+
     // ECOSYSTEM NETWORK
     // ═══════════════════════════════
     (() => {
