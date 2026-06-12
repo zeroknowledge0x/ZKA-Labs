@@ -146,8 +146,8 @@
     .hero-glow { position: absolute; top: 30%; left: 30%; transform: translate(-50%,-50%); width: 900px; height: 500px; background: radial-gradient(ellipse, rgba(0,255,136,0.04) 0%, rgba(0,212,255,0.02) 40%, transparent 70%); opacity: 0.6; pointer-events: none; }
     .hero-layout { display: grid; grid-template-columns: 1fr 400px; gap: 48px; align-items: start; }
 
-    .hero-eyebrow { font-family: var(--mono); font-size: 11px; color: var(--green); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; opacity: 0; animation: fadeUp 0.7s ease 2.8s forwards; }
-    .hero-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--green); }
+    .hero-eyebrow { font-family: var(--mono); font-size: 11px; color: var(--blue); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; opacity: 0; animation: fadeUp 0.7s ease 2.8s forwards; }
+    .hero-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--blue); }
     .hero-title { font-size: clamp(48px, 7vw, 80px); font-weight: 900; letter-spacing: -3px; line-height: 0.95; margin-bottom: 20px; opacity: 0; animation: fadeUp 0.7s ease 3s forwards; }
     .hero-sub { font-size: 16px; color: var(--text-2); max-width: 460px; line-height: 1.7; margin-bottom: 28px; opacity: 0; animation: fadeUp 0.7s ease 3.2s forwards; }
     .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.7s ease 3.4s forwards; }
@@ -537,12 +537,12 @@
               <div class="panel-hdr"><span class="dot b"></span> Network Stats</div>
               <div class="obs-metric"><span class="om-key">Total Models</span><span class="om-val" id="obs-total" style="color:var(--blue)">—</span></div>
               <div class="obs-metric"><span class="om-key">Providers</span><span class="om-val" id="obs-providers" style="color:var(--text)">—</span></div>
-              <div class="obs-metric"><span class="om-key">Top Provider</span><span class="om-val" id="obs-top-provider" style="color:var(--green)">—</span></div>
+              <div class="obs-metric"><span class="om-key">Top Provider</span><span class="om-val" id="obs-top-provider" style="color:var(--text)">—</span></div>
               <div class="obs-metric"><span class="om-key">Open Source</span><span class="om-val" id="obs-oss" style="color:var(--purple)">—</span></div>
               <div class="obs-metric"><span class="om-key">Last Sync</span><span class="om-val" id="obs-sync" style="color:var(--text-3)">—</span></div>
             </div>
             <div class="glass obs-panel">
-              <div class="panel-hdr"><span class="dot g"></span> Activity Feed</div>
+              <div class="panel-hdr"><span class="dot b"></span> Activity Feed</div>
               <div class="obs-feed" id="obs-feed"></div>
             </div>
           </div>
@@ -595,7 +595,7 @@
     <section id="research">
       <div class="container">
         <div class="reveal">
-          <div class="section-label">Research Areas</div>
+          <div class="section-label" style="color:var(--purple)">Research Areas</div>
           <h2 class="section-title">What we're <span class="green">building</span></h2>
         </div>
         <div class="research-grid">
@@ -789,8 +789,8 @@
     // CC Strip
     const stripData = [
       { d: 'g', l: 'NETWORK', v: 'ONLINE' }, { d: 'b', l: 'OBSERVATORY', v: 'LIVE' },
-      { d: 'g', l: 'AGENT REGISTRY', v: 'SYNCED' }, { d: 'p', l: 'RESEARCH', v: 'ACTIVE' },
-      { d: 'b', l: 'INFRASTRUCTURE', v: 'HEALTHY' }, { d: 'g', l: 'SYSTEM', v: '99.9%' },
+      { d: 'cyan', l: 'AGENT REGISTRY', v: 'SYNCED' }, { d: 'p', l: 'RESEARCH', v: 'ACTIVE' },
+      { d: 'b', l: 'INFRASTRUCTURE', v: 'HEALTHY' }, { d: 'cyan', l: 'SYSTEM', v: '99.9%' },
       { d: 'gold', l: 'DATABASE', v: 'CONNECTED' }, { d: 'b', l: 'API', v: 'OPERATIONAL' },
     ];
     function buildStrip(el) {
@@ -932,7 +932,7 @@
       const cx = canvas.getContext('2d');
       const tooltip = document.getElementById('obs-tooltip');
       const feedEl = document.getElementById('obs-feed');
-      let W, H, modelNodes = [], hoveredNode = null, animT = 0, loaded = false;
+      let W, H, modelNodes = [], hoveredNode = null, animT = 0, loaded = false, nnParticles = [];
 
       // Provider colors
       const providerColors = {
@@ -964,7 +964,10 @@
       }
 
       function layoutModels() {
-        const cx_ = W / 2, cy = H / 2;
+        const padding = 50;
+        const availW = W - padding * 2;
+        const availH = H - padding * 2;
+
         // Group by provider
         const groups = {};
         modelNodes.forEach(n => {
@@ -972,23 +975,61 @@
           groups[n.provider].push(n);
         });
         const providerKeys = Object.keys(groups);
-        const radius = Math.min(W, H) * 0.38;
+
+        // Assign each provider a grid region
+        const cols = Math.max(2, Math.ceil(Math.sqrt(providerKeys.length)));
+        const rows = Math.ceil(providerKeys.length / cols);
+        const cellW = availW / cols;
+        const cellH = availH / rows;
+
+        // Deterministic random for consistent layout
+        let seed = 42;
+        function sRand() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
 
         providerKeys.forEach((prov, gi) => {
-          const angle = (gi / providerKeys.length) * Math.PI * 2 - Math.PI / 2;
-          const groupCx = cx_ + Math.cos(angle) * radius;
-          const groupCy = cy + Math.sin(angle) * radius;
+          const col = gi % cols;
+          const row = Math.floor(gi / cols);
+          const regionCx = padding + cellW * (col + 0.5);
+          const regionCy = padding + cellH * (row + 0.5);
           const nodes = groups[prov];
-          const subRadius = Math.min(40, 15 + nodes.length * 3);
 
+          // Scatter nodes within region organically
           nodes.forEach((n, ni) => {
-            const subAngle = (ni / nodes.length) * Math.PI * 2;
-            n.baseX = groupCx + Math.cos(subAngle) * subRadius;
-            n.baseY = groupCy + Math.sin(subAngle) * subRadius;
-            n.x = n.baseX; n.y = n.baseY;
-            n.groupAngle = angle;
+            const spread = Math.min(cellW, cellH) * 0.38;
+            const angle = sRand() * Math.PI * 2;
+            const dist = (0.2 + sRand() * 0.8) * spread;
+            n.baseX = regionCx + Math.cos(angle) * dist;
+            n.baseY = regionCy + Math.sin(angle) * dist;
+            n.baseX = Math.max(padding + 10, Math.min(W - padding - 10, n.baseX));
+            n.baseY = Math.max(padding + 10, Math.min(H - padding - 10, n.baseY));
+            n.x = n.baseX;
+            n.y = n.baseY;
           });
         });
+
+        // Build data flow particles along connections
+        nnParticles = [];
+        providerKeys.forEach(prov => {
+          const nodes = groups[prov];
+          for (let i = 0; i < nodes.length; i++) {
+            for (let j = i + 1; j < nodes.length; j++) {
+              const d = Math.hypot(nodes[i].baseX - nodes[j].baseX, nodes[i].baseY - nodes[j].baseY);
+              if (d < 160) {
+                nnParticles.push({ from: nodes[i], to: nodes[j], t: sRand(), speed: 0.002 + sRand() * 0.005, provider: prov });
+              }
+            }
+          }
+        });
+        // Cross-provider particles for nearby key models
+        const keys = modelNodes.filter(n => n.isKey);
+        for (let i = 0; i < keys.length; i++) {
+          for (let j = i + 1; j < keys.length; j++) {
+            const d = Math.hypot(keys[i].baseX - keys[j].baseX, keys[i].baseY - keys[j].baseY);
+            if (d < 200) {
+              nnParticles.push({ from: keys[i], to: keys[j], t: sRand(), speed: 0.001 + sRand() * 0.003, provider: keys[i].provider });
+            }
+          }
+        }
       }
 
       function drawObs() {
@@ -1004,81 +1045,114 @@
           return;
         }
 
-        const cx_ = W / 2, cy = H / 2;
-
-        // Draw connections from center to provider group centers
-        const groups = {};
-        modelNodes.forEach(n => { if (!groups[n.provider]) groups[n.provider] = n; });
-
-        Object.values(groups).forEach(n => {
-          const col = (providerColors[n.provider] || defaultColor).c;
-          // Animated data flow
-          const flowPhase = (animT * 1.5 + n.groupAngle) % 1;
-          const flowX = cx_ + (n.x - cx_) * flowPhase;
-          const flowY = cy + (n.y - cy) * flowPhase;
-
-          cx.beginPath(); cx.moveTo(cx_, cy); cx.lineTo(n.x, n.y);
-          cx.strokeStyle = col + '15'; cx.lineWidth = 1; cx.stroke();
-
-          // Flow dot
-          cx.beginPath(); cx.arc(flowX, flowY, 1.5, 0, Math.PI * 2);
-          cx.fillStyle = col + '60'; cx.fill();
+        // Update positions with subtle floating
+        modelNodes.forEach(n => {
+          n.x = n.baseX + Math.sin(animT * 0.8 + n.phase) * 2.5;
+          n.y = n.baseY + Math.cos(animT * 0.6 + n.phase * 1.3) * 2.5;
         });
 
-        // Draw inter-model connections (within same provider)
+        // Group by provider for rendering
         const provGroups = {};
-        modelNodes.forEach(n => { if (!provGroups[n.provider]) provGroups[n.provider] = []; provGroups[n.provider].push(n); });
-        Object.values(provGroups).forEach(nodes => {
+        modelNodes.forEach(n => {
+          if (!provGroups[n.provider]) provGroups[n.provider] = [];
+          provGroups[n.provider].push(n);
+        });
+
+        // Draw connections between same-provider models
+        Object.entries(provGroups).forEach(([prov, nodes]) => {
+          const col = (providerColors[prov] || defaultColor).c;
           for (let i = 0; i < nodes.length; i++) {
             for (let j = i + 1; j < nodes.length; j++) {
               const d = Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y);
-              if (d < 80) {
-                cx.beginPath(); cx.moveTo(nodes[i].x, nodes[i].y); cx.lineTo(nodes[j].x, nodes[j].y);
-                cx.strokeStyle = (providerColors[nodes[i].provider] || defaultColor).c + '10';
-                cx.lineWidth = 0.5; cx.stroke();
+              if (d < 160) {
+                const a = Math.round(Math.max(8, 30 - d * 0.14)).toString(16).padStart(2, '0');
+                cx.beginPath();
+                cx.moveTo(nodes[i].x, nodes[i].y);
+                cx.lineTo(nodes[j].x, nodes[j].y);
+                cx.strokeStyle = col + a;
+                cx.lineWidth = 0.8;
+                cx.stroke();
               }
             }
           }
         });
 
-        // Center node
-        const cp = Math.sin(animT * 2) * 0.1 + 0.9;
-        const cg = cx.createRadialGradient(cx_, cy, 0, cx_, cy, 50 * cp);
-        cg.addColorStop(0, 'rgba(0,255,136,0.08)'); cg.addColorStop(1, 'transparent');
-        cx.beginPath(); cx.arc(cx_, cy, 50 * cp, 0, Math.PI * 2); cx.fillStyle = cg; cx.fill();
-        cx.beginPath(); cx.arc(cx_, cy, 28, 0, Math.PI * 2);
-        cx.fillStyle = 'rgba(10,10,10,0.8)'; cx.fill();
-        cx.strokeStyle = 'rgba(0,255,136,0.2)'; cx.lineWidth = 1.5; cx.stroke();
-        cx.font = '700 11px "JetBrains Mono"'; cx.fillStyle = '#00ff88'; cx.textAlign = 'center';
-        cx.fillText('OPEN', cx_, cy - 5); cx.fillText('ROUTER', cx_, cy + 7);
+        // Draw faint cross-provider connections for nearby key models
+        const keyNodes = modelNodes.filter(n => n.isKey);
+        for (let i = 0; i < keyNodes.length; i++) {
+          for (let j = i + 1; j < keyNodes.length; j++) {
+            const d = Math.hypot(keyNodes[i].x - keyNodes[j].x, keyNodes[i].y - keyNodes[j].y);
+            if (d < 200) {
+              const a = Math.round(Math.max(4, 15 - d * 0.06)).toString(16).padStart(2, '0');
+              cx.beginPath();
+              cx.moveTo(keyNodes[i].x, keyNodes[i].y);
+              cx.lineTo(keyNodes[j].x, keyNodes[j].y);
+              cx.strokeStyle = '#ffffff' + a;
+              cx.lineWidth = 0.4;
+              cx.stroke();
+            }
+          }
+        }
+
+        // Animate data flow particles
+        nnParticles.forEach(p => {
+          p.t += p.speed;
+          if (p.t > 1) p.t -= 1;
+          const col = (providerColors[p.provider] || defaultColor).c;
+          const px = p.from.x + (p.to.x - p.from.x) * p.t;
+          const py = p.from.y + (p.to.y - p.from.y) * p.t;
+          cx.beginPath();
+          cx.arc(px, py, 1.5, 0, Math.PI * 2);
+          cx.fillStyle = col + '80';
+          cx.fill();
+        });
 
         // Draw model nodes
         modelNodes.forEach(n => {
-          n.x = n.baseX + Math.sin(animT + n.phase) * 2;
-          n.y = n.baseY + Math.cos(animT * 0.7 + n.phase) * 2;
-
           const col = (providerColors[n.provider] || defaultColor).c;
           const isHovered = n === hoveredNode;
-          const r = (n.isKey ? 8 : 5) + (isHovered ? 3 : 0);
+          const r = (n.isKey ? 7 : 4) + (isHovered ? 3 : 0);
 
-          // Glow for key models
+          // Glow for key models and hovered
           if (n.isKey || isHovered) {
-            const glow = cx.createRadialGradient(n.x, n.y, 0, n.x, n.y, r * 3);
-            glow.addColorStop(0, col + (isHovered ? '25' : '12'));
+            const glow = cx.createRadialGradient(n.x, n.y, 0, n.x, n.y, r * 3.5);
+            glow.addColorStop(0, col + (isHovered ? '30' : '15'));
             glow.addColorStop(1, 'transparent');
-            cx.beginPath(); cx.arc(n.x, n.y, r * 3, 0, Math.PI * 2);
-            cx.fillStyle = glow; cx.fill();
+            cx.beginPath();
+            cx.arc(n.x, n.y, r * 3.5, 0, Math.PI * 2);
+            cx.fillStyle = glow;
+            cx.fill();
           }
 
-          cx.beginPath(); cx.arc(n.x, n.y, r, 0, Math.PI * 2);
+          cx.beginPath();
+          cx.arc(n.x, n.y, r, 0, Math.PI * 2);
           cx.fillStyle = isHovered ? col : col + 'cc';
           cx.fill();
-          if (isHovered) { cx.strokeStyle = col; cx.lineWidth = 1.5; cx.stroke(); }
+          if (isHovered) {
+            cx.strokeStyle = col;
+            cx.lineWidth = 1.5;
+            cx.stroke();
+          }
         });
 
-        // Center text
-        cx.font = '600 10px "JetBrains Mono"'; cx.fillStyle = '#555'; cx.textAlign = 'center';
-        cx.fillText(`${modelNodes.length} models`, cx_, cy + 44);
+        // Draw provider labels near cluster centroids
+        cx.font = '600 9px "JetBrains Mono"';
+        cx.textAlign = 'center';
+        Object.entries(provGroups).forEach(([prov, nodes]) => {
+          const col = (providerColors[prov] || defaultColor).c;
+          const name = (providerColors[prov] || defaultColor).name;
+          let sumX = 0, sumY = 0, topY = Infinity;
+          nodes.forEach(n => { sumX += n.x; sumY += n.y; if (n.y < topY) topY = n.y; });
+          const cx_ = sumX / nodes.length;
+          cx.fillStyle = col + '80';
+          cx.fillText(name.toUpperCase(), cx_, topY - 14);
+        });
+
+        // Model count
+        cx.font = '600 10px "JetBrains Mono"';
+        cx.fillStyle = '#444';
+        cx.textAlign = 'center';
+        cx.fillText(`${modelNodes.length} models · neural network`, W / 2, H - 8);
 
         requestAnimationFrame(drawObs);
       }
