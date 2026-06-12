@@ -84,13 +84,17 @@
     .bg-noise { position: fixed; inset: 0; z-index: 1; opacity: 0.015; pointer-events: none; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
 
     /* Ambient orbs */
-    .orb { position: fixed; border-radius: 50%; filter: blur(140px); pointer-events: none; z-index: 0; }
-    .orb-1 { width: 600px; height: 600px; background: rgba(0,255,136,0.025); top: -200px; right: -150px; animation: f1 30s ease-in-out infinite; }
-    .orb-2 { width: 500px; height: 500px; background: rgba(0,212,255,0.02); bottom: 20%; left: -200px; animation: f2 35s ease-in-out infinite; }
-    .orb-3 { width: 400px; height: 400px; background: rgba(139,92,246,0.018); top: 50%; right: 5%; animation: f3 25s ease-in-out infinite; }
-    @keyframes f1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-80px,100px)} }
-    @keyframes f2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(90px,-70px)} }
-    @keyframes f3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-60px,60px)} }
+    .orb { position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0; }
+    .orb-1 { width: 700px; height: 700px; background: rgba(0,255,136,0.035); top: -250px; right: -200px; animation: f1 22s ease-in-out infinite; }
+    .orb-2 { width: 600px; height: 600px; background: rgba(0,212,255,0.03); bottom: 15%; left: -250px; animation: f2 28s ease-in-out infinite; }
+    .orb-3 { width: 500px; height: 500px; background: rgba(139,92,246,0.025); top: 45%; right: 0%; animation: f3 18s ease-in-out infinite; }
+    .orb-4 { width: 400px; height: 400px; background: rgba(255,213,74,0.018); top: 10%; left: 10%; animation: f4 32s ease-in-out infinite; }
+    .orb-5 { width: 350px; height: 350px; background: rgba(34,211,238,0.02); bottom: 40%; right: 30%; animation: f5 26s ease-in-out infinite; }
+    @keyframes f1 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(-100px,120px) scale(1.1)} 66%{transform:translate(60px,40px) scale(0.9)} }
+    @keyframes f2 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(110px,-80px) scale(1.15)} 66%{transform:translate(-40px,60px) scale(0.85)} }
+    @keyframes f3 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-80px,80px) scale(1.2)} }
+    @keyframes f4 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(70px,-50px)} }
+    @keyframes f5 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-50px,70px)} }
 
     /* ═══════════════════════════════════════
        CONTENT
@@ -586,6 +590,31 @@
       #observatory { padding: 100px 0; }
 
     }
+
+    /* ═══════════════════════════════
+       OBSERVATORY LIVING CANVAS
+    ═══════════════════════════════ */
+    .obs-canvas-wrap {
+      margin-top: 40px; position: relative; width: 100%;
+      border-radius: 20px; overflow: hidden;
+      background: radial-gradient(ellipse at 50% 50%, rgba(0,255,136,0.03), rgba(0,212,255,0.015), transparent 65%);
+      border: 1px solid var(--border);
+      box-shadow: 0 0 80px rgba(0,255,136,0.04), 0 0 160px rgba(0,212,255,0.02);
+    }
+    #obs-canvas { width: 100%; height: 520px; display: block; }
+    .obs-canvas-tooltip {
+      position: absolute; pointer-events: none; background: rgba(8,10,14,0.95);
+      backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px; padding: 18px 22px; min-width: 240px; max-width: 320px;
+      opacity: 0; transition: opacity 0.15s; z-index: 100;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(0,255,136,0.05);
+    }
+    .obs-canvas-tooltip.show { opacity: 1; }
+    .ott-name { font-size: 15px; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.5px; }
+    .ott-stats { font-family: var(--mono); font-size: 11px; color: var(--text-3); margin-bottom: 10px; letter-spacing: 0.5px; }
+    .ott-models { font-family: var(--mono); font-size: 11px; color: var(--text-2); line-height: 1.8; }
+    .ott-models span { color: var(--text-3); font-size: 10px; }
+
   </style>
 </head>
 <body>
@@ -606,6 +635,8 @@
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
   <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
+  <div class="orb orb-5"></div>
 
   <div class="content">
 
@@ -687,14 +718,14 @@
     <!-- CC STRIP -->
     <div class="cc-strip"><div class="cc-strip-inner" id="cc-strip"></div></div>
 
-    <!-- AI OBSERVATORY -->
+    <!-- AI OBSERVATORY — LIVING CANVAS -->
     <section id="observatory">
       <div class="container">
         <div class="obs-header reveal">
           <div class="obs-header-left">
             <div class="section-label">AI Observatory</div>
             <h2 class="section-title">Model <span class="green">Intelligence</span></h2>
-            <p class="section-desc">Live data from the OpenRouter model catalog. Every provider, every context window, every pricing tier — mapped and observable.</p>
+            <p class="section-desc">Living map of the global AI provider landscape. Every node is a real provider from the OpenRouter catalog — hover to explore.</p>
           </div>
           <div class="obs-header-stats">
             <div class="obs-stat"><div class="obs-stat-val blue" id="obs-field-index">—</div><div class="obs-stat-label">Models</div></div>
@@ -704,7 +735,16 @@
           </div>
         </div>
 
-        <div class="obs-grid reveal" id="obs-grid">
+        <div class="obs-canvas-wrap reveal">
+          <canvas id="obs-canvas"></canvas>
+          <div class="obs-canvas-tooltip" id="obs-canvas-tooltip">
+            <div class="ott-name"></div>
+            <div class="ott-stats"></div>
+            <div class="ott-models"></div>
+          </div>
+        </div>
+
+        <div class="obs-grid reveal" id="obs-grid" style="margin-top:48px">
           <div class="obs-grid-loading">Loading provider data...</div>
         </div>
 
@@ -1090,8 +1130,11 @@
       loop();
     })();
 
-        // AI OBSERVATORY — Provider Cards
+        // AI OBSERVATORY — Living Canvas + Provider Cards
     (() => {
+      const canvas = document.getElementById('obs-canvas');
+      const ctx = canvas.getContext('2d');
+      const tooltip = document.getElementById('obs-canvas-tooltip');
       const grid = document.getElementById('obs-grid');
       const hud = {
         field: document.getElementById('obs-field-index'),
@@ -1100,17 +1143,21 @@
         contextMax: document.getElementById('obs-context-max'),
       };
 
+      let W, H, providerNodes = [], hoveredNode = null, animT = 0, allModels = [];
+
       const providerColors = {
         'openai': '#00a6ff', 'anthropic': '#8b5cf6', 'google': '#ffd54a',
         'qwen': '#00ff88', 'deepseek': '#ef4444', 'meta-llama': '#ff8c00',
         'mistralai': '#22d3ee', 'x-ai': '#ffffff', 'nvidia': '#76b900',
         'moonshotai': '#c084fc', 'nousresearch': '#a78bfa', 'cohere': '#39d353',
+        'microsoft': '#00bcf2', 'amazon': '#ff9900', 'perplexity': '#7c3aed',
       };
       const providerNames = {
         'openai': 'OpenAI', 'anthropic': 'Anthropic', 'google': 'Google',
         'qwen': 'Qwen', 'deepseek': 'DeepSeek', 'meta-llama': 'Meta',
         'mistralai': 'Mistral', 'x-ai': 'xAI', 'nvidia': 'NVIDIA',
         'moonshotai': 'Moonshot', 'nousresearch': 'Nous Research', 'cohere': 'Cohere',
+        'microsoft': 'Microsoft', 'amazon': 'Amazon', 'perplexity': 'Perplexity',
       };
 
       function fmtCtx(n) {
@@ -1120,15 +1167,58 @@
         return String(n);
       }
 
-      function buildCards(models) {
+      function hexToRgb(hex) {
+        const r = parseInt(hex.slice(1,3), 16), g = parseInt(hex.slice(3,5), 16), b = parseInt(hex.slice(5,7), 16);
+        return `${r},${g},${b}`;
+      }
+
+      function resizeCanvas() {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        W = rect.width; H = 520;
+        canvas.width = W * devicePixelRatio; canvas.height = H * devicePixelRatio;
+        canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+        ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+        layoutProviderNodes();
+      }
+
+      function layoutProviderNodes() {
+        if (!providerNodes.length) return;
+        const cx = W / 2, cy = H / 2;
+        const count = providerNodes.length;
+        // Spiral-like layout: inner ring for top providers, outer for smaller
+        const innerCount = Math.min(8, count);
+        const outerCount = count - innerCount;
+        const innerR = Math.min(W, H) * 0.22;
+        const outerR = Math.min(W, H) * 0.38;
+
+        providerNodes.forEach((n, i) => {
+          let angle, radius;
+          if (i < innerCount) {
+            angle = (i / innerCount) * Math.PI * 2 - Math.PI / 2;
+            radius = innerR;
+          } else {
+            const oi = i - innerCount;
+            angle = (oi / Math.max(outerCount, 1)) * Math.PI * 2 - Math.PI / 2 + 0.3;
+            radius = outerR;
+          }
+          // Weight-based radius
+          const weight = Math.min(1, n.models.length / 40);
+          n.r = 18 + weight * 24;
+          n.baseX = cx + Math.cos(angle) * radius;
+          n.baseY = cy + Math.sin(angle) * radius;
+          n.x = n.baseX; n.y = n.baseY;
+          n.pulse = Math.random() * Math.PI * 2;
+          n.hover = 0;
+        });
+      }
+
+      function buildProviderData(models) {
         const providers = {};
         models.forEach(m => {
           const p = (m.id || 'unknown').split('/')[0];
           if (!providers[p]) providers[p] = [];
           providers[p].push(m);
         });
-
-        // Sort providers by model count
         const sorted = Object.entries(providers).sort((a, b) => b[1].length - a[1].length);
         const total = models.length;
         const provCount = sorted.length;
@@ -1149,13 +1239,23 @@
         const ossEl = document.getElementById('obs-oss');
         if (ossEl) ossEl.textContent = sorted.filter(([p]) => ['meta-llama','mistralai','qwen','deepseek','nousresearch'].includes(p)).reduce((s,[,m]) => s + m.length, 0);
 
-        // Build cards
+        // Build canvas nodes
+        providerNodes = sorted.map(([provider, pModels]) => ({
+          name: providerNames[provider] || provider,
+          key: provider,
+          models: pModels,
+          color: providerColors[provider] || '#7c7c7c',
+          topModels: pModels.slice(0, 4),
+          x: 0, y: 0, baseX: 0, baseY: 0, r: 20, pulse: 0, hover: 0,
+        }));
+        resizeCanvas();
+
+        // Build cards below canvas
         grid.innerHTML = '';
         sorted.forEach(([provider, pModels]) => {
           const color = providerColors[provider] || '#7c7c7c';
           const name = providerNames[provider] || provider;
           const top5 = pModels.slice(0, 5);
-
           const card = document.createElement('div');
           card.className = 'obs-card';
           card.innerHTML = `
@@ -1172,28 +1272,235 @@
         });
       }
 
-      // Fetch OpenRouter data
+      // ═══════════════════════════════════════
+      // LIVING CANVAS RENDER
+      // ═══════════════════════════════════════
+      function drawObservatory() {
+        ctx.clearRect(0, 0, W, H);
+        animT += 0.008;
+        const cx = W / 2, cy = H / 2;
+
+        // === Deep background glow layers ===
+        const bg1 = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.min(W,H) * 0.55);
+        bg1.addColorStop(0, 'rgba(0,255,136,0.035)');
+        bg1.addColorStop(0.3, 'rgba(0,212,255,0.02)');
+        bg1.addColorStop(0.6, 'rgba(139,92,246,0.012)');
+        bg1.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = bg1; ctx.fillRect(0, 0, W, H);
+
+        // Rotating accent glow
+        const rotX = cx + Math.cos(animT * 0.5) * W * 0.15;
+        const rotY = cy + Math.sin(animT * 0.3) * H * 0.15;
+        const bg2 = ctx.createRadialGradient(rotX, rotY, 0, rotX, rotY, 200);
+        bg2.addColorStop(0, 'rgba(0,212,255,0.04)');
+        bg2.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = bg2; ctx.fillRect(0, 0, W, H);
+
+        // === Draw connections between related providers ===
+        const linkPairs = [];
+        for (let i = 0; i < providerNodes.length; i++) {
+          for (let j = i + 1; j < providerNodes.length; j++) {
+            // Connect providers that share similar model types or are related
+            const a = providerNodes[i].key, b = providerNodes[j].key;
+            if ((a === 'openai' && b === 'microsoft') ||
+                (a === 'anthropic' && b === 'amazon') ||
+                (a === 'google' && b === 'anthropic') ||
+                (a === 'qwen' && b === 'deepseek') ||
+                (a === 'meta-llama' && b === 'nvidia') ||
+                (a === 'mistralai' && b === 'cohere') ||
+                (a === 'x-ai' && b === 'openai') ||
+                i < 3 && j < 6 ||
+                Math.abs(i - j) <= 2 && i > 2) {
+              linkPairs.push([i, j]);
+            }
+          }
+        }
+
+        linkPairs.forEach(([ai, bi]) => {
+          const a = providerNodes[ai], b = providerNodes[bi];
+          const midX = (a.x + b.x) / 2, midY = (a.y + b.y) / 2 - 15;
+
+          // Connection line with gradient
+          const grad = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
+          grad.addColorStop(0, hexToRgb(a.color) ? `rgba(${hexToRgb(a.color)},0.2)` : 'rgba(255,255,255,0.1)');
+          grad.addColorStop(0.5, 'rgba(255,255,255,0.06)');
+          grad.addColorStop(1, hexToRgb(b.color) ? `rgba(${hexToRgb(b.color)},0.2)` : 'rgba(255,255,255,0.1)');
+
+          ctx.beginPath(); ctx.moveTo(a.x, a.y);
+          ctx.quadraticCurveTo(midX, midY, b.x, b.y);
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = (a === hoveredNode || b === hoveredNode) ? 1.8 : 0.8;
+          ctx.stroke();
+
+          // Flowing light particle along connection
+          const flowPhase = (animT * 1.2 + ai * 0.15 + bi * 0.1) % 1;
+          const fx = a.x + (b.x - a.x) * flowPhase;
+          const fy = a.y + (b.y - a.y) * flowPhase - 15 * Math.sin(flowPhase * Math.PI);
+          const fGrad = ctx.createRadialGradient(fx, fy, 0, fx, fy, 6);
+          fGrad.addColorStop(0, `rgba(${hexToRgb(a.color)},0.7)`);
+          fGrad.addColorStop(1, 'rgba(0,0,0,0)');
+          ctx.beginPath(); ctx.arc(fx, fy, 6, 0, Math.PI * 2);
+          ctx.fillStyle = fGrad; ctx.fill();
+          ctx.beginPath(); ctx.arc(fx, fy, 2, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${hexToRgb(a.color)},1)`; ctx.fill();
+        });
+
+        // === Ambient floating particles ===
+        for (let i = 0; i < 30; i++) {
+          const px = (Math.sin(animT * 0.4 + i * 2.3) * 0.5 + 0.5) * W;
+          const py = (Math.cos(animT * 0.35 + i * 1.9) * 0.5 + 0.5) * H;
+          const size = 1 + Math.sin(animT * 2 + i) * 0.8;
+          const alpha = 0.15 + Math.sin(animT * 3 + i * 0.7) * 0.1;
+          const colors = ['0,255,136', '0,212,255', '139,92,246', '255,255,255'];
+          ctx.beginPath(); ctx.arc(px, py, size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${colors[i % 4]},${alpha})`; ctx.fill();
+        }
+
+        // === Draw provider nodes ===
+        providerNodes.forEach(n => {
+          n.pulse += 0.015;
+          n.x = n.baseX + Math.sin(animT * 0.8 + n.pulse) * 4;
+          n.y = n.baseY + Math.cos(animT * 0.6 + n.pulse) * 4;
+
+          if (n === hoveredNode) n.hover = Math.min(1, n.hover + 0.12);
+          else n.hover = Math.max(0, n.hover - 0.06);
+
+          const r = n.r + n.hover * 8;
+          const col = n.color;
+          const rgb = hexToRgb(col);
+          const breathe = Math.sin(n.pulse) * 0.15 + 0.85;
+
+          // === Outer aura (large soft glow) ===
+          const aura = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, r * 3.5);
+          aura.addColorStop(0, `rgba(${rgb},0.08)`);
+          aura.addColorStop(0.5, `rgba(${rgb},0.03)`);
+          aura.addColorStop(1, 'rgba(0,0,0,0)');
+          ctx.beginPath(); ctx.arc(n.x, n.y, r * 3.5, 0, Math.PI * 2);
+          ctx.fillStyle = aura; ctx.fill();
+
+          // === Pulse ring (expanding) ===
+          const pulsePhase = (n.pulse * 0.5) % 1;
+          const pulseR = r * (1 + pulsePhase * 1.5);
+          const pulseAlpha = (1 - pulsePhase) * 0.15;
+          ctx.beginPath(); ctx.arc(n.x, n.y, pulseR, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(${rgb},${pulseAlpha})`;
+          ctx.lineWidth = 1.5; ctx.stroke();
+
+          // === Hover enhanced glow ===
+          if (n.hover > 0) {
+            const glow = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, r * 2.5);
+            glow.addColorStop(0, `rgba(${rgb},${0.15 * n.hover})`);
+            glow.addColorStop(1, 'rgba(0,0,0,0)');
+            ctx.beginPath(); ctx.arc(n.x, n.y, r * 2.5, 0, Math.PI * 2);
+            ctx.fillStyle = glow; ctx.globalAlpha = n.hover; ctx.fill(); ctx.globalAlpha = 1;
+          }
+
+          // === Node body ===
+          const bodyGrad = ctx.createRadialGradient(n.x - r * 0.3, n.y - r * 0.3, 0, n.x, n.y, r * breathe);
+          bodyGrad.addColorStop(0, `rgba(${rgb},0.12)`);
+          bodyGrad.addColorStop(0.7, 'rgba(12,14,20,0.92)');
+          bodyGrad.addColorStop(1, 'rgba(8,10,14,0.95)');
+          ctx.beginPath(); ctx.arc(n.x, n.y, r * breathe, 0, Math.PI * 2);
+          ctx.fillStyle = bodyGrad; ctx.fill();
+
+          // === Node border ===
+          ctx.beginPath(); ctx.arc(n.x, n.y, r * breathe, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(${rgb},${n === hoveredNode ? 0.9 : 0.45})`;
+          ctx.lineWidth = n === hoveredNode ? 2.5 : 1.5;
+          ctx.stroke();
+
+          // === Inner light dot ===
+          const dotGrad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, r * 0.4);
+          dotGrad.addColorStop(0, `rgba(${rgb},0.5)`);
+          dotGrad.addColorStop(1, 'rgba(0,0,0,0)');
+          ctx.beginPath(); ctx.arc(n.x, n.y, r * 0.4, 0, Math.PI * 2);
+          ctx.fillStyle = dotGrad; ctx.fill();
+
+          // === Model count text ===
+          ctx.font = `800 ${11 + n.hover * 3}px "JetBrains Mono"`;
+          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          ctx.fillStyle = col;
+          ctx.fillText(n.models.length, n.x, n.y - 2);
+
+          // === Provider name below ===
+          ctx.font = `700 ${10 + n.hover}px "Inter"`;
+          ctx.fillStyle = n === hoveredNode ? '#fff' : 'rgba(255,255,255,0.7)';
+          ctx.fillText(n.name, n.x, n.y + r + 14);
+
+          // === Status label ===
+          ctx.font = `500 8px "JetBrains Mono"`;
+          ctx.fillStyle = `rgba(${rgb},0.6)`;
+          ctx.fillText(fmtCtx(n.models.reduce((max, m) => Math.max(max, Number(m.context_length || 0)), 0)) + ' ctx', n.x, n.y + r + 26);
+        });
+
+        // === Center label ===
+        ctx.font = '600 9px "JetBrains Mono"'; ctx.textAlign = 'center';
+        ctx.fillStyle = 'rgba(255,255,255,0.12)';
+        ctx.fillText(providerNodes.length + ' providers · ' + allModels.length + ' models · live from OpenRouter', W / 2, H - 14);
+
+        requestAnimationFrame(drawObservatory);
+      }
+
+      // === Hover handling ===
+      canvas.addEventListener('mousemove', e => {
+        const rect = canvas.getBoundingClientRect();
+        const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+        hoveredNode = null;
+        providerNodes.forEach(n => { if (Math.hypot(mx - n.x, my - n.y) < n.r + 12) hoveredNode = n; });
+
+        if (hoveredNode) {
+          canvas.style.cursor = 'pointer';
+          tooltip.classList.add('show');
+          tooltip.querySelector('.ott-name').textContent = hoveredNode.name;
+          tooltip.querySelector('.ott-name').style.color = hoveredNode.color;
+          tooltip.querySelector('.ott-stats').textContent = hoveredNode.models.length + ' models · ' + fmtCtx(hoveredNode.models.reduce((max, m) => Math.max(max, Number(m.context_length || 0)), 0)) + ' max context';
+          tooltip.querySelector('.ott-models').innerHTML = hoveredNode.topModels.map(m =>
+            `<div>${(m.name || m.id || '').replace(/:free$/i, '').slice(0, 28)} <span>${fmtCtx(m.context_length)}</span></div>`
+          ).join('');
+          let tx = hoveredNode.x + hoveredNode.r + 20;
+          let ty = hoveredNode.y - 60;
+          if (tx + 280 > W) tx = hoveredNode.x - 280;
+          if (ty < 10) ty = 10;
+          tooltip.style.left = tx + 'px'; tooltip.style.top = ty + 'px';
+        } else {
+          canvas.style.cursor = 'default';
+          tooltip.classList.remove('show');
+        }
+      });
+      canvas.addEventListener('mouseleave', () => { hoveredNode = null; tooltip.classList.remove('show'); });
+
+      // === Fetch data ===
+      function handleData(models) {
+        allModels = models;
+        buildProviderData(models);
+        drawObservatory();
+      }
+
       fetch('https://openrouter.ai/api/v1/models')
         .then(r => r.json())
-        .then(d => {
-          const models = d.data || d;
-          buildCards(models);
-        })
+        .then(d => handleData(d.data || d))
         .catch(() => {
-          // Fallback
           const fallback = [
             { id:'openai/gpt-4.1', name:'GPT-4.1', context_length:1047576 },
             { id:'openai/o3', name:'o3', context_length:200000 },
+            { id:'openai/gpt-4o', name:'GPT-4o', context_length:128000 },
             { id:'anthropic/claude-sonnet-4', name:'Claude Sonnet 4', context_length:1000000 },
+            { id:'anthropic/claude-opus-4', name:'Claude Opus 4', context_length:200000 },
             { id:'google/gemini-2.5-pro', name:'Gemini 2.5 Pro', context_length:1048576 },
+            { id:'google/gemini-2.5-flash', name:'Gemini 2.5 Flash', context_length:1048576 },
             { id:'qwen/qwen3', name:'Qwen3', context_length:131072 },
             { id:'deepseek/deepseek-r1', name:'DeepSeek R1', context_length:128000 },
             { id:'meta-llama/llama-4-maverick', name:'Llama 4 Maverick', context_length:1000000 },
             { id:'mistralai/mistral-large', name:'Mistral Large', context_length:128000 },
             { id:'x-ai/grok-4', name:'Grok 4', context_length:256000 },
+            { id:'nvidia/llama-3.1-nemotron-70b', name:'Nemotron 70B', context_length:131072 },
+            { id:'cohere/command-r-plus', name:'Command R+', context_length:128000 },
+            { id:'microsoft/phi-4', name:'Phi-4', context_length:16384 },
           ];
-          buildCards(fallback);
+          handleData(fallback);
         });
+
+      window.addEventListener('resize', resizeCanvas);
     })();
 
 
