@@ -1253,49 +1253,65 @@
       function layoutLiveMesh() {
         if (!W || !nodes.length) return;
         resetSeed();
-        const padding = Math.max(42, Math.min(W, H) * 0.08);
+        const cx_ = W / 2, cy = H / 2;
         const providers = [...new Set(nodes.map(n => n.provider))];
-        const cols = Math.max(2, Math.ceil(Math.sqrt(providers.length)));
-        const rows = Math.ceil(providers.length / cols);
-        const cellW = (W - padding * 2) / cols;
-        const cellH = (H - padding * 2) / rows;
-
+        const clusterMeta = {};
+        
+        // Assign cluster positions in a brain-like arrangement around center
+        const brainPositions = [
+          { angle: -Math.PI/2, dist: 0.32 },    // top
+          { angle: -Math.PI/4, dist: 0.35 },    // top-right
+          { angle: Math.PI/6, dist: 0.33 },     // right
+          { angle: Math.PI/2, dist: 0.30 },     // bottom
+          { angle: 5*Math.PI/6, dist: 0.34 },   // bottom-left
+          { angle: -3*Math.PI/4, dist: 0.36 },  // top-left
+          { angle: 0, dist: 0.38 },             // far right
+          { angle: Math.PI, dist: 0.32 },       // far left
+          { angle: -Math.PI/3, dist: 0.28 },    // inner top-right
+          { angle: 2*Math.PI/3, dist: 0.30 },   // inner bottom-left
+        ];
+        
         providers.forEach((provider, idx) => {
           const group = nodes.filter(n => n.provider === provider);
-          const col = idx % cols;
-          const row = Math.floor(idx / cols);
-          const clusterX = padding + cellW * (col + 0.5) + (sRand() - 0.5) * cellW * 0.18;
-          const clusterY = padding + cellH * (row + 0.5) + (sRand() - 0.5) * cellH * 0.18;
+          const pos = brainPositions[idx % brainPositions.length];
+          const radius = Math.min(W, H) * pos.dist;
+          const clusterX = cx_ + Math.cos(pos.angle) * radius + (sRand() - 0.5) * 30;
+          const clusterY = cy + Math.sin(pos.angle) * radius + (sRand() - 0.5) * 30;
+          const meta = providerMeta(provider);
+          clusterMeta[provider] = { x: clusterX, y: clusterY, name: meta.name, color: meta.c, count: group.length };
+          
           group.forEach((n, i) => {
             const angle = sRand() * Math.PI * 2;
-            const radius = (0.18 + sRand() * 0.88) * Math.min(cellW, cellH) * 0.42;
-            n.bx = Math.max(32, Math.min(W - 32, clusterX + Math.cos(angle) * radius));
-            n.by = Math.max(42, Math.min(H - 42, clusterY + Math.sin(angle) * radius));
-            n.x = n.bx;
-            n.y = n.by;
+            const r = (0.15 + sRand() * 0.75) * Math.min(W, H) * 0.06;
+            n.bx = Math.max(32, Math.min(W - 32, clusterX + Math.cos(angle) * r));
+            n.by = Math.max(42, Math.min(H - 42, clusterY + Math.sin(angle) * r));
+            n.x = n.bx; n.y = n.by;
+            n.clusterX = clusterX; n.clusterY = clusterY;
           });
         });
 
+        // Store cluster metadata for drawing labels
+        window._obsClusters = Object.values(clusterMeta);
+
+        // Links: intra-cluster + cross-cluster via key models
         links = [];
         for (let i = 0; i < nodes.length; i++) {
           for (let j = i + 1; j < nodes.length; j++) {
             const a = nodes[i], b = nodes[j];
             const d = Math.hypot(a.bx - b.bx, a.by - b.by);
-            if (a.provider === b.provider && d < 215) {
-              links.push({ a, b, color: a.color, strength: 0.10 + (a.isKey || b.isKey ? 0.08 : 0) });
-            } else if ((a.isKey || b.isKey) && d < 285 && sRand() > 0.42) {
-              links.push({ a, b, color: a.isKey ? a.color : b.color, strength: 0.055 });
-            } else if (d < 105 && sRand() > 0.72) {
-              links.push({ a, b, color: '#ffffff', strength: 0.025 });
+            if (a.provider === b.provider && d < 120) {
+              links.push({ a, b, color: a.color, strength: 0.18 + (a.isKey || b.isKey ? 0.12 : 0) });
+            } else if ((a.isKey || b.isKey) && d < 260 && sRand() > 0.5) {
+              links.push({ a, b, color: a.isKey ? a.color : b.color, strength: 0.06 });
             }
           }
         }
 
-        pulses = Array.from({ length: links.length ? Math.min(132, Math.max(58, links.length)) : 0 }, (_, i) => ({
+        pulses = Array.from({ length: links.length ? Math.min(160, Math.max(70, links.length)) : 0 }, (_, i) => ({
           link: links[Math.floor(sRand() * links.length)],
           p: sRand(),
-          speed: 0.0025 + sRand() * 0.008,
-          size: 1.6 + sRand() * 2.8,
+          speed: 0.003 + sRand() * 0.009,
+          size: 2 + sRand() * 3,
         }));
       }
 
@@ -1318,11 +1334,20 @@
           return;
         }
         cx.clearRect(0, 0, W, H);
-        const bg = cx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.max(W,H)*0.6);
-        bg.addColorStop(0, 'rgba(0,212,255,0.125)');
-        bg.addColorStop(0.42, 'rgba(139,92,246,0.060)');
+        
+        // Deep background glow
+        const bg = cx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.max(W,H)*0.55);
+        bg.addColorStop(0, 'rgba(0,212,255,0.08)');
+        bg.addColorStop(0.3, 'rgba(139,92,246,0.04)');
+        bg.addColorStop(0.7, 'rgba(0,255,136,0.02)');
         bg.addColorStop(1, 'rgba(0,0,0,0)');
         cx.fillStyle = bg; cx.fillRect(0, 0, W, H);
+        
+        // Grid overlay (subtle)
+        cx.strokeStyle = 'rgba(255,255,255,0.015)'; cx.lineWidth = 0.5;
+        const gs = 60;
+        for (let gx = 0; gx < W; gx += gs) { cx.beginPath(); cx.moveTo(gx, 0); cx.lineTo(gx, H); cx.stroke(); }
+        for (let gy = 0; gy < H; gy += gs) { cx.beginPath(); cx.moveTo(0, gy); cx.lineTo(W, gy); cx.stroke(); }
 
         nodes.forEach(n => {
           n.x = n.bx + Math.sin(t * (0.45 + n.weight * 0.24) + n.phase) * 5;
@@ -1365,23 +1390,85 @@
           cx.beginPath(); cx.arc(n.x, n.y, (hot ? n.r + 7 : n.r + 3) + Math.sin(t * 3 + n.phase) * 1.2, 0, Math.PI * 2); cx.stroke();
         });
 
-        const groups = {};
-        nodes.forEach(n => { (groups[n.provider] ||= []).push(n); });
-        cx.font = '800 10px "JetBrains Mono", monospace';
-        cx.textAlign = 'center';
-        Object.entries(groups).forEach(([provider, group]) => {
-          if (group.length < 2) return;
-          const meta = providerMeta(provider);
-          const x = group.reduce((s,n)=>s+n.x,0)/group.length;
-          const y = Math.min(...group.map(n=>n.y)) - 22;
-          cx.fillStyle = hexAlpha(meta.c, hovered && hovered.provider !== provider ? 0.22 : 0.82);
-          cx.fillText(meta.name.toUpperCase(), x, y);
+        // Cluster labels with neuron counts (brain-like)
+        const clusters = window._obsClusters || [];
+        clusters.forEach(cl => {
+          const alpha = hovered && hovered.clusterX !== cl.x ? 0.25 : 0.7;
+          // Cluster glow
+          const clGlow = cx.createRadialGradient(cl.x, cl.y, 0, cl.x, cl.y, Math.min(W,H)*0.08);
+          clGlow.addColorStop(0, hexAlpha(cl.color, 0.06));
+          clGlow.addColorStop(1, 'transparent');
+          cx.fillStyle = clGlow; cx.beginPath(); cx.arc(cl.x, cl.y, Math.min(W,H)*0.08, 0, Math.PI*2); cx.fill();
+          
+          // Label background pill
+          cx.font = '800 10px "JetBrains Mono", monospace';
+          const labelW = cx.measureText(cl.name.toUpperCase()).width + 24;
+          const labelH = 22;
+          const labelX = cl.x - labelW/2;
+          const labelY = cl.y - Math.min(W,H)*0.08 - 28;
+          
+          cx.fillStyle = hexAlpha(cl.color, alpha * 0.15);
+          cx.beginPath();
+          cx.roundRect(labelX, labelY, labelW, labelH, 6);
+          cx.fill();
+          cx.strokeStyle = hexAlpha(cl.color, alpha * 0.35);
+          cx.lineWidth = 1;
+          cx.stroke();
+          
+          // Label text
+          cx.fillStyle = hexAlpha(cl.color, alpha);
+          cx.textAlign = 'center'; cx.textBaseline = 'middle';
+          cx.fillText(cl.name.toUpperCase(), cl.x, labelY + labelH/2);
+          
+          // Neuron count below
+          cx.font = '600 8px "JetBrains Mono", monospace';
+          cx.fillStyle = hexAlpha('#ffffff', alpha * 0.35);
+          cx.fillText(cl.count + ' NEURONS', cl.x, labelY + labelH + 10);
         });
 
+        // Central hub connection lines (curved, like brain pathways)
+        const hubX = W/2, hubY = H/2;
+        clusters.forEach(cl => {
+          const cp = (t * 0.8 + cl.x * 0.01) % 1;
+          const midX = (hubX + cl.x) / 2 + Math.sin(t + cl.y * 0.01) * 15;
+          const midY = (hubY + cl.y) / 2 + Math.cos(t + cl.x * 0.01) * 15;
+          
+          // Connection line
+          cx.beginPath(); cx.moveTo(hubX, hubY);
+          cx.quadraticCurveTo(midX, midY, cl.x, cl.y);
+          cx.strokeStyle = hexAlpha(cl.color, 0.12);
+          cx.lineWidth = 1.5; cx.stroke();
+          
+          // Flow particle on connection
+          const fx = hubX + (cl.x - hubX) * cp + (midX - hubX) * 4 * cp * (1-cp);
+          const fy = hubY + (cl.y - hubY) * cp + (midY - hubY) * 4 * cp * (1-cp);
+          const pg = cx.createRadialGradient(fx, fy, 0, fx, fy, 10);
+          pg.addColorStop(0, hexAlpha(cl.color, 0.7));
+          pg.addColorStop(1, 'transparent');
+          cx.beginPath(); cx.arc(fx, fy, 10, 0, Math.PI*2); cx.fillStyle = pg; cx.fill();
+          cx.beginPath(); cx.arc(fx, fy, 3, 0, Math.PI*2); cx.fillStyle = cl.color; cx.fill();
+        });
+
+        // Central hub (ZKA Labs)
+        const hubPulse = Math.sin(t * 2) * 0.15 + 0.85;
+        const hubGlow = cx.createRadialGradient(hubX, hubY, 0, hubX, hubY, 55);
+        hubGlow.addColorStop(0, 'rgba(0,255,136,0.15)');
+        hubGlow.addColorStop(0.5, 'rgba(0,212,255,0.06)');
+        hubGlow.addColorStop(1, 'transparent');
+        cx.fillStyle = hubGlow; cx.beginPath(); cx.arc(hubX, hubY, 55, 0, Math.PI*2); cx.fill();
+        cx.strokeStyle = 'rgba(0,255,136,0.35)'; cx.lineWidth = 2;
+        cx.beginPath(); cx.arc(hubX, hubY, 38 * hubPulse, 0, Math.PI*2); cx.stroke();
+        cx.fillStyle = 'rgba(0,255,136,0.08)';
+        cx.beginPath(); cx.arc(hubX, hubY, 38 * hubPulse, 0, Math.PI*2); cx.fill();
+        cx.font = '800 13px "JetBrains Mono", monospace'; cx.fillStyle = '#00ff88';
+        cx.textAlign = 'center'; cx.textBaseline = 'middle';
+        cx.fillText('ZKA', hubX, hubY - 8); cx.fillText('LABS', hubX, hubY + 8);
+
+        // Status bar at bottom
         cx.font = '600 10px "JetBrains Mono", monospace';
         cx.textAlign = 'center';
-        cx.fillStyle = 'rgba(255,255,255,.38)';
-        cx.fillText(`${nodes.length} visible model nodes · ${links.length} synapses · ${pulses.length} signal flows · OpenRouter live`, W / 2, H - 18);
+        cx.fillStyle = 'rgba(255,255,255,.30)';
+        cx.fillText(`${nodes.length} visible model nodes · ${clusters.length} provider constellations · ${links.length} synapses · ${pulses.length} signal flows · OpenRouter live`, W / 2, H - 18);
         requestAnimationFrame(draw);
       }
 
