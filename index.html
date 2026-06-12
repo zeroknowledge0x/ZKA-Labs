@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZKA Labs — Technology Command Center</title>
-  <meta name="description" content="ZKA Labs — AI Agents, Infrastructure & Research Laboratory. Building the next generation of intelligent systems.">
+  <title>ZKA Labs — Digital Headquarters for Autonomous Systems</title>
+  <meta name="description" content="ZKA Labs — Digital headquarters for autonomous systems, agent infrastructure, memory, and research operations.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -460,6 +460,69 @@
     @media (max-width: 900px) { .hero-layout { grid-template-columns:1fr; } .hero-panels { order:0; } }
     @media (max-width: 640px) { .hero-sub { font-size:15px; } .obs-experience { min-height:500px; } #obs-canvas { height:500px; } .hero-proofline { margin-top:0; } }
 
+
+    /* ═══════════════════════════════════════
+       DIGITAL HEADQUARTERS UPGRADE — doctrine, streams, operations
+    ═══════════════════════════════════════ */
+    .doctrine-layout { display:grid; grid-template-columns:.82fr 1.18fr; gap:64px; align-items:start; }
+    .doctrine-intro { position:sticky; top:96px; }
+    .doctrine-list { border-top:1px solid var(--border); }
+    .doctrine-item { display:grid; grid-template-columns:64px 1fr; gap:24px; padding:26px 0; border-bottom:1px solid var(--border); }
+    .doctrine-item > span, .stream-row > span, .ops-event > span { font-family:var(--mono); font-size:11px; color:var(--blue); letter-spacing:2px; }
+    .doctrine-item h3 { font-size:24px; line-height:1.15; letter-spacing:-.8px; margin-bottom:8px; }
+    .doctrine-item p { color:var(--text-2); line-height:1.75; font-size:14px; max-width:620px; }
+    .research-heading { max-width:720px; }
+    .research-streams { margin-top:48px; display:grid; grid-template-columns:.9fr 1.1fr; gap:18px; }
+    .stream-primary { min-height:390px; border:1px solid rgba(139,92,246,.13); border-radius:24px; padding:34px; background:radial-gradient(circle at 80% 12%, rgba(139,92,246,.12), transparent 42%), linear-gradient(180deg, rgba(12,9,20,.78), rgba(6,6,8,.72)); display:flex; flex-direction:column; justify-content:flex-end; box-shadow:0 30px 120px rgba(0,0,0,.34); }
+    .stream-marker { font-family:var(--mono); font-size:10px; color:var(--purple); letter-spacing:2px; text-transform:uppercase; margin-bottom:auto; }
+    .stream-primary h3 { font-size:34px; letter-spacing:-1.4px; margin-bottom:12px; }
+    .stream-primary p { color:var(--text-2); line-height:1.7; }
+    .stream-list { border:1px solid var(--border); border-radius:24px; overflow:hidden; background:rgba(8,8,10,.54); }
+    .stream-row { display:grid; grid-template-columns:46px 1fr 86px; gap:18px; padding:24px; border-bottom:1px solid rgba(255,255,255,.045); align-items:start; }
+    .stream-row:last-child { border-bottom:0; }
+    .stream-row h4 { font-size:17px; margin-bottom:6px; }
+    .stream-row p { color:var(--text-3); font-size:13px; line-height:1.6; }
+    .stream-row em { font-family:var(--mono); font-size:10px; color:var(--purple); font-style:normal; text-transform:uppercase; letter-spacing:1.2px; text-align:right; }
+    .ops-console { margin-top:48px; display:grid; grid-template-columns:1fr 290px; gap:16px; }
+    .ops-timeline { border:1px solid rgba(255,255,255,.065); border-radius:24px; background:linear-gradient(180deg, rgba(9,12,16,.72), rgba(6,6,7,.62)); overflow:hidden; }
+    .ops-event { display:grid; grid-template-columns:52px 1fr 120px; gap:18px; padding:22px 24px; border-bottom:1px solid rgba(255,255,255,.045); align-items:start; }
+    .ops-event:last-child { border-bottom:0; }
+    .ops-event b { display:block; font-size:15px; margin-bottom:6px; }
+    .ops-event p { color:var(--text-3); font-size:13px; line-height:1.6; }
+    .ops-event em { font-family:var(--mono); font-size:10px; color:var(--green); font-style:normal; text-transform:uppercase; text-align:right; letter-spacing:1px; }
+    .ops-side { display:flex; flex-direction:column; gap:12px; }
+    .ops-node, .ops-status { border:1px solid var(--border); border-radius:18px; background:rgba(255,255,255,.025); padding:20px; }
+    .ops-node { min-height:174px; background:radial-gradient(circle at 70% 20%, rgba(0,255,136,.10), transparent 52%), rgba(255,255,255,.025); }
+    .ops-node small { font-family:var(--mono); color:var(--text-4); letter-spacing:1.5px; font-size:9px; display:block; margin-bottom:22px; }
+    .ops-node strong { display:block; font-size:27px; letter-spacing:-1px; margin-bottom:8px; }
+    .ops-node span { color:var(--text-2); font-size:13px; }
+    .ops-status { display:flex; align-items:center; justify-content:space-between; font-size:12px; color:var(--text-3); }
+    .ops-status b { color:var(--blue); font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:1px; }
+    .node-inspection { margin-top:48px; border:1px solid rgba(0,255,136,.11); border-radius:26px; padding:30px; background:radial-gradient(circle at 82% 18%, rgba(0,255,136,.10), transparent 42%), linear-gradient(135deg, rgba(10,14,12,.86), rgba(7,8,11,.72)); box-shadow:0 34px 130px rgba(0,0,0,.42); }
+    .node-core { display:flex; align-items:center; gap:18px; padding-bottom:22px; border-bottom:1px solid rgba(255,255,255,.055); }
+    .node-glyph { width:58px; height:58px; border-radius:50%; display:grid; place-items:center; font-family:var(--mono); font-weight:900; color:var(--bg); background:linear-gradient(135deg,var(--green),var(--blue)); box-shadow:0 0 46px rgba(0,255,136,.18); }
+    .node-core small { display:block; font-family:var(--mono); font-size:9px; color:var(--text-4); letter-spacing:2px; }
+    .node-core strong { display:block; font-size:30px; letter-spacing:-1px; }
+    .node-core b { margin-left:auto; font-family:var(--mono); font-size:10px; color:var(--green); border:1px solid var(--green-border); border-radius:999px; padding:6px 12px; }
+    .inspection-grid { margin:24px 0; display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:rgba(255,255,255,.055); border-radius:16px; overflow:hidden; }
+    .inspection-grid div { background:rgba(5,5,5,.62); padding:18px; }
+    .inspection-grid span { display:block; font-family:var(--mono); font-size:9px; color:var(--text-4); text-transform:uppercase; letter-spacing:1.4px; margin-bottom:8px; }
+    .inspection-grid strong { font-size:14px; line-height:1.45; }
+    .evolution-map { margin-top:50px; display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.065); border-radius:24px; overflow:hidden; }
+    .evolution-phase { min-height:260px; padding:24px 20px; background:linear-gradient(180deg, rgba(10,10,12,.92), rgba(7,7,9,.82)); position:relative; }
+    .evolution-phase::before { content:''; position:absolute; left:20px; top:0; width:1px; height:44px; background:linear-gradient(to bottom,var(--blue),transparent); opacity:.55; }
+    .evolution-phase.active { background:radial-gradient(circle at 50% 0%, rgba(0,255,136,.12), transparent 48%), rgba(10,10,12,.92); }
+    .evolution-phase span { font-family:var(--mono); font-size:10px; color:var(--text-4); text-transform:uppercase; letter-spacing:1.4px; }
+    .evolution-phase h3 { margin-top:60px; font-size:20px; letter-spacing:-.6px; }
+    .evolution-phase p { margin-top:10px; color:var(--text-3); font-size:13px; line-height:1.65; }
+    .obs-experience::before { background-image: radial-gradient(circle at 50% 50%, rgba(0,212,255,.05), transparent 22%), linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.016) 1px, transparent 1px); background-size:auto, 72px 72px, 72px 72px; }
+    .signal-time { white-space:nowrap; }
+
+    .obs-experience { background: radial-gradient(circle at 50% 48%, rgba(0,212,255,0.14), transparent 34%), radial-gradient(circle at 26% 20%, rgba(139,92,246,0.09), transparent 30%), radial-gradient(circle at 76% 28%, rgba(0,255,136,0.075), transparent 32%), linear-gradient(180deg, rgba(2,4,7,0.98), rgba(4,5,8,0.98)); }
+    .obs-field-vignette { background: radial-gradient(circle at center, transparent 34%, rgba(0,0,0,0.42) 72%, rgba(0,0,0,0.76) 100%), linear-gradient(90deg, rgba(0,212,255,.035), transparent 18%, transparent 82%, rgba(139,92,246,.035)); }
+    @media (max-width: 900px) { .doctrine-layout, .research-streams, .ops-console { grid-template-columns:1fr; } .doctrine-intro { position:relative; top:auto; } .evolution-map { grid-template-columns:1fr; } .evolution-phase { min-height:190px; } .evolution-phase h3 { margin-top:42px; } }
+    @media (max-width: 640px) { .doctrine-item { grid-template-columns:42px 1fr; gap:14px; } .doctrine-item h3 { font-size:20px; } .stream-row, .ops-event { grid-template-columns:1fr; gap:8px; } .stream-row em, .ops-event em { text-align:left; } .inspection-grid { grid-template-columns:1fr; } .node-core { align-items:flex-start; flex-wrap:wrap; } .node-core b { margin-left:0; } .obs-hud-cell { min-height:auto; } .ops-console, .research-streams { margin-top:32px; } }
+
     /* ═══════════════════════════════════════
        RESPONSIVE
     ═══════════════════════════════════════ */
@@ -540,12 +603,12 @@
       <div class="container">
         <div class="hero-layout">
           <div>
-            <div class="hero-eyebrow">AI Operations Laboratory · Built in Public</div>
+            <div class="hero-eyebrow">Digital Headquarters · Autonomous Systems</div>
             <h1 class="hero-title">ZKA <span class="green">Labs</span></h1>
-            <p class="hero-sub">A command center for AI agents, memory systems, automation, and model infrastructure — small pieces today, one serious ecosystem over time.</p>
-            <div class="hero-proofline"><span class="proof-pill"><span>Live</span> observatory</span><span class="proof-pill"><span>Open</span> repositories</span><span class="proof-pill"><span>Agent</span> infrastructure</span></div>
+            <p class="hero-sub">A command layer for agents, infrastructure, memory, and research. ZKA Labs is an operating system for an expanding AI ecosystem — not a collection of isolated projects.</p>
+            <div class="hero-proofline"><span class="proof-pill"><span>Live</span> intelligence field</span><span class="proof-pill"><span>Open</span> ecosystem nodes</span><span class="proof-pill"><span>Agent</span> runtime layer</span></div>
             <div class="hero-ctas">
-              <a href="#observatory" class="btn btn-primary">AI Observatory ↓</a>
+              <a href="#observatory" class="btn btn-primary">AI Observatory</a>
               <a href="#ecosystem" class="btn btn-ghost">Ecosystem</a>
             </div>
           </div>
@@ -559,7 +622,7 @@
               <div class="mini-rail">
                 <div><div class="k">Active</div><div class="v green">01</div></div>
                 <div><div class="k">Repos</div><div class="v blue">06</div></div>
-                <div><div class="k">Health</div><div class="v purple">99.9</div></div>
+                <div><div class="k">Mode</div><div class="v purple">HQ</div></div>
               </div>
             </div>
             <div class="glass hero-panel">
@@ -567,7 +630,7 @@
               <div class="activity-feed" id="activity-feed">
                 <div class="activity-line"><span class="tag online">ONLINE</span> <span>ZKA Agent</span></div>
                 <div class="activity-line"><span class="tag sync">SYNC</span> <span>Repository Registry</span></div>
-                <div class="activity-line"><span class="tag active">ACTIVE</span> <span>Research Database</span></div>
+                <div class="activity-line"><span class="tag active">ACTIVE</span> <span>Research Streams</span></div>
                 <div class="activity-line"><span class="tag ready">READY</span> <span>Infrastructure Layer</span></div>
                 <div class="activity-line"><span class="tag monitoring">LIVE</span> <span>AI Observatory</span></div>
               </div>
@@ -605,24 +668,24 @@
         <div class="reveal obs-title-stack" style="text-align:center">
           <div class="obs-kicker">AI Observatory</div>
           <h2 class="section-title">Living <span class="blue">Intelligence</span> Network</h2>
-          <p class="section-desc" style="margin:0 auto">A live map of the model layer: providers, context windows, signal paths, and usable intelligence moving as one mesh.</p>
-          <div class="obs-orbit-readout"><span><b>Source</b> OpenRouter</span><span><b>Mode</b> Live mesh</span><span><b>Layout</b> organic clusters</span></div>
+          <p class="section-desc" style="margin:0 auto">A live intelligence field built from the OpenRouter model catalog: provider constellations, context-window bodies, open-source signals, and distribution patterns moving through one observable layer.</p>
+          <div class="obs-orbit-readout"><span><b>Source</b> OpenRouter catalog</span><span><b>Mode</b> Living intelligence field</span><span><b>Lens</b> Provider constellations</span></div>
         </div>
 
         <div class="obs-hud reveal">
-          <div class="obs-hud-cell" style="--hud-glow:rgba(0,212,255,.12)"><div class="obs-hud-label">Field Coherence</div><div class="obs-hud-value blue" id="obs-coherence">98.2%</div><div class="obs-hud-note">stable neural topology</div></div>
-          <div class="obs-hud-cell" style="--hud-glow:rgba(0,255,136,.10)"><div class="obs-hud-label">Active Synapses</div><div class="obs-hud-value green" id="obs-synapses">2,341</div><div class="obs-hud-note">live signal pathways</div></div>
-          <div class="obs-hud-cell" style="--hud-glow:rgba(139,92,246,.12)"><div class="obs-hud-label">Emergence Rate</div><div class="obs-hud-value purple" id="obs-emergence">+12/min</div><div class="obs-hud-note">agent-to-agent events</div></div>
-          <div class="obs-hud-cell" style="--hud-glow:rgba(255,213,74,.10)"><div class="obs-hud-label">Last Pulse</div><div class="obs-hud-value gold" id="obs-pulse">0.8s</div><div class="obs-hud-note">network heartbeat</div></div>
+          <div class="obs-hud-cell" style="--hud-glow:rgba(0,212,255,.12)"><div class="obs-hud-label">Field Index</div><div class="obs-hud-value blue" id="obs-field-index">—</div><div class="obs-hud-note">models returned by OpenRouter</div></div>
+          <div class="obs-hud-cell" style="--hud-glow:rgba(0,255,136,.10)"><div class="obs-hud-label">Provider Constellations</div><div class="obs-hud-value green" id="obs-provider-index">—</div><div class="obs-hud-note">unique provider families</div></div>
+          <div class="obs-hud-cell" style="--hud-glow:rgba(139,92,246,.12)"><div class="obs-hud-label">Open Source Signals</div><div class="obs-hud-value purple" id="obs-open-ratio">—</div><div class="obs-hud-note">open model families detected</div></div>
+          <div class="obs-hud-cell" style="--hud-glow:rgba(255,213,74,.10)"><div class="obs-hud-label">Max Context Window</div><div class="obs-hud-value gold" id="obs-context-max">—</div><div class="obs-hud-note">largest observable context</div></div>
         </div>
 
         <div class="obs-experience reveal">
           <canvas id="obs-canvas"></canvas>
           <div class="obs-field-vignette"></div>
           <div class="obs-corner tl">ZKA / MODEL OBSERVATORY</div>
-          <div class="obs-corner tr">MODE: AUTONOMOUS<br>STREAM: LIVE</div>
-          <div class="obs-corner bl">OPENROUTER: STREAMING</div>
-          <div class="obs-corner br">SIGNAL: CLEAN<br>NOISE: LOW</div>
+          <div class="obs-corner tr">LENS: PROVIDER FIELD<br>DATA: LIVE CATALOG</div>
+          <div class="obs-corner bl">OPENROUTER: PUBLIC MODEL INDEX</div>
+          <div class="obs-corner br">LAYERS: DEEP FIELD<br>FOCUS: PROVIDERS</div>
           <div class="obs-tooltip" id="obs-tooltip"><div class="ot-name"></div><div class="ot-provider"></div><div class="ot-stats"></div></div>
         </div>
 
@@ -637,7 +700,7 @@
               <div class="signal-metric"><div class="k">Models</div><div class="v blue" id="obs-total">—</div><div class="s">observable nodes</div></div>
               <div class="signal-metric"><div class="k">Providers</div><div class="v green" id="obs-providers">—</div><div class="s">cluster families</div></div>
               <div class="signal-metric"><div class="k">Dominant Source</div><div class="v gold" id="obs-top-provider" style="font-size:15px">—</div><div class="s">highest density</div></div>
-              <div class="signal-metric"><div class="k">Open Mesh</div><div class="v purple" id="obs-oss">—</div><div class="s">open-source nodes</div></div>
+              <div class="signal-metric"><div class="k">Open Signals</div><div class="v purple" id="obs-oss">—</div><div class="s">open-source families</div></div>
             </div>
           </div>
         </div>
@@ -647,18 +710,19 @@
     <!-- ABOUT -->
     <section id="about">
       <div class="container">
-        <div class="reveal">
-          <div class="section-label">About</div>
-          <h2 class="section-title">What is <span class="green">ZKA Labs</span>?</h2>
-          <p class="section-desc">A small but focused technology lab organizing AI agents, automation, APIs, and infrastructure into one durable operating system.</p>
-        </div>
-        <div class="about-grid">
-          <div class="about-card reveal"><div class="about-icon g">🎯</div><h3>Mission</h3><p>Build a foundation that can grow from one agent into a full ecosystem without becoming messy, fragile, or dependent on hype.</p></div>
-          <div class="about-card reveal"><div class="about-icon b">🔬</div><h3>Focus Areas</h3><p>AI Agents, API platforms, workflow automation, persistent memory systems, research experiments, and SaaS infrastructure.</p></div>
-          <div class="about-card reveal"><div class="about-icon p">⚡</div><h3>Philosophy</h3><p>Clear systems over noise. Useful infrastructure over demos. Every layer should be understandable, reusable, and hard to break.</p></div>
-          <div class="about-card reveal"><div class="about-icon g">🌐</div><h3>Infrastructure</h3><p>Production-grade systems designed for reliability, performance, and seamless integration across the ecosystem.</p></div>
-          <div class="about-card reveal"><div class="about-icon b">🧠</div><h3>Research</h3><p>AI safety, alignment, experimental models, and pushing the boundaries of what autonomous agents can achieve.</p></div>
-          <div class="about-card reveal"><div class="about-icon p">🔓</div><h3>Open Source</h3><p>Built in public where it makes sense: repositories, experiments, notes, and tools that others can inspect, learn from, and reuse.</p></div>
+        <div class="doctrine-layout">
+          <div class="reveal doctrine-intro">
+            <div class="section-label">Operating Doctrine</div>
+            <h2 class="section-title">ZKA Labs is an <span class="green">operating layer</span>.</h2>
+            <p class="section-desc">The ecosystem is designed as a digital headquarters: every agent, repository, memory system, and research stream strengthens the same command layer.</p>
+          </div>
+          <div class="doctrine-list">
+            <div class="doctrine-item reveal"><span>01</span><div><h3>Every project is a node.</h3><p>Projects are not standalone showcases. Each node exists because it adds capability to the wider system.</p></div></div>
+            <div class="doctrine-item reveal"><span>02</span><div><h3>Every node strengthens the ecosystem.</h3><p>Agents, APIs, memory, and automation are designed to share patterns instead of multiplying isolated codebases.</p></div></div>
+            <div class="doctrine-item reveal"><span>03</span><div><h3>Build systems before scale.</h3><p>Durable foundations matter more than inflated metrics. The lab prioritizes reusable infrastructure and clear operational boundaries.</p></div></div>
+            <div class="doctrine-item reveal"><span>04</span><div><h3>Research and infrastructure are one layer.</h3><p>Experiments become runtime knowledge; runtime failures become research material. Both feed the command center.</p></div></div>
+            <div class="doctrine-item reveal"><span>05</span><div><h3>Built in public, operated with discipline.</h3><p>Open repositories expose progress, but the brand direction stays institutional: serious, precise, and system-first.</p></div></div>
+          </div>
         </div>
       </div>
     </section>
@@ -688,18 +752,23 @@
     <!-- RESEARCH -->
     <section id="research">
       <div class="container">
-        <div class="reveal">
-          <div class="section-label" style="color:var(--purple)">Research Areas</div>
-          <h2 class="section-title">Research <span class="purple">tracks</span></h2>
-          <p class="section-desc">The lab is not chasing one app. It is assembling reusable layers for agents, memory, automation, and model access.</p>
+        <div class="reveal research-heading">
+          <div class="section-label" style="color:var(--purple)">Research Streams</div>
+          <h2 class="section-title">Research as an <span class="purple">operating pipeline</span>.</h2>
+          <p class="section-desc">The lab studies systems that become infrastructure: autonomous execution, memory architectures, model access, and operational intelligence.</p>
         </div>
-        <div class="research-grid">
-          <div class="research-card reveal"><div class="research-icon">🤖</div><div class="research-name">AI Agents</div><div class="research-desc">Autonomous agents with tool usage, memory, and reasoning</div><div class="rc-badge g">Active</div></div>
-          <div class="research-card reveal"><div class="research-icon">⚡</div><div class="research-name">Automation</div><div class="research-desc">Workflow orchestration and task execution systems</div><div class="rc-badge b">Development</div></div>
-          <div class="research-card reveal"><div class="research-icon">🧠</div><div class="research-name">Memory Systems</div><div class="research-desc">Persistent, contextual memory for AI agents</div><div class="rc-badge p">Research</div></div>
-          <div class="research-card reveal"><div class="research-icon">🏗️</div><div class="research-name">Infrastructure</div><div class="research-desc">Scalable, production-grade platform architecture</div><div class="rc-badge g">Active</div></div>
-          <div class="research-card reveal"><div class="research-icon">🔌</div><div class="research-name">API Platforms</div><div class="research-desc">OpenAI-compatible APIs with multi-model routing</div><div class="rc-badge b">Production</div></div>
-          <div class="research-card reveal"><div class="research-icon">🔬</div><div class="research-name">Research</div><div class="research-desc">AI safety, alignment, and experimental models</div><div class="rc-badge p">Ongoing</div></div>
+        <div class="research-streams">
+          <div class="stream-primary reveal">
+            <span class="stream-marker">ACTIVE INVESTIGATIONS</span>
+            <h3>Emerging Systems</h3>
+            <p>Mapping how agents, model routing, memory, and task execution combine into one reliable command layer.</p>
+          </div>
+          <div class="stream-list">
+            <div class="stream-row reveal"><span>01</span><div><h4>Autonomous Operations</h4><p>Agent workflows, tool execution, background tasks, and recovery loops.</p></div><em>Active</em></div>
+            <div class="stream-row reveal"><span>02</span><div><h4>Memory Architectures</h4><p>Persistent context, routing memory, session continuity, and reusable operating knowledge.</p></div><em>Research</em></div>
+            <div class="stream-row reveal"><span>03</span><div><h4>Infrastructure Research</h4><p>OpenAI-compatible surfaces, provider abstraction, zero-budget deployment, and observability.</p></div><em>Build</em></div>
+            <div class="stream-row reveal"><span>04</span><div><h4>Public Intelligence Network</h4><p>Using public model catalogs to understand the global AI layer as a living field.</p></div><em>Observed</em></div>
+          </div>
         </div>
       </div>
     </section>
@@ -708,59 +777,46 @@
     <section id="dashboard">
       <div class="container">
         <div class="reveal">
-          <div class="section-label">Development</div>
-          <h2 class="section-title">Project <span class="green">dashboard</span></h2>
-          <p class="section-desc">Real-time development monitoring across the ecosystem.</p>
+          <div class="section-label">Operations Console</div>
+          <h2 class="section-title">Operational <span class="green">timeline</span></h2>
+          <p class="section-desc">A command-console view of the ecosystem: recent events, active node state, build cycles, sync activity, infrastructure work, and research movement.</p>
         </div>
-        <div class="dash-monitor reveal">
-          <div class="dash-table" id="dash-table">
-            <div class="dash-header"><span>Project</span><span>Status</span><span>Progress</span><span></span></div>
+        <div class="ops-console reveal">
+          <div class="ops-timeline">
+            <div class="ops-event"><span>01</span><div><b>Recent Event</b><p>AI Observatory connected to the OpenRouter public model index.</p></div><em>Live Catalog</em></div>
+            <div class="ops-event"><span>02</span><div><b>Active Node</b><p>ZKA Agent remains the execution layer for workflows, tools, and agent-facing systems.</p></div><em>ZKA Agent</em></div>
+            <div class="ops-event"><span>03</span><div><b>Sync Activity</b><p>Repository registry, ecosystem architecture, and public pages are aligned around ZKA Labs.</p></div><em>Synced</em></div>
+            <div class="ops-event"><span>04</span><div><b>Build Cycle</b><p>Command center interface upgraded toward a digital headquarters, not a project page.</p></div><em>2026</em></div>
+            <div class="ops-event"><span>05</span><div><b>Research Activity</b><p>Memory, autonomous operations, and model infrastructure remain active investigation streams.</p></div><em>Ongoing</em></div>
           </div>
-          <div class="dash-side">
-            <div class="glass health-panel">
-              <div class="panel-hdr"><span class="dot g"></span> System Health</div>
-              <div class="health-row"><span class="h-key">Network</span><span class="h-val g">ONLINE</span></div>
-              <div class="health-row"><span class="h-key">Agent Registry</span><span class="h-val g">SYNCED</span></div>
-              <div class="health-row"><span class="h-key">Infrastructure</span><span class="h-val b">HEALTHY</span></div>
-              <div class="health-row"><span class="h-key">Research DB</span><span class="h-val g">ACTIVE</span></div>
-              <div class="health-row"><span class="h-key">System Health</span><span class="h-val g">99.9%</span></div>
-              <div class="health-row"><span class="h-key">Database</span><span class="h-val b">CONNECTED</span></div>
-            </div>
-            <div class="glass stat-mini-panel">
-              <div class="panel-hdr"><span class="dot b"></span> Ecosystem Stats</div>
-              <div class="stat-mini-grid">
-                <div class="stat-mini"><div class="sm-val">6</div><div class="sm-lbl">Repos</div></div>
-                <div class="stat-mini"><div class="sm-val">1</div><div class="sm-lbl">Live</div></div>
-                <div class="stat-mini"><div class="sm-val">1</div><div class="sm-lbl">In Dev</div></div>
-                <div class="stat-mini"><div class="sm-val">4</div><div class="sm-lbl">Planned</div></div>
-              </div>
-            </div>
-          </div>
+          <aside class="ops-side">
+            <div class="ops-node"><small>ACTIVE NODE</small><strong>ZKA Agent</strong><span>Execution Layer</span></div>
+            <div class="ops-status"><span>Infrastructure</span><b>In build</b></div>
+            <div class="ops-status"><span>Research</span><b>Active</b></div>
+            <div class="ops-status"><span>Observatory</span><b>Live catalog</b></div>
+          </aside>
         </div>
       </div>
     </section>
 
-    <!-- FEATURED -->
+    <!-- ACTIVE NODE INSPECTION -->
     <section id="projects">
       <div class="container">
         <div class="reveal">
-          <div class="section-label">Current Initiative</div>
-          <h2 class="section-title">Now <span class="green">building</span></h2>
-          <p class="section-desc">ZKA Agent is the first live proof: an agent interface connected to automation, tools, memory direction, and API-compatible infrastructure.</p>
+          <div class="section-label">Active Node Inspection</div>
+          <h2 class="section-title">Inspecting the <span class="green">execution layer</span></h2>
+          <p class="section-desc">The featured project is treated as a subsystem inside the headquarters — not a marketing showcase.</p>
         </div>
-        <div class="featured reveal">
-          <div class="featured-top">
-            <div class="featured-icon">🤖</div>
-            <div><div class="featured-title">ZKA Agent</div></div>
-            <span class="featured-badge">Live</span>
+        <div class="node-inspection reveal">
+          <div class="node-core"><span class="node-glyph">Z</span><div><small>NODE</small><strong>ZKA Agent</strong></div><b>LIVE</b></div>
+          <div class="inspection-grid">
+            <div><span>Role</span><strong>Execution Layer</strong></div>
+            <div><span>State</span><strong>Live</strong></div>
+            <div><span>Dependencies</span><strong>Memory · Infrastructure · Automation</strong></div>
+            <div><span>Output</span><strong>Agents · Workflows · Tasks</strong></div>
           </div>
-          <p class="featured-desc">The first visible node in the ecosystem: agent workflows, tool execution, memory direction, API-compatible access, and automation patterns that can be reused across future projects.</p>
-          <div class="featured-tech">
-            <span class="tech-tag">AI Agent</span><span class="tech-tag">Automation</span>
-            <span class="tech-tag">Memory Systems</span><span class="tech-tag">Tool Orchestration</span>
-            <span class="tech-tag">OpenAI Compatible</span>
-          </div>
-          <a href="https://zeroknowledge0x.github.io/zk-api/" target="_blank" class="featured-link">Explore ZKA Agent →</a>
+          <p class="featured-desc">ZKA Agent is the first visible subsystem: agent workflows, tool execution, memory direction, API-compatible access, and automation patterns that can be reused across future nodes.</p>
+          <a href="https://zeroknowledge0x.github.io/zk-api/" target="_blank" class="featured-link">Open node inspection →</a>
         </div>
       </div>
     </section>
@@ -769,12 +825,16 @@
     <section id="roadmap">
       <div class="container">
         <div class="reveal">
-          <div class="section-label">Roadmap</div>
-          <h2 class="section-title">What's <span class="green">next</span></h2>
+          <div class="section-label">Strategic Evolution</div>
+          <h2 class="section-title">From foundation to <span class="green">public intelligence network</span></h2>
+          <p class="section-desc">The roadmap describes organizational evolution, not a checklist of repositories.</p>
         </div>
-        <div class="reveal">
-          <div class="roadmap-year">2026</div>
-          <div class="roadmap-timeline" id="roadmap-timeline"></div>
+        <div class="evolution-map reveal">
+          <div class="evolution-phase active"><span>Phase 01</span><h3>Foundation</h3><p>Establish ZKA Labs as the hub, command center, and public ecosystem identity.</p></div>
+          <div class="evolution-phase"><span>Phase 02</span><h3>Agent Runtime</h3><p>Turn ZKA Agent and Hermes patterns into a reusable execution layer.</p></div>
+          <div class="evolution-phase"><span>Phase 03</span><h3>Memory Layer</h3><p>Develop persistent context, routing memory, and operational knowledge storage.</p></div>
+          <div class="evolution-phase"><span>Phase 04</span><h3>Autonomous Operations</h3><p>Coordinate agents, background workflows, monitoring, and recovery mechanisms.</p></div>
+          <div class="evolution-phase"><span>Phase 05</span><h3>Public Intelligence Network</h3><p>Expose the ecosystem as a living map of models, infrastructure, research, and autonomous systems.</p></div>
         </div>
       </div>
     </section>
@@ -783,20 +843,20 @@
     <section id="vision">
       <div class="container">
         <div class="reveal"><div class="section-label">Future Vision</div></div>
-        <div class="reveal"><h2 class="vision-headline">One Foundation.<br><span class="green">Many</span> Systems.</h2></div>
+        <div class="reveal"><h2 class="vision-headline">One Headquarters.<br><span class="green">Many</span> Intelligent Systems.</h2></div>
         <div class="vision-statements">
           <div class="vision-statement" data-delay="0">Start with one reliable node.</div>
           <div class="vision-statement" data-delay="200">Connect tools only when they make the system stronger.</div>
-          <div class="vision-statement" data-delay="400">Keep the foundation clean enough to scale.</div>
-          <div class="vision-statement" data-delay="600">Building toward a future where <strong>AI Agents</strong>, <strong>Automation</strong>, <strong>Infrastructure</strong>, <strong>APIs</strong>, <strong>Memory Systems</strong>, and <strong>Research</strong> behave like one operating layer — not scattered experiments.</div>
+          <div class="vision-statement" data-delay="400">Treat research, memory, infrastructure, and agents as one operating layer.</div>
+          <div class="vision-statement" data-delay="600">ZKA Labs is evolving into a digital headquarters for autonomous systems — a serious organization layer, built in public.</div>
         </div>
         <div class="vision-metrics reveal">
-          <div class="vision-metric"><div class="vm-val g">∞</div><div class="vm-label">Scale</div></div>
-          <div class="vision-metric"><div class="vm-val b">1</div><div class="vm-label">Foundation</div></div>
-          <div class="vision-metric"><div class="vm-val p">24/7</div><div class="vm-label">Always On</div></div>
+          <div class="vision-metric"><div class="vm-val g">01</div><div class="vm-label">Headquarters</div></div>
+          <div class="vision-metric"><div class="vm-val b">Live</div><div class="vm-label">Observatory</div></div>
+          <div class="vision-metric"><div class="vm-val p">Nodes</div><div class="vm-label">Ecosystem</div></div>
           <div class="vision-metric"><div class="vm-val gold">OSS</div><div class="vm-label">Open Source</div></div>
         </div>
-        <div class="vision-tagline reveal">ZKA Labs — Build the system, then scale it</div>
+        <div class="vision-tagline reveal">ZKA Labs — Digital headquarters for autonomous systems</div>
       </div>
     </section>
 
@@ -855,37 +915,40 @@
     // PROJECTS REGISTRY
     // ═══════════════════════════════
     const projects = [
-      { id:'zka-agent', name:'ZKA Agent', icon:'🤖', status:'online', statusLabel:'Online', desc:'AI Agent platform — automation, memory, tool usage.', url:'https://zeroknowledge0x.github.io/zk-api/', progress:100 },
-      { id:'hermes', name:'Hermes', icon:'⚡', status:'development', statusLabel:'In Dev', desc:'AI agent framework — multi-platform, persistent memory.', url:'https://zeroknowledge0x.github.io/hermes/', progress:35 },
-      { id:'memory-api', name:'Memory API', icon:'🧠', status:'planned', statusLabel:'Planned', desc:'Persistent memory systems for AI agents.', url:'https://zeroknowledge0x.github.io/memory-api/', progress:10 },
-      { id:'automation-tools', name:'Automation Tools', icon:'🔧', status:'planned', statusLabel:'Planned', desc:'Workflow automation and task execution.', url:'https://zeroknowledge0x.github.io/automation-tools/', progress:5 },
-      { id:'research-projects', name:'Research Projects', icon:'🔬', status:'planned', statusLabel:'Planned', desc:'AI safety, alignment, and experimental models.', url:'https://zeroknowledge0x.github.io/research-projects/', progress:5 },
-      { id:'future-projects', name:'Future Projects', icon:'🚀', status:'planned', statusLabel:'Planned', desc:'Next-generation technology experiments.', url:'https://zeroknowledge0x.github.io/future-projects/', progress:0 },
+      { id:'zka-agent', name:'ZKA Agent', glyph:'ZA', status:'online', statusLabel:'Online', desc:'AI Agent platform — automation, memory, tool usage.', url:'https://zeroknowledge0x.github.io/zk-api/', progress:100 },
+      { id:'hermes', name:'Hermes', glyph:'HE', status:'development', statusLabel:'In Dev', desc:'AI agent framework — multi-platform, persistent memory.', url:'https://zeroknowledge0x.github.io/hermes/', progress:35 },
+      { id:'memory-api', name:'Memory API', glyph:'ME', status:'planned', statusLabel:'Planned', desc:'Persistent memory systems for AI agents.', url:'https://zeroknowledge0x.github.io/memory-api/', progress:10 },
+      { id:'automation-tools', name:'Automation Tools', glyph:'AU', status:'planned', statusLabel:'Planned', desc:'Workflow automation and task execution.', url:'https://zeroknowledge0x.github.io/automation-tools/', progress:5 },
+      { id:'research-projects', name:'Research Projects', glyph:'RS', status:'planned', statusLabel:'Planned', desc:'AI safety, alignment, and experimental models.', url:'https://zeroknowledge0x.github.io/research-projects/', progress:5 },
+      { id:'future-projects', name:'Future Projects', glyph:'NX', status:'planned', statusLabel:'Planned', desc:'Next-generation technology experiments.', url:'https://zeroknowledge0x.github.io/future-projects/', progress:0 },
     ];
 
-    // Dashboard
+    // Legacy project table / roadmap hooks are optional after the Digital Headquarters upgrade.
     const dashTable = document.getElementById('dash-table');
-    projects.forEach(p => {
-      const sc = p.status === 'online' ? 'online' : p.status === 'development' ? 'dev' : 'planned';
-      const fc = p.status === 'online' ? 'g' : p.status === 'development' ? 'y' : 'muted';
-      dashTable.innerHTML += `<div class="dash-row"><div class="dash-name"><span class="icon">${p.icon}</span>${p.name}</div><div class="dash-status ${sc}">${p.statusLabel}</div><div class="dash-progress"><div class="progress-bar"><div class="progress-fill ${fc}" style="width:${p.progress}%"></div></div><span class="progress-pct">${p.progress}%</span></div><a href="${p.url}" target="_blank" class="dash-link">→</a></div>`;
-    });
+    if (dashTable) {
+      projects.forEach(p => {
+        const sc = p.status === 'online' ? 'online' : p.status === 'development' ? 'dev' : 'planned';
+        const fc = p.status === 'online' ? 'g' : p.status === 'development' ? 'y' : 'muted';
+        dashTable.innerHTML += `<div class="dash-row"><div class="dash-name"><span class="icon">${p.glyph}</span>${p.name}</div><div class="dash-status ${sc}">${p.statusLabel}</div><div class="dash-progress"><div class="progress-bar"><div class="progress-fill ${fc}" style="width:${p.progress}%"></div></div><span class="progress-pct">${p.progress}%</span></div><a href="${p.url}" target="_blank" class="dash-link">→</a></div>`;
+      });
+    }
 
-    // Roadmap
     const roadmapEl = document.getElementById('roadmap-timeline');
-    projects.forEach(p => {
-      const isActive = p.status === 'online';
-      const sc = isActive ? 's-green' : p.status === 'development' ? 's-yellow' : 's-gray';
-      const label = isActive ? 'Active — Online' : p.statusLabel;
-      roadmapEl.innerHTML += `<a href="${p.url}" target="_blank" class="roadmap-item ${isActive ? 'active' : ''}"><div class="roadmap-dot"></div><div class="roadmap-content"><div class="roadmap-name">${p.name}</div><div class="roadmap-status ${sc}">${label}</div></div></a>`;
-    });
+    if (roadmapEl) {
+      projects.forEach(p => {
+        const isActive = p.status === 'online';
+        const sc = isActive ? 's-green' : p.status === 'development' ? 's-yellow' : 's-gray';
+        const label = isActive ? 'Active — Online' : p.statusLabel;
+        roadmapEl.innerHTML += `<a href="${p.url}" target="_blank" class="roadmap-item ${isActive ? 'active' : ''}"><div class="roadmap-dot"></div><div class="roadmap-content"><div class="roadmap-name">${p.name}</div><div class="roadmap-status ${sc}">${label}</div></div></a>`;
+      });
+    }
 
     // CC Strip
     const stripData = [
       { d: 'g', l: 'NETWORK', v: 'ONLINE' }, { d: 'b', l: 'OBSERVATORY', v: 'LIVE' },
       { d: 'cyan', l: 'AGENT REGISTRY', v: 'SYNCED' }, { d: 'p', l: 'RESEARCH', v: 'ACTIVE' },
-      { d: 'b', l: 'INFRASTRUCTURE', v: 'HEALTHY' }, { d: 'cyan', l: 'SYSTEM', v: '99.9%' },
-      { d: 'gold', l: 'DATABASE', v: 'CONNECTED' }, { d: 'b', l: 'API', v: 'OPERATIONAL' },
+      { d: 'b', l: 'INFRASTRUCTURE', v: 'IN BUILD' }, { d: 'cyan', l: 'SYSTEM', v: 'HEADQUARTERS' },
+      { d: 'gold', l: 'RESEARCH', v: 'ONGOING' }, { d: 'b', l: 'API', v: 'OPEN' },
     ];
     function buildStrip(el) {
       const items = stripData.map(s => `<div class="cc-item"><span class="cc-dot" style="background:var(--${s.d === 'gold' ? 'gold' : s.d})"></span> ${s.l}: <span class="cc-val">${s.v}</span></div>`).join('');
@@ -1027,11 +1090,12 @@
       const tooltip = document.getElementById('obs-tooltip');
       const feedEl = document.getElementById('obs-feed');
       const hud = {
-        coherence: document.getElementById('obs-coherence'),
-        synapses: document.getElementById('obs-synapses'),
-        emergence: document.getElementById('obs-emergence'),
-        pulse: document.getElementById('obs-pulse'),
+        field: document.getElementById('obs-field-index'),
+        providers: document.getElementById('obs-provider-index'),
+        openRatio: document.getElementById('obs-open-ratio'),
+        contextMax: document.getElementById('obs-context-max'),
       };
+      let catalogEvents = [];
 
       let W = 0, H = 660, t = 0, loaded = false, hovered = null;
       let nodes = [], links = [], pulses = [], providerCounts = {};
@@ -1114,7 +1178,7 @@
             weight: (m.isKey ? 1 : 0.52) + sRand() * 0.25,
             phase: sRand() * Math.PI * 2,
             x: W / 2, y: H / 2, bx: W / 2, by: H / 2,
-            r: m.isKey ? 8 : 4.5,
+            r: m.isKey ? 10 : 5.8,
           };
         });
       }
@@ -1175,13 +1239,12 @@
           }
         }
 
-        pulses = Array.from({ length: links.length ? Math.min(88, Math.max(36, links.length)) : 0 }, (_, i) => ({
+        pulses = Array.from({ length: links.length ? Math.min(132, Math.max(58, links.length)) : 0 }, (_, i) => ({
           link: links[Math.floor(sRand() * links.length)],
           p: sRand(),
           speed: 0.0025 + sRand() * 0.008,
-          size: 1 + sRand() * 2.2,
+          size: 1.6 + sRand() * 2.8,
         }));
-        if (hud.synapses) hud.synapses.textContent = links.length.toLocaleString();
       }
 
       function drawLoading() {
@@ -1204,8 +1267,8 @@
         }
         cx.clearRect(0, 0, W, H);
         const bg = cx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.max(W,H)*0.6);
-        bg.addColorStop(0, 'rgba(0,212,255,0.060)');
-        bg.addColorStop(0.42, 'rgba(139,92,246,0.028)');
+        bg.addColorStop(0, 'rgba(0,212,255,0.125)');
+        bg.addColorStop(0.42, 'rgba(139,92,246,0.060)');
         bg.addColorStop(1, 'rgba(0,0,0,0)');
         cx.fillStyle = bg; cx.fillRect(0, 0, W, H);
 
@@ -1217,8 +1280,8 @@
         links.forEach(l => {
           const hot = hovered && (hovered === l.a || hovered === l.b);
           cx.beginPath(); cx.moveTo(l.a.x, l.a.y); cx.lineTo(l.b.x, l.b.y);
-          cx.strokeStyle = hexAlpha(l.color, hot ? 0.45 : l.strength);
-          cx.lineWidth = hot ? 1.35 : 0.62;
+          cx.strokeStyle = hexAlpha(l.color, hot ? 0.62 : Math.max(l.strength * 1.75, 0.085));
+          cx.lineWidth = hot ? 1.65 : 0.9;
           cx.stroke();
         });
 
@@ -1230,42 +1293,42 @@
           const x = a.x + (b.x - a.x) * p.p, y = a.y + (b.y - a.y) * p.p;
           const c = p.link.color;
           const g = cx.createRadialGradient(x, y, 0, x, y, 9);
-          g.addColorStop(0, hexAlpha(c, 0.82)); g.addColorStop(1, 'transparent');
-          cx.fillStyle = g; cx.beginPath(); cx.arc(x, y, 9, 0, Math.PI * 2); cx.fill();
+          g.addColorStop(0, hexAlpha(c, 0.95)); g.addColorStop(1, 'transparent');
+          cx.fillStyle = g; cx.beginPath(); cx.arc(x, y, 13, 0, Math.PI * 2); cx.fill();
           cx.fillStyle = c; cx.beginPath(); cx.arc(x, y, p.size, 0, Math.PI * 2); cx.fill();
         });
 
         nodes.forEach(n => {
           const hot = n === hovered;
           const breath = 0.72 + Math.sin(t * 2 + n.phase) * 0.24;
-          const glowR = (hot ? 42 : (n.isKey ? 34 : 20)) * n.weight;
+          const glowR = (hot ? 58 : (n.isKey ? 46 : 28)) * n.weight;
           const g = cx.createRadialGradient(n.x, n.y, 0, n.x, n.y, glowR);
-          g.addColorStop(0, hexAlpha(n.color, hot ? 0.36 : 0.14 * breath));
+          g.addColorStop(0, hexAlpha(n.color, hot ? 0.52 : 0.23 * breath));
           g.addColorStop(1, 'transparent');
           cx.fillStyle = g; cx.beginPath(); cx.arc(n.x, n.y, glowR, 0, Math.PI * 2); cx.fill();
-          cx.fillStyle = hot ? n.color : hexAlpha(n.color, 0.86);
+          cx.fillStyle = hot ? n.color : hexAlpha(n.color, 0.96);
           cx.beginPath(); cx.arc(n.x, n.y, hot ? n.r + 3 : n.r, 0, Math.PI * 2); cx.fill();
           cx.strokeStyle = hexAlpha(n.color, hot ? 0.95 : 0.32);
-          cx.lineWidth = hot ? 1.6 : 0.75;
+          cx.lineWidth = hot ? 1.9 : 1.05;
           cx.beginPath(); cx.arc(n.x, n.y, (hot ? n.r + 7 : n.r + 3) + Math.sin(t * 3 + n.phase) * 1.2, 0, Math.PI * 2); cx.stroke();
         });
 
         const groups = {};
         nodes.forEach(n => { (groups[n.provider] ||= []).push(n); });
-        cx.font = '700 9px "JetBrains Mono", monospace';
+        cx.font = '800 10px "JetBrains Mono", monospace';
         cx.textAlign = 'center';
         Object.entries(groups).forEach(([provider, group]) => {
           if (group.length < 2) return;
           const meta = providerMeta(provider);
           const x = group.reduce((s,n)=>s+n.x,0)/group.length;
           const y = Math.min(...group.map(n=>n.y)) - 22;
-          cx.fillStyle = hexAlpha(meta.c, hovered && hovered.provider !== provider ? 0.18 : 0.62);
+          cx.fillStyle = hexAlpha(meta.c, hovered && hovered.provider !== provider ? 0.22 : 0.82);
           cx.fillText(meta.name.toUpperCase(), x, y);
         });
 
         cx.font = '600 10px "JetBrains Mono", monospace';
         cx.textAlign = 'center';
-        cx.fillStyle = 'rgba(255,255,255,.24)';
+        cx.fillStyle = 'rgba(255,255,255,.38)';
         cx.fillText(`${nodes.length} visible model nodes · ${links.length} synapses · ${pulses.length} signal flows · OpenRouter live`, W / 2, H - 18);
         requestAnimationFrame(draw);
       }
@@ -1298,7 +1361,7 @@
 
       function pushSignal(type, text, color) {
         if (!feedEl) return;
-        const time = new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+        const time = new Date().toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit', second:'2-digit', timeZone:'Asia/Jakarta' }) + ' WIB';
         const line = document.createElement('div');
         line.className = 'signal-line';
         line.style.setProperty('--sig-color', color);
@@ -1307,7 +1370,14 @@
         while (feedEl.children.length > 7) feedEl.removeChild(feedEl.lastChild);
       }
 
-      function updateTelemetry(totalModels, providerTotal, topProvider, ossCount, syncText) {
+      function fmtContext(n) {
+        if (!n) return '—';
+        if (n >= 1000000) return (n / 1000000).toFixed(n % 1000000 ? 1 : 0) + 'M';
+        if (n >= 1000) return Math.round(n / 1000) + 'K';
+        return String(n);
+      }
+
+      function updateTelemetry(totalModels, providerTotal, topProvider, ossCount, maxContext, topShare, syncText) {
         const totalEl = document.getElementById('obs-total');
         const provEl = document.getElementById('obs-providers');
         const topEl = document.getElementById('obs-top-provider');
@@ -1318,25 +1388,24 @@
         if (topEl) topEl.textContent = topProvider;
         if (ossEl) ossEl.textContent = ossCount;
         if (syncEl) syncEl.textContent = syncText;
-        if (hud.synapses) hud.synapses.textContent = links.length.toLocaleString();
+        if (hud.field) hud.field.textContent = totalModels;
+        if (hud.providers) hud.providers.textContent = providerTotal;
+        if (hud.openRatio) hud.openRatio.textContent = ossCount;
+        if (hud.contextMax) hud.contextMax.textContent = fmtContext(maxContext);
+        catalogEvents = [
+          ['index', `<strong>${totalModels}</strong> systems mapped from OpenRouter`, '#00d4ff'],
+          ['field', `<strong>${providerTotal}</strong> provider constellations distributed`, '#00ff88'],
+          ['open', `<strong>${ossCount}</strong> open-source family signals detected`, '#8b5cf6'],
+          ['context', `<strong>${fmtContext(maxContext)}</strong> maximum context body observed`, '#ffd54a'],
+          ['density', `<strong>${topProvider}</strong> leads provider density at ${topShare}%`, '#22d3ee'],
+        ];
       }
 
       setInterval(() => {
-        if (hud.coherence) hud.coherence.textContent = (97.4 + Math.random() * 1.6).toFixed(1) + '%';
-        if (hud.emergence) hud.emergence.textContent = '+' + (9 + Math.floor(Math.random() * 8)) + '/min';
-        if (hud.pulse) hud.pulse.textContent = (0.4 + Math.random() * 0.8).toFixed(1) + 's';
-      }, 1200);
-      setInterval(() => {
-        const events = [
-          ['mesh', '<strong>model cluster</strong> rebalanced topology', '#00d4ff'],
-          ['agent', '<strong>agent node</strong> negotiated tool pathway', '#00ff88'],
-          ['memory', '<strong>memory layer</strong> compressed context shard', '#8b5cf6'],
-          ['sync', '<strong>provider catalog</strong> propagated fresh signal', '#ffd54a'],
-          ['field', '<strong>intelligence field</strong> detected clean heartbeat', '#22d3ee'],
-        ];
-        const e = events[Math.floor(Math.random() * events.length)];
+        if (!catalogEvents.length) return;
+        const e = catalogEvents[Math.floor(Math.random() * catalogEvents.length)];
         pushSignal(e[0], e[1], e[2]);
-      }, 2400);
+      }, 4200);
 
       window.addEventListener('resize', resize);
       resize();
@@ -1350,18 +1419,21 @@
           loaded = true;
           layoutLiveMesh();
           const top = Object.entries(providerCounts).sort((a,b) => b[1] - a[1])[0] || ['unknown', 0];
-          const oss = (providerCounts['meta-llama'] || 0) + (providerCounts['mistralai'] || 0) + (providerCounts['qwen'] || 0);
-          updateTelemetry(models.length, Object.keys(providerCounts).length, top[0], oss, 'SYNCED');
-          pushSignal('sync', `<strong>${models.length}</strong> OpenRouter models mapped into mesh`, '#00d4ff');
-          pushSignal('source', `<strong>${top[0]}</strong> leads density with ${top[1]} nodes`, '#ffd54a');
-          pushSignal('mesh', `<strong>${nodes.length}</strong> visible model nodes rendered`, '#00ff88');
+          const openFamilies = ['meta-llama','mistralai','qwen','deepseek','nousresearch','microsoft','nvidia'];
+          const oss = openFamilies.reduce((sum, p) => sum + (providerCounts[p] || 0), 0);
+          const maxContext = models.reduce((max, m) => Math.max(max, Number(m.context_length || 0)), 0);
+          const topShare = models.length ? Math.round((top[1] / models.length) * 100) : 0;
+          updateTelemetry(models.length, Object.keys(providerCounts).length, top[0], oss, maxContext, topShare, 'SYNCED');
+          pushSignal('index', `<strong>${models.length}</strong> OpenRouter models mapped into the intelligence field`, '#00d4ff');
+          pushSignal('density', `<strong>${top[0]}</strong> leads distribution with ${top[1]} catalog entries`, '#ffd54a');
+          pushSignal('context', `<strong>${fmtContext(maxContext)}</strong> max context window detected`, '#8b5cf6');
         })
         .catch(err => {
           console.error('OpenRouter fetch error:', err);
           buildFallbackNodes();
           loaded = true;
           layoutLiveMesh();
-          updateTelemetry('337+', '50+', 'openai', 'LIVE', 'LOCAL');
+          updateTelemetry('fallback', '8', 'openai', 'open families', 1048576, 12, 'LOCAL');
           pushSignal('sync', '<strong>cached model mesh</strong> active without external catalog', '#ffd54a');
         });
     })();
@@ -1385,12 +1457,12 @@
       }
 
       const nodeData = [
-        { name: 'ZKA Agent', icon: '🤖', status: 'online', desc: 'AI Agent platform — automation, memory, tool usage.', url: 'https://zeroknowledge0x.github.io/zk-api/' },
-        { name: 'Hermes', icon: '⚡', status: 'dev', desc: 'AI agent framework — multi-platform, persistent memory.', url: 'https://zeroknowledge0x.github.io/hermes/' },
-        { name: 'Memory API', icon: '🧠', status: 'planned', desc: 'Persistent memory systems for AI agents.', url: 'https://zeroknowledge0x.github.io/memory-api/' },
-        { name: 'Automation', icon: '🔧', status: 'planned', desc: 'Workflow automation and task execution.', url: 'https://zeroknowledge0x.github.io/automation-tools/' },
-        { name: 'Research', icon: '🔬', status: 'planned', desc: 'AI safety, alignment, and experimental models.', url: 'https://zeroknowledge0x.github.io/research-projects/' },
-        { name: 'Future', icon: '🚀', status: 'planned', desc: 'Next-generation technology experiments.', url: 'https://zeroknowledge0x.github.io/future-projects/' },
+        { name: 'ZKA Agent', icon: 'ZA', status: 'online', desc: 'AI Agent platform — automation, memory, tool usage.', url: 'https://zeroknowledge0x.github.io/zk-api/' },
+        { name: 'Hermes', icon: 'HE', status: 'dev', desc: 'AI agent framework — multi-platform, persistent memory.', url: 'https://zeroknowledge0x.github.io/hermes/' },
+        { name: 'Memory API', icon: 'ME', status: 'planned', desc: 'Persistent memory systems for AI agents.', url: 'https://zeroknowledge0x.github.io/memory-api/' },
+        { name: 'Automation', icon: 'AU', status: 'planned', desc: 'Workflow automation and task execution.', url: 'https://zeroknowledge0x.github.io/automation-tools/' },
+        { name: 'Research', icon: 'RS', status: 'planned', desc: 'AI safety, alignment, and experimental models.', url: 'https://zeroknowledge0x.github.io/research-projects/' },
+        { name: 'Future', icon: 'NX', status: 'planned', desc: 'Next-generation technology experiments.', url: 'https://zeroknowledge0x.github.io/future-projects/' },
       ];
 
       const nodeColors = { online: '#00ff88', dev: '#fbbf24', planned: '#555' };
@@ -1463,7 +1535,7 @@
           cx.strokeStyle = col + (n === hoveredNode ? 'aa' : '33');
           cx.lineWidth = n === hoveredNode ? 2 : 1; cx.stroke();
 
-          cx.font = `${18 + n.hover * 4}px sans-serif`; cx.textAlign = 'center'; cx.textBaseline = 'middle';
+          cx.font = `800 ${12 + n.hover * 2}px "JetBrains Mono"`; cx.textAlign = 'center'; cx.textBaseline = 'middle';
           cx.fillText(n.icon, n.x, n.y - 2);
           cx.font = `600 ${11 + n.hover}px "Inter"`; cx.fillStyle = '#e8e8e8';
           cx.fillText(n.name, n.x, n.y + r + 14);
@@ -1481,7 +1553,7 @@
         nodes.forEach(n => { if (Math.hypot(mx - n.x, my - n.y) < n.r + 10) hoveredNode = n; });
         if (hoveredNode) {
           c.style.cursor = 'pointer'; tooltip.classList.add('show');
-          tooltip.querySelector('.tt-name').textContent = hoveredNode.icon + ' ' + hoveredNode.name;
+          tooltip.querySelector('.tt-name').textContent = hoveredNode.icon + ' / ' + hoveredNode.name;
           const ttS = tooltip.querySelector('.tt-status');
           ttS.textContent = hoveredNode.status.toUpperCase();
           ttS.className = 'tt-status ' + (hoveredNode.status === 'online' ? 'online' : hoveredNode.status === 'dev' ? 'dev' : 'planned');
